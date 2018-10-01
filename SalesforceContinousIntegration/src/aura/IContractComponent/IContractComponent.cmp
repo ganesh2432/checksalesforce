@@ -1,0 +1,17 @@
+<aura:component controller="IContractBaseComponentCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute type="Boolean" name="showLineItemMapping" default="false" description="To enable LineItem mapping on click of MapLine item / Review line item button"/>
+<aura:attribute name="themeURL" type="string" description="Used to know whether component is running in Lightning Experience or classic"/> 
+    <aura:attribute name="BaseURL" type="string" access="global"/>
+    
+    <aura:handler name="EnableLineItemMappings" event="c:EnableLineItemMappings" action="{!c.EnableLineItemMappings}" description="Event handled which was fired on click on Map line item / Review line item button in Header component to display and hide icontractBasecomponent and LineItemMapping component"/>
+    <aura:handler name="goToHomePage" event="c:GoToHomePage" action="{!c.goToHomePage}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.checkBaseURL}"/>
+    
+    
+    <aura:if isTrue="{!not(v.showLineItemMapping)}" >
+        <c:iContractBaseComponent aura:id="iContractBaseComp"/>
+   </aura:if>
+    <aura:if isTrue="{!v.showLineItemMapping}">
+		<c:LightningProgressIndicatorForLineItemMapping themeURL="{!v.themeURL}"/>
+	</aura:if>	
+</aura:component>

@@ -1,0 +1,25 @@
+.THIS.container {	width: 100%;
+	padding: 10px 0px;
+	margin: 0px;
+}
+
+.THIS .center {
+	margin: 0px auto;
+}
+
+.THIS .content {
+	max-width: 768px;
+	font-size: 12px;
+	color: #3c3d3e;
+}
+.THIS table{
+    border-collapse: collapse;
+    text-align:left;   
+}
+
+.THIS th{
+    background-color:#DBE8ED;
+    border-collapse: collapse;
+    padding: 1.8%;
+    text-align:left;
+}

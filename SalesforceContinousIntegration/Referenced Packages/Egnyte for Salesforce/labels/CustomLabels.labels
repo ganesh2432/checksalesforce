@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>ActiveFolderTemplateRestriction</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Active Folder Template Restriction</shortDescription>
+        <value>A folder template already exists for the {0} object and {1} record type.</value>
+    </labels>
+    <labels>
+        <fullName>BatchAlreadyExecuting</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Batch Already Executing</shortDescription>
+        <value>Batch already executing.</value>
+    </labels>
+    <labels>
+        <fullName>BulkFolderCreating</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Bulk Folder Creating</shortDescription>
+        <value>Executing bulk actions. You may navigate away from this page.</value>
+    </labels>
+    <labels>
+        <fullName>ClearFailedAndProcessedESQ</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Clear Failed And Processed ESQ</shortDescription>
+        <value>Failed actions have been removed from the queue.</value>
+    </labels>
+    <labels>
+        <fullName>ESOConfigurationRestriction</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Configuration Restriction</shortDescription>
+        <value>Egnyte Sync Configurations cannot be created. Please contact Egnyte support.</value>
+    </labels>
+    <labels>
+        <fullName>ESOConfigurationSuccessful</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Configuration Successful</shortDescription>
+        <value>Egnyte Sync Configurations successfully created.</value>
+    </labels>
+    <labels>
+        <fullName>ESOConfiguring</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Configuring</shortDescription>
+        <value>Creating Egnyte Sync Configurations...</value>
+    </labels>
+    <labels>
+        <fullName>ESODeleting</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Deleting</shortDescription>
+        <value>Deleting Egnyte Sync Configurations...</value>
+    </labels>
+    <labels>
+        <fullName>ESODeletionRestriction</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Deletion Restriction</shortDescription>
+        <value>Egnyte Sync Configurations can not be deleted. Please Contact Egnyte support.</value>
+    </labels>
+    <labels>
+        <fullName>ESODeletionSuccessful</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Deletion Successful</shortDescription>
+        <value>Egnyte Sync Configurations deleted successfully.</value>
+    </labels>
+    <labels>
+        <fullName>ESODeletionWarning</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Deletion Warning</shortDescription>
+        <value>You cannot delete Egnyte Sync Configurations for standard objects. Instead, you can mark them as inactive.</value>
+    </labels>
+    <labels>
+        <fullName>ESOErrorObjectAlreadyExist</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Error Object Already Exist</shortDescription>
+        <value>An Egnyte Sync Configuration already exists for the {0} object.</value>
+    </labels>
+    <labels>
+        <fullName>ESOErrorOnDeleteRecord</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Error On Delete Record</shortDescription>
+        <value>Error deleting the Egnyte Sync Configuration. Please contact Egnyte support.</value>
+    </labels>
+    <labels>
+        <fullName>ESOErrorOnInvalidConfiguration</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Error On Invalid Configuration</shortDescription>
+        <value>Please verify that you have correctly created the Egnyte Sync Configuration.</value>
+    </labels>
+    <labels>
+        <fullName>ESOErrorOnInvalidObject</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Error On Invalid Object</shortDescription>
+        <value>Invalid &apos;Name&apos; on Egnyte Sync Configuration record.</value>
+    </labels>
+    <labels>
+        <fullName>ESOErrorOnInvalidParent</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Error On Invalid Parent</shortDescription>
+        <value>Invalid &apos;ParentObject__c&apos; field on Egnyte Sync Configuration record.</value>
+    </labels>
+    <labels>
+        <fullName>ESOErrorOnNameField</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Error On Name Field</shortDescription>
+        <value>Invalid &apos;ObjectNameField__c&apos; field on Egnyte Sync Configuration record.</value>
+    </labels>
+    <labels>
+        <fullName>ESOErrorOnParentNameField</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Error On Parent Name Field</shortDescription>
+        <value>Invalid &apos;ParentObjectNameField__c&apos; field on Egnyte Sync Configuration record.</value>
+    </labels>
+    <labels>
+        <fullName>ESOInsertErrorInGEPE</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Insert Error In GEPE</shortDescription>
+        <value>Additional Egnyte Sync Configurations may not be created in Group and Professional editions.</value>
+    </labels>
+    <labels>
+        <fullName>ESOInvalidApexTriggerOrTestClass</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESO Invalid Apex Trigger Or Test Class</shortDescription>
+        <value>Please enter apex trigger and apex test class name.</value>
+    </labels>
+    <labels>
+        <fullName>ESQOpNotAllowedManually</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ESQ Op Not Allowed Manually</shortDescription>
+        <value>You do not have permission to perform this action.</value>
+    </labels>
+    <labels>
+        <fullName>EgnyteDomainNotConfiguredCorrectlyError</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Presented when Egnyte Domain is not configured properly.</shortDescription>
+        <value>Egnyte Domain needs to be re-configured.</value>
+    </labels>
+    <labels>
+        <fullName>EgnyteFilesAppStoreButton</fullName>
+        <categories>EgnyteFiles</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Presented on the App Store button of Egnyte Files Quick action.</shortDescription>
+        <value>Download Egnyte App from the App Store</value>
+    </labels>
+    <labels>
+        <fullName>EgnyteFilesEgnyteAppButton</fullName>
+        <categories>EgnyteFiles</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Presented on the Egnyte App button of Egnyte Files Quick action.</shortDescription>
+        <value>Open folder with Egnyte App</value>
+    </labels>
+    <labels>
+        <fullName>EgnyteFilesFirstTextLine</fullName>
+        <categories>EgnyteFiles</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Presented on the first text line of Egnyte Files Quick action.</shortDescription>
+        <value>Access files using the</value>
+    </labels>
+    <labels>
+        <fullName>EgnyteFilesPlayStoreButton</fullName>
+        <categories>EgnyteFiles</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Presented on the Play Store button of Egnyte Files Quick action.</shortDescription>
+        <value>Download Egnyte App from the Play Store</value>
+    </labels>
+    <labels>
+        <fullName>EgnyteFilesSecondTextLine</fullName>
+        <categories>EgnyteFiles</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Presented on the second text line of Egnyte Files Quick action.</shortDescription>
+        <value>Egnyte Mobile App</value>
+    </labels>
+    <labels>
+        <fullName>EgnyteIntegratedUsersPageSubtitleWithIntegrations</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Egnyte Integrated Users Page Subtitle</shortDescription>
+        <value>{0} of {1} purchased seats still available for use</value>
+    </labels>
+    <labels>
+        <fullName>EgnyteIntegratedUsersPageSubtitleWithoutIntegrations</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Egnyte Integrated Users Page Subtitle</shortDescription>
+        <value>You have purchased {0} seats. Start integrating now!!</value>
+    </labels>
+    <labels>
+        <fullName>EgnyteIntegratedUsersPageTitle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Egnyte Integrated Users Page Title</shortDescription>
+        <value>Egnyte Integrated Users</value>
+    </labels>
+    <labels>
+        <fullName>EgnyteSalesforceIntegrationSuccessful</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Egnyte Salesforce Integration Successful</shortDescription>
+        <value>You have successfully integrated with your Egnyte domain.</value>
+    </labels>
+    <labels>
+        <fullName>EgnyteSyncFailed</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Egnyte Sync failed</shortDescription>
+        <value>Scheduled job to process Egnyte Sync Queue is already in progress.</value>
+    </labels>
+    <labels>
+        <fullName>EgnyteSyncStarted</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Egnyte Sync Started</shortDescription>
+        <value>Started scheduled job to process Egnyte Sync Queue.</value>
+    </labels>
+    <labels>
+        <fullName>EmptyDomainOrToken</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Empty Domain Or Token</shortDescription>
+        <value>Please check your Egnyte domain.</value>
+    </labels>
+    <labels>
+        <fullName>FieldMaxLengthError</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Field Max Length Error</shortDescription>
+        <value>You cannot exceed 245 characters for this field.</value>
+    </labels>
+    <labels>
+        <fullName>FolderPathAlreadyExist</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Folder Path Already Exist</shortDescription>
+        <value>This folder path already exists in this folder template</value>
+    </labels>
+    <labels>
+        <fullName>FolderPathFormat</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Folder Path Format</shortDescription>
+        <value>Folder paths cannot start with a slash / or \ or period.</value>
+    </labels>
+    <labels>
+        <fullName>InsufficientAccessField</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Insufficient Access Field</shortDescription>
+        <value>Insufficient access on {0} field of {1} object.</value>
+    </labels>
+    <labels>
+        <fullName>InsufficientAccessObject</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Insufficient Access Object</shortDescription>
+        <value>Insufficient access on {0} object.</value>
+    </labels>
+    <labels>
+        <fullName>InsufficientPrivileges</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Insufficient Privileges</shortDescription>
+        <value>You do not have permissions to perform DML on {0} object.</value>
+    </labels>
+    <labels>
+        <fullName>NoESQInProcessing</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>No ESQ In Processing</shortDescription>
+        <value>There are no actions queued for processing</value>
+    </labels>
+    <labels>
+        <fullName>NoObjectFoundError</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>No Object Found Error</shortDescription>
+        <value>No Object Found.</value>
+    </labels>
+    <labels>
+        <fullName>RecordFolderNotExistingOnEgnyteError</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Presented as error when the record has no folder on Egnyte.</shortDescription>
+        <value>Record&apos;s folder does not exist on Egnyte.</value>
+    </labels>
+    <labels>
+        <fullName>RecordIdNotFoundError</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Presented as error when there is no record Id associated.</shortDescription>
+        <value>No Record Id found.</value>
+    </labels>
+    <labels>
+        <fullName>RequiredFieldError</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Required Field Error</shortDescription>
+        <value>Please complete all required fields.</value>
+    </labels>
+    <labels>
+        <fullName>RetryFailedESQ</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Retry Failed ESQ</shortDescription>
+        <value>Failed actions will be retried.</value>
+    </labels>
+    <labels>
+        <fullName>SpecialCharsRestriction</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Special Chars Restriction</shortDescription>
+        <value>Folders cannot contain special characters \ &quot; : &lt; &gt; | * ? or trailing periods.</value>
+    </labels>
+    <labels>
+        <fullName>SpecifiedTestClassNotExist</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Specified Test Class Not Exist</shortDescription>
+        <value>The specified test class {0} does not exist</value>
+    </labels>
+    <labels>
+        <fullName>SpecifiedTriggerNotExist</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Specified Trigger Not Exist</shortDescription>
+        <value>The specified trigger {0} does not exist</value>
+    </labels>
+    <labels>
+        <fullName>SyncActiveRestriction</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Sync Active Restriction</shortDescription>
+        <value>Sync object cannot be activated until a trigger is generated.</value>
+    </labels>
+    <labels>
+        <fullName>SyncBatchSizeWarning</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Sync Batch Size Warning</shortDescription>
+        <value>Batch size must be between 10 and 200.</value>
+    </labels>
+    <labels>
+        <fullName>TotalChilds</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Children Exceed Error</shortDescription>
+        <value>You may only create up to {0} template folders.</value>
+    </labels>
+    <labels>
+        <fullName>TriggerGeneratedRestriction</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Trigger Generated Restriction</shortDescription>
+        <value>No trigger or trigger test class exists for the selected sync object.</value>
+    </labels>
+</CustomLabels>

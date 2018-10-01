@@ -1,0 +1,287 @@
+<aura:component controller="FieldMappingController" >
+    <!-- Component to show -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" description="to get All Mapping configurations from the System."/>
+    
+    <aura:attribute type="Object" name="contractConfigRec" description="To store all Mapping Configuration." access="public"/>
+    <aura:attribute type="String" name="activateModalMsg" description="To store the Activate modal Message" access="public"/>
+    <aura:attribute type="String" name="copyModalMsg" description="To store the Copy modal Message" access="public"/>
+    <aura:attribute type="String" name="deleteModalMsg" description="To store the Delete modal Message" access="public"/>
+    <aura:attribute type="String" name="deleteRecId" description="To store the Id of record to be deleted." access="public"/>
+    <aura:attribute type="String" name="typeSelForCopy" description="To store the Type selected." access="public"/>
+    <aura:attribute type="String" name="subTypeSelForCopy" description="To store the SubType selected." access="public"/>
+    <aura:attribute type="String" name="selContractConfigId" description="To store the selected config record on click of Review." access="public"/>
+    <aura:attribute type="Boolean" name="isErrorInCopyMapping" default="false" description="To store if there is any Error while copying the Metadata." access="public"/>
+    <aura:attribute type="String" name="typeSelectedValue" description="used to store selected Type value." access="public"/>
+    <aura:attribute type="String" name="subTypeSelectedValue" description="used to store selected SubType value." access="public"/>
+    <aura:attribute type="map"    name="typeSubTypeMap" description="used to store Type and SubType Mapping." access="public"/>
+    <aura:attribute type="String" name="activateButton" default="Activate_Mapping" access="public"/>
+    <aura:attribute type="String" name="deactivateButton" default="Dectivate_Mapping" access="public"/>
+    <aura:attribute type="String" name="copyButton" default="Copy_Mapping" access="public"/>
+    <aura:attribute type="String" name="deleteButton" default="Delete" access="public"/>
+    <aura:attribute type="Boolean" name="isContractConfigFound" default="false" access="public"/>
+    <aura:attribute type="boolean" name="isSubTypeDisable" default="true" description="used to, disbale Subtype field." access="public"/>
+    <aura:attribute type="String[]" name="tableHeader" default="['Contract Type',' Contract sub-type', 'Status','Created By', 'Last Updated On', 'Action']" access="public"/>
+    
+    <!--Moves Back To Home Page-->
+    <aura:registerEvent name="goToHomePage" type="c:GoToHomePage"/>
+    <!--Set Type and Subtype for Review Button -->
+    <aura:registerEvent name="fetchMDataEvent" type="c:fetchMetadataButtonEvent"/>
+    
+    
+    <aura:handler event="c:StoreTypeSubTypeMapEvt" action="{!c.storeTypeSubTypeMapEvt}"/>
+    
+    <!--<aura:attribute type="iContractMapping__mdt[]"  name="AllreadyMappedValues" ></aura:attribute>-->
+    <aura:if isTrue="{!v.isContractConfigFound}">
+        <div class="slds-box" style="margin:1%"><!--removed inner scroller  slds-scrollable. if needed put it back -->
+            
+            <b>{!$Label.c.Heading_Header_Contract_Mapping}</b>
+            <br/><br/>
+            <!--{!v.AllreadyMappedValues}-->
+            
+            <!--c:TableHeaderDyanmicComponent headerFields="{!v.tableHeader}"/ -->
+            <table style="border-collapse: collapse; text-align:left"> 
+                <thead>
+                    <tr style="width:100%; line-height: 3.5;background-color:#dbe8ed">
+                        <th style="width:16%;border-top-left-radius:6px;padding-left: 1%;">
+                            <div class="slds-truncate" title="Contract Type">{!$Label.c.Contract_Type_Table_Heading_Stored_Mapping}
+                                <div class="slds-icon_container" onclick="{!c.sortTypeDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortTypeASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                            </div>
+
+                        </th>
+                        <th style="width:16%;">
+                            <div class="slds-truncate" title="Contract sub-type">{!$Label.c.Contract_SubType_Table_Heading_Stored_Mapping}
+                            <div class="slds-icon_container" onclick="{!c.sortSubTypeDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortSubTypeASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                           </div>
+                        </th>
+                        <th style="width:16%;">
+                            <div class="slds-truncate" title="Status">{!$Label.c.Status_Table_Heading_Stored_Mapping}
+                            <div class="slds-icon_container" onclick="{!c.sortStatusDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortStatusASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                           </div>
+                        </th>
+                        <th style="width:16%;">
+                            <div class="slds-truncate" title="Created By">{!$Label.c.CreatedBy_Table_Heading_Stored_Mapping}
+                            <div class="slds-icon_container" onclick="{!c.sortCreatedByDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortCreatedByASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                           </div>
+                        </th>
+                        <th style="width:16%;">
+                            <div class="slds-truncate" title="Last Updated On">{!$Label.c.Last_Updated_On_Table_Heading_Stored_Mapping}
+                                <div class="slds-icon_container" onclick="{!c.sortUpdatedOnDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortUpdatedOnASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                            </div>
+                        </th>
+                        <th style="width:16%;border-top-right-radius:6px;">
+                            <div class="slds-truncate" title="Action">{!$Label.c.Action_Table_Heading_Stored_Mapping}</div>
+                        </th>
+                    </tr>
+                </thead>
+                <aura:iteration items="{!v.contractConfigRec}" var="contConfigRec" indexVar="index">
+                    <tr style="width:100%"> 
+                        <td scope="col" style="width:16%;padding-left: 1%;"  class="{!v.contractConfigRec.length-1 == index ? 'slds-border_bottom slds-border_left':'slds-border_left'}">
+                            <div class="slds-truncate">{!contConfigRec.Type__c}</div>
+                        </td>        
+                        <td scope="col" style="width:16%;" class="{!v.contractConfigRec.length-1 == index ? 'slds-border_bottom':''}">
+                            <div class="slds-truncate">{!contConfigRec.SubType__c}</div>
+                        </td>
+                        <td scope="col" style="width:16%;" class="{!v.contractConfigRec.length-1 == index ? 'slds-border_bottom':''}">    
+                            <div class="slds-truncate">
+                                <aura:if isTrue="{!(contConfigRec.Status__c == 'Active')}">
+                                    <span style=" height: 8px; width: 8px; background-color:green; border-radius: 50%;display: inline-block;"></span>
+                                </aura:if>
+                                <aura:if isTrue="{!(contConfigRec.Status__c == 'InActive')}">
+                                    <span style=" height: 8px; width: 8px; background-color:grey; border-radius: 50%;display: inline-block;"></span>
+                                </aura:if>
+                                <aura:if isTrue="{!(contConfigRec.Status__c == 'Draft in progress')}">
+                                    <span style=" height: 8px; width: 8px; background-color:Orange; border-radius: 50%;display: inline-block; text-align:left"></span>
+                                </aura:if>&nbsp;&nbsp;
+                                {!contConfigRec.Status__c}</div>
+                        </td>
+                        <td scope="col" style="width:16%;" class="{!v.contractConfigRec.length-1 == index ? 'slds-border_bottom':''}">    
+                            <div class="slds-truncate">{!contConfigRec.Created_By_Custom__r.Name}</div>
+                        </td>
+                        <td scope="col" style="width:16%;" class="{!v.contractConfigRec.length-1 == index ? 'slds-border_bottom':''}"> 
+                            <div class="slds-truncate"><lightning:formattedDateTime value="{!contConfigRec.Last_Updated_On_Custom__c}" year="numeric" month="numeric" day="numeric"/></div>    
+                        </td>                
+                        <td style="width:16%;text-align:left" class="{!v.contractConfigRec.length-1 == index ? 'slds-border_bottom slds-border_right':'slds-border_right'}">       
+                            <!--a style="margin-left: 16%;" onclick="{!c.onReviewClick}" value="{!index}">Review&nbsp;&nbsp;&nbsp;&nbsp;</a-->
+                            
+                                <lightning:button class="slds-button REVIEW" label="Review" onclick="{! c.onReviewClick }" value="{!index}"/>    
+                            
+                            <lightning:buttonMenu menuAlignment="center" name="{!index}" iconName="utility:down" alternativeText="Select" onselect="{!c.onClickOfMenuButtons}">
+                                <aura:if isTrue="{!(contConfigRec.Status__c != $Label.c.Mapping_Status_Active)}">
+                                    <lightning:menuItem label="Activate Mapping" value="{!v.activateButton+index}" />
+                                </aura:if>
+                                <aura:if isTrue="{!(contConfigRec.Status__c == $Label.c.Mapping_Status_Active)}">
+                                    <lightning:menuItem label="Deactivate Mapping" value="{!v.deactivateButton+index}" />
+                                </aura:if>
+                                <lightning:menuItem label="Copy Mapping" value="{!v.copyButton+index}"/>
+                                <lightning:menuItem label="Delete" value="{!v.deleteButton+index}" />
+                            </lightning:buttonMenu>
+                        </td>
+                    </tr>
+                </aura:iteration>        
+            </table>
+            <div aria-hidden="false" id="ActivateMappingConfigurationModal" style="display:none;">
+                <div class="demo-only" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container" style="width: 23%;">
+                            <header class="slds-modal__header slds-modal__header_empty">
+                            </header>
+                            <!-- Messages displayed inside modal popup-->
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                <p>
+                                    <aura:unescapedHtml value="{!v.activateModalMsg}"/>
+                                </p>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <div class="slds-align_absolute-center">
+                                    <button class="slds-button slds-button_neutral" onclick = "{!c.onActivateModalConfirm}">Ok</button><!-- remains in same page-->
+                                </div>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+            </div>
+            <div aria-hidden="false" id="DeleteMappingConfigurationModal" style="display:none;">
+                <div class="demo-only" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container" style="width: 23%;">
+                            <header class="slds-modal__header slds-modal__header_empty">
+                            </header>
+                            <!-- Messages displayed inside modal popup-->
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                <p>
+                                    Do you wish to continue?<br/>
+                                </p>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <div class="slds-align_absolute-center">
+                                    <button class="slds-button slds-button_neutral" onclick="{!c.onDeleteModalCancel}" style="color:black;">Cancel</button><!-- go backs to Home page-->
+                                    <button class="slds-button slds-button_neutral" onclick = "{!c.onDeleteModalConfirm}">Yes, continue</button><!-- remains in same page-->
+                                </div>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+            </div>
+            <div aria-hidden="false" id="DeleteRespMappingConfigurationModal" style="display:none;">
+                <div class="demo-only" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container" style="width: 23%;">
+                            <header class="slds-modal__header slds-modal__header_empty">
+                            </header>
+                            <!-- Messages displayed inside modal popup-->
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                <p>
+                                    <aura:unescapedHtml value="{!v.deleteModalMsg}"/>
+                                </p>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <div class="slds-align_absolute-center">
+                                    <button class="slds-button slds-button_neutral" onclick = "{!c.onDeleteResModalConfirm}">Ok</button><!-- remains in same page-->
+                                </div>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+            </div>
+            <div aria-hidden="false" id="CopyConfigurationModel" style="display:none;">
+                <div class="demo-only" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container" style="width: 50%;">
+                            <header class="slds-modal__header slds-modal__header_empty" style="text-align:left; background: #ecebea; padding-left : 3%;     line-height: 3.5;">
+                                <b>Copy Mapping</b>
+                            </header>
+                            <!-- Messages displayed inside modal popup-->
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                <p>Copy Mapping Configuration of Type {!v.typeSelForCopy} - {!v.subTypeSelForCopy} to:</p><br/><br/>
+                                <div class="slds-grid slds-gutters">
+                                    <div style="width:100%" class="slds-list slds-size_1-of-3">
+                                        
+                                        <div>
+                                            <!--Controller Field-->
+                                            <div style="width: 45%; float: left; padding-left:3%" class="slds-form-element">
+                                                <label class="slds-form-element__label" for="select-01"><b>Contract Type</b></label>
+                                                <div>
+                                                    <ui:inputSelect aura:id="typeId" class="slds-select" change="{!c.onTypeFieldChange}"/>
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                             <!--Dependent Field-->
+                                            <div class="slds-form-element" style="width: 45%; float: right; padding-right:3%">
+                                                <label class="slds-form-element__label" for="select-01"><b>Contract Sub-type</b></label>
+                                                <div>
+                                                    <ui:inputSelect aura:id="subtypeId" class="slds-select" change="{!c.setSelectedSubTypeValue}" disabled="{!v.isSubTypeDisable}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <div class="slds-align_absolute-center">
+                                    <button class="slds-button slds-button_neutral" onclick="{!c.closeCopyModal}" style="color:black;">Cancel</button>
+                                    <button class="slds-button slds-button_brand" onclick="{!c.validateAndCopyMapping}" style="color:white;">Continue</button>
+                                </div>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+            </div>
+            <div aria-hidden="false" id="CopyMappingSubmitErrMsgModel" style="display:none;">
+                <div class="demo-only" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container" style="width: 23%;">
+                            <header class="slds-modal__header slds-modal__header_empty">
+                                <aura:if isTrue="{!v.isErrorInCopyMapping}">
+                                <b>Error</b>
+                                </aura:if>
+                                <aura:if isTrue="{!not(v.isErrorInCopyMapping)}">
+                                <b>Success</b>
+                                </aura:if>
+                            </header>
+                            <!-- Messages displayed inside modal popup-->
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                <p> <aura:unescapedHtml value="{!v.copyModalMsg}"/></p>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <div class="slds-align_absolute-center">
+                                    <button class="slds-button slds-button_neutral" onclick="{!c.closeCopyErrModal}" style="color:black;">Ok</button>
+                                </div>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

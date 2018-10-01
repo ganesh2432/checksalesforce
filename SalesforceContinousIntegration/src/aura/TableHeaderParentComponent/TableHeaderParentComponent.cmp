@@ -1,0 +1,195 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component Used to Setup the Questions for Requesting contracts.
+ * Created By  :   Jayanth B
+ * Created Date:   27/04/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="RequestWizardController" Implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader">
+    
+    <aura:attribute name="SelectedRequestWizardList" type="Request_Wizard_MetaData__c[]" access="global" description="Used to store the RequestWizard Field Details Obtained from previous Step Value Mapping"/> 
+    <aura:attribute name="SelectedFieldsList" type="String[]" access="global" description="fields list stored in the backend"/> 
+    <aura:attribute type="String" name="selectedType" access="global" description="SelectedType of the contract"></aura:attribute>
+    <aura:attribute type="String" name="selectedSubType" access="global" description="SelectedSubType of the contract"></aura:attribute>
+    <aura:attribute name="Spinner" type="boolean" default="false" description="loading spinner" access="global"/>
+    
+    <!-- Below attributes are used for Calculating the the number of questions answered in Setup Request Wizard-->
+    <aura:attribute name="questionsLength" type="Integer" access="global" description="total question length"/>
+    <aura:attribute name="answeredQuestions" type="Integer[]" access="global" description="answerd question length"/>
+    <aura:attribute name="answeredQuestionsLength" type="Integer" default="0" access="global" description="answered queston length for calulating percentage"/>
+    <aura:attribute name="questionCompletedPercent" type="Double" default="0" access="global" description="Question completed percentage"/>
+    
+    <aura:attribute name="OrderIndexWrapper" type="Object" access="global" description="Used to maintain the order duplicate check and other order functionality based on row index"/>
+    <aura:attribute type="String" name="mapConfigId" access="global" description="mapping configuration data"/>
+    <aura:attribute name="emptyQuestionErrorMsg" type="String" access="global" description="When question is empty"/>
+    <aura:attribute type="string" name="themeURL" access="global" description="To check whether component is running in classic or lighting"/>
+    <aura:attribute name="allowSaveOnlyOnce" type="boolean" default="false" description="To disable double click"/>
+    
+    <!-- used to Display model popup for Skip button click-->
+    <aura:attribute name="displaySkipPopUp" type="boolean" default="false" access="global" description="to display skip popup"/>
+    
+    <!-- Used to display dynamic error model popup with field name for which question is empty when clicked on save button-->
+    <aura:attribute name="QuestionEmptyFieldName" type="String" access="global" description="field name of specific fields which are not filled"/>
+    
+    <!--Handler which calls init function on load of component--> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!-- Add row event Handler-->
+    <aura:handler name="AddRow" event="c:AddRow" action="{!c.addRow}"/>
+    <!-- remove row event Handler-->
+    <aura:handler name="DeleteRow" event="c:DeleteRow" action="{!c.removeDeletedRow}"/>
+    
+    <!-- Events used to Calculate answered Question percentage when Question is entered and Remove + add back link is pressed in each field row-->
+    <aura:handler name="FilledQuestion" event="c:FilledQuestion" action="{!c.FilledQuestionsLengthCalculator}"/>
+    <aura:handler name="RemovedQuestion" event="c:RemovedQuestion" action="{!c.RemovedQuestionsLengthCalculator}"/>
+    
+    <!-- Event registered to move for Document setup Step-->
+    <aura:registerEvent name="MoveToStepFive" type="c:MoveToStepFive"/>
+    
+    <!-- Method used to skip popup from parent component LightningProgressBarCpmponent by on click of "Skip anyway" button in Model-->
+    <aura:method name="openSkipPopUp" action="{!c.skipPopUp}" access="PUBLIC"/>
+    
+    <!--Method called from Parent component LightningProgressBarCpmponent to save the Request Wizard Details -->
+    <aura:method name="saveContractRequestWizardInChild" action="{!c.Save}" access="PUBLIC"/>
+    <!--Order index duplicate check based on row index --> 
+    <aura:handler name="OrderIndexDuplicateCheckEvnt" event="c:OrderIndexDuplicateCheckEvnt" action="{!c.OrderIndexDuplicateCheckEvnt}"/>
+    <aura:handler name="OrderIndexRemoveEvt" event="c:OrderIndexRemoveEvt" action="{!c.OrderIndexRemoveEvt}"/>
+    <aura:handler name="OrderIndexAddEvt" event="c:OrderIndexAddEvt" action="{!c.OrderIndexAddEvt}"/>
+    <aura:handler name="addRowDeleteRowOrderNoEvt" event="c:addRowDeleteRowOrderNoEvt" action="{!c.addRowDeleteRowOrderNoEvt}"/>
+    
+    
+    
+    <div class="slds-p-around_small">
+        <b>{!$Label.c.Setup_Contract_Request_info_display_in_page}</b><i> (Optional step)</i>
+        <div class="slds-float_right"  >    
+            &nbsp;{!v.answeredQuestionsLength}/{!v.questionsLength} &nbsp;&nbsp;Questions Completed
+            <div class="slds-progress-bar slds-progress-bar_medium progressBarStyle"  aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" role="progressbar">
+                <span class="slds-progress-bar__value" style="{!'width:'+v.questionCompletedPercent+'%;border-radius: 30px;'}">
+                </span>
+            </div>
+        </div>
+        
+        <!--Table -->   
+        <table class="slds-m-top_large slds-table_fixed-layout tableClass" > 
+            <thead >
+                <tr >
+                    <th scope="col" class="slds-p-around_small firstCol">
+                        <div class="slds-m-left_large" title="Field">Order</div>
+                    </th>
+                    <th scope="col" class="slds-p-around_small secondCol">
+                        <div class="slds-float_left slds-m-left_medium" title="Field">Field Name</div>
+                    </th>
+                    <th scope="col" class="slds-p-around_small thirdCol">
+                        <div class="slds-float_left" title="Question">Question</div>
+                    </th>
+                    <th scope="col" class="slds-p-around_small fourthCol">
+                        <div class="slds-float_left" title="Mandatory">
+                            Mandatory in<br/> Salesforce
+                            <aura:if isTrue="{!v.themeURL != $Label.c.Theme4d}">
+                                 <lightning:helptext class="slds-m-top_x-small" title="{!$Label.c.RequestWizardMandatoryHelpText}"/>
+                            </aura:if>
+                             <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+                                <lightning:helptext style="margin-top: -3px;" content="{!$Label.c.RequestWizardMandatoryHelpText}"/>
+                            </aura:if> 
+                        </div>
+                    </th>
+                    <th scope="col" class="slds-p-around_small fifthCol">
+                        <div class="slds-float_left" title="Actions"></div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--where parent component contains button and table header and all the rows are displayed through child component which has table body  -->
+                <!-- while iterating each time a new value is set to "RequestWizardInstance" attribute of child component and "index" defines the index of row-->
+                <aura:iteration items="{!v.SelectedRequestWizardList}" var="item" indexVar="index">
+                    <c:TableBodyChildComponent RequestWizardInstance="{!item}" rowIndex="{!index}" SelectedFieldsList="{!v.SelectedFieldsList}" aura:id="tableChildComponent"/><!--fieldsNames="{!v.SelectedRequestWizardList.Field_Name__c}" -->
+                </aura:iteration>
+            </tbody>
+        </table>
+    </div>
+    <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+        <br/><br/>
+        </aura:if>
+    
+    <div aria-hidden="false" id="newClientSectionId" style="display:none;">
+        <div class="demo-only skipPopUPStyle">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container modelSkipContainer">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                     <aura:unescapedHtml value="{!$Label.c.Skip_Model_Message}"></aura:unescapedHtml>                        
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.goTodocSetup}" style="color:black;">Skip anyway</button>
+                            <button class="slds-button slds-button_success" onclick="{!c.disableSkipPopUp}">Yes Continue</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    
+    
+        <div aria-hidden="false" id="EmptyQuestionField" style="display:none;">
+        <div class="demo-only emptyQuestionModel" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container emptyModelContainer" style="width: 26%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>{!v.emptyQuestionErrorMsg}</p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.CloseEmptyQuestionField}">OK</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    
+            <div aria-hidden="false" id="Exceptions" style="display:none;">
+        <div class="demo-only emptyQuestionModel" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container emptyModelContainer" style="width: 26%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            <center><lightning:icon iconName="action:close" size="x-small" alternativeText="Indicates approval"/>
+                                <br/><br/>{!$Label.c.Exception_Message}</center></p>
+                    </div>
+                    <!--footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.CloseEmptyQuestionField}">OK</button>
+                        </div>
+                    </footer-->
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+           <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+             <span class="slds-assistive-text">Loading</span>
+             <div class="slds-spinner__dot-a"></div>
+             <div class="slds-spinner__dot-b"></div>
+           </div>
+        </div>
+    </aura:if>
+</aura:component>

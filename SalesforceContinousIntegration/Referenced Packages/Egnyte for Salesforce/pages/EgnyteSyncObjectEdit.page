@@ -1,0 +1,21 @@
+<apex:page standardController="efs__EgnyteSyncObject__c" extensions="efs.EgnyteSyncObjectEditController" tabStyle="efs__EgnyteSyncObject__c">
+    <apex:sectionHeader title="Egnyte Sync Configuration Edit" subtitle="{!efs__EgnyteSyncObject__c.Name}"/>
+    <apex:pageMessages />
+    <apex:form >
+        <!-- Page Block : Edit Block -->
+        <apex:pageBlock title="Edit Egnyte Sync Configuration" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!save}" title="Save" value="Save" />
+                <apex:commandButton action="{!cancel}" title="cancel" value="Cancel" />
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Information" columns="2">
+                <apex:outputField value="{!obj.efs__ObjectLabel__c}" />
+                <apex:inputField value="{!obj.efs__Active__c}" />
+                <apex:selectList value="{!parentInfo}" label="Parent Object" size="1">
+                    <apex:selectOptions value="{!parentList}"/> 
+                </apex:selectList>
+                <apex:inputField value="{!obj.efs__CreateRootFolder__c}" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

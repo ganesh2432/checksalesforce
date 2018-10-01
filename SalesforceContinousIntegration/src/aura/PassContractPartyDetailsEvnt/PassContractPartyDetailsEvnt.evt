@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="to pass contract partry details to partent component">
+    <aura:attribute type="Object" name="contractPartySelectedData" access="global"/>
+</aura:event>

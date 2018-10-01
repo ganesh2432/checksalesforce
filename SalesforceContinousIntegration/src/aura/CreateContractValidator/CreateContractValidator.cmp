@@ -1,0 +1,33 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component used for Contract creation validation check.
+ * Created By  :   Jayanth B
+ * Created Date:   17/07/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="CreateContractValidationCheck" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="opportunityId" type="Id" access="global" description="holds the opportunity Id"/>
+    <aura:attribute name="displayTypeSubType" type="boolean" access="global" description="Boolean variable used to decide whethere to display selection of type and subtype for contract creation or to display the error message"/>
+    <aura:attribute name="themeURL" type="string" description="Used to know whether component is running in Lightning Experience or classic"/> 
+    <aura:attribute type="boolean" name="spinner" default="true" description="loading icon" access="global"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" description="onload function"/>
+        <aura:if isTrue="{!v.displayTypeSubType}">
+            <c:CreateContractTypeSubTypeComp opportunityId="{!v.opportunityId}"/>
+        </aura:if>
+        <aura:if isTrue="{!not(v.displayTypeSubType)}">
+            <br/><br/>
+          <center>  <lightning:icon iconName="action:close" size="medium" alternativeText="cannot create contact"/>
+             <br/> <br/><b>{!$Label.c.opportunity_contract_creation_error}</b></center> 
+        </aura:if>
+    
+     <!--Used for spinner loading icon -->
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+</aura:component>

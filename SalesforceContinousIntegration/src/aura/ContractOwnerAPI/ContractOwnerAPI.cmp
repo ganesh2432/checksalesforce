@@ -1,0 +1,177 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component used to select contract owner for contract which is being created
+ * Created By  :   Jayanth B
+ * Created Date:   18/07/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="ContractOwnerDataFetch" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	
+    <aura:attribute name="contractOwnerMap" type="Map" access="global" description="contract owner data received from api callout"/>
+    <aura:attribute name="filterSelctedType" type="String" access="global" description="filter criteria of what selected First_name,Last_Name or email"/>
+    <aura:attribute name="searchVal" type="String" access="global" description="search val entered"/>
+    <aura:attribute name="searchingName" type="String" access="global" default="select" description="search val"/>
+    <aura:attribute name="contractOwnerList" type="String[]"  access="global" description="contract owner list from api callout"/>
+    <aura:attribute name="iterater" type="integer" access="global" default="0"/>
+    <aura:attribute name="currentPage" type="Integer" access="global" default="1" description="used for pagination"/>
+    <aura:attribute name="typeSelectedValue" type="String" description="used to store selected Type value." access="global"/>
+    <aura:attribute name="contractOwnerDataFromIcont" type="Object[]" access="global" description="Selected fields from icontract"/>
+    <aura:attribute name="defaultcondata" type="boolean" access="global" default="true"/>
+    <aura:attribute name="displayTable" type="boolean" access="global" default="true" description="whether to display table or not"/>
+    <aura:attribute name="contractOwnerFirstNameAndLastName" type="String" access="global" description="combining FN and LN"/>
+    <aura:attribute name="spinnerinQuickAction" type="boolean" access="global" default="true"/>
+    
+    <aura:registerEvent name="BackNextContractOwnerEvnt" access="global" type="c:BackNextContractOwnerEvnt" description="to move for next step"/>
+    
+    <aura:registerEvent name="PassContractOwnerDetailsEvnt" access="global" type="c:PassContractOwnerDetailsEvnt" description="passes contract owner data"/>
+    
+<aura:handler name="init" value="{!this}" action="{!c.doInit}" description="on load function call"/>
+
+    <aura:method name="goNext" action="{!c.onNextPageClick}" access="global" description=".">
+    </aura:method>
+    
+    <aura:method name="getBack" action="{!c.onBackPageClick}" access="global" description=".">
+    </aura:method>
+    
+    <aura:method name="searchAllContractOwner" action="{!c.searchAllContractOwner}" access="global" description="."></aura:method>
+    
+    <b >{!$Label.c.Search_criteria_msg_fro_CO}</b>
+    <div >
+            <lightning:select class="fieldSelectStleLightningstl" name="contractOwnerSearchBy"  aura:id="contractOwnerSearchByID" value="{!v.filterSelctedType}" onchange="{!c.pickValSelected}">
+            <option value="select">Select</option>
+            <option  value="first_name">First Name</option>
+            <option  value="last_name">Last Name</option>
+            <option  value="email">Email</option>
+                <!--aura:iteration items="{!item.picklistValuestodisplay}" var="obj1">
+                    <option selected="{!obj1 == item.answer}" value="{!obj1}">{!obj1}</option>
+                </aura:iteration-->
+            </lightning:select>
+    </div>
+    
+    
+    <aura:if isTrue="{!not(v.filterSelctedType=='select' || v.filterSelctedType=='' || v.filterSelctedType==undefined)}">
+    <br/>
+    <b>Search by {!v.searchingName}
+        </b>
+        
+        
+        <lightning:layout horizontalAlign="left">
+               <div  style="width:30%">
+                <ui:inputText class="slds-input" maxlength="40" placeholder="Search here.." value="{!v.searchVal}" /><!--add change="" function later on -->
+                <div class="slds-text-align_right">Max length : 40 Char</div>
+                </div>
+                <lightning:button class="buttonsearchStyleapi" variant="brand" label="Search" title="Searches the zycus contract owner" onclick="{! c.searchContractOwnerFromAPI }" />
+                
+       </lightning:layout>
+        
+        
+        
+    
+    </aura:if>
+    
+    <br/>
+    
+     <aura:if isTrue="{!v.displayTable==true}">
+   
+    <table style="border-collapse: collapse; text-align:left"> 
+                <thead>
+                    <tr style="width:100%; line-height: 3.5;background-color:#dbe8ed">
+                      
+                        <th style="width:29%;border-top-left-radius:6px;padding-left: 1%;">
+                            <div class="slds-truncate" title="Contract sub-type" style="margin-left:0.5rem;">FirstName
+                            <div class="slds-icon_container" onclick="{!c.sortFirstNameDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortFirstNameASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                           </div>
+                        </th>
+                        <th style="width:29%;">
+                            <div class="slds-truncate" title="Status" >LastName
+                            <div class="slds-icon_container" onclick="{!c.sortLastNameDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortLastNameASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                           </div>
+                        </th>
+                        <th style="width:33%;">
+                            <div class="slds-truncate" title="Created By">Email
+                            <div class="slds-icon_container" onclick="{!c.sortEmailDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortEmailASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                           </div>
+                        </th>
+                        <th style="width:16%;border-top-right-radius:6px;">
+                            <div class="slds-truncate" title="Action">Action</div>
+                        </th>
+                    </tr>
+                </thead>
+                <aura:iteration items="{!v.contractOwnerDataFromIcont}" var="conOwner" indexVar="index">
+                    
+                    <tr style="width:100%">       
+                        <td scope="col" style="width:16%;" class="slds-border_bottom slds-border_left">
+                            <div class="slds-truncate" style="margin-left:1rem;">{!conOwner.contractOwner.firstName}</div>
+                        </td>
+                        <td scope="col" style="width:16%;" class="slds-border_bottom">    
+                            <div class="slds-truncate">
+                                {!conOwner.contractOwner.lastName}
+                               </div>
+                        </td>
+                        <td scope="col" style="width:16%;" class="slds-border_bottom">    
+                            <div class="slds-truncate">{!conOwner.contractOwner.email}</div>
+                        </td>              
+                        
+                        <td class="slds-border_bottom slds-border_right">
+                            <lightning:button class="slds-button  VIEW" label="Select"  onclick="{! c.selectContractOwner }" value="{!conOwner.contractOwner}"/>
+                        </td>
+                    </tr>
+                </aura:iteration>        
+            </table>
+    </aura:if>
+    
+    <aura:if isTrue="{!not(v.displayTable==true)}">
+        <div class="slds-box" style="background-color:#fafafa;">
+            <center>Contract Owner(s) not available.Please click <b>"Search All"</b> button.</center>
+        </div>
+    </aura:if>
+
+    <div aria-hidden="false" id="contractOwnerError" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            <center>{!$Label.c.CO_unable_to_fect_error_msg}</center></p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.closePoppup}" style="color:black;">OK</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+
+
+    
+    <!--Used for spinner loading icon -->
+        <aura:if isTrue="{!v.spinnerinQuickAction}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+</aura:component>

@@ -1,0 +1,14 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" controller="Greeting" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="name" type="String"/>
+    <aura:attribute name="output" type="String"/>
+	<div aura:id="getInput">
+     <ui:inputText value="{!v.name}" label="Whats Your Name"  click="{!c.clear}" />
+	</div>
+	<lightning:button variant="brand" class="button" label="HI" onclick="{!c.greet}"></lightning:button>
+    <aura:if isTrue="{!not(empty(v.output))}">
+    
+    <p aura:id="outputText" style="color:white">HI  {!v.output} !!!</p>
+    
+	</aura:if>
+</aura:component>

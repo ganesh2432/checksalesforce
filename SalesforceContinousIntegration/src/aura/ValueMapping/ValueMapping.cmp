@@ -1,0 +1,218 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component for Value mapping selection.
+ * Created By  :   Siva Krishna Reddy B
+ * Created Date:   10/05/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="ValueMappingController" access="global">
+      
+    <!-- attributes declaration -->
+    <aura:attribute name="enumobjs" type="object[]" description="selected enum values from IContract with salesforce fields" access="global" default="[{'IContractFieldName':'','ObjectName1':'','FieldName1':'','ObjectName2':'','FieldName2':''}]"/>
+    <aura:attribute name="enumList" type="String[]" description="selected enum values from IContract" access="global" default="['Contract Region','Contract Title','Category']"/>
+    <aura:attribute name="enumValues" type="object[]" description="allowed values in Contract" access="global" default="[{'FieldName':'','Allowedvalues':''}]"/>
+    <aura:attribute name="piValues" type="String[]" description="iContract picklist values" access="global"/>
+    <aura:attribute name="pickValueWrapper" type="object[]" description="selected and non-selected values" access="global"  />
+    <aura:attribute name="mapConfigId" type="String" description="mapping configuration data" access="global"/>
+    <aura:attribute name="mapConfigIdNew" type="String" description="mapping configuration data using after init function" access="global"/>
+    <aura:attribute name="iContractFieldsList" type="IContract_MetaData__c[]" description="store icontract enum fields" access="global"/>
+    <aura:attribute name="allowSave" type="Boolean" default="true" description="stop saving value mapping incomplete." access="global"/>
+    <aura:attribute name="SuccessErrormsg" type="String" description="modal popup for success and error messages" access="global"/>
+    <aura:attribute name="firstVal" type="boolean" description="load with default values" access="global" default="true"/>
+    <aura:attribute name="Spinner" type="boolean" default="false" description="loading spinner" access="global"/>
+    <aura:attribute name="currStep" type="String" description="checking current step"/>
+    <aura:attribute name="finalSavePopup" type="boolean" description=" show popup to user to fill values" access="global" default="false"/>
+    <aura:attribute name="unMappedList" type="String[]" description="selected and non-selected values with all list values" access="global"  />
+    <aura:attribute name="fieldMismatchErrMsg" type="String" description="Error msg to display" access="global"/>
+    <aura:attribute name="DuplicateValueErrMsg" type="String" description="Error msg to display" access="global"/>
+    <aura:attribute name="finalSaveWithOutExit" type="boolean" default="false" description="to land particular value" access="global"/>
+    <aura:attribute name="notMapped" type="boolean" default="false" description="not mapped value" access="global"/>
+    <aura:attribute name="themeURL" type="string" access="global" description="to know component running in lightning or classic"/>
+    
+    <!-- aura handler --> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>     
+    <aura:method name="savePickValues" action="{!c.saveNextClick}" access="global"/>
+    <aura:method name="backtoStep3" action="{!c.doInit}" access="global"/>
+    <aura:registerEvent type="c:MovetoNextProgressBarEvt" name="moveToNextEvt" />
+    
+    <!-- header -->
+    <div class="heading">
+        <b><ui:outputText value="{!$Label.c.Value_Mapping_Header}" /></b>
+    </div>
+    <br/>
+    
+    <!-- Value Mapping table -->
+    <div class="slds-grid gridHeader">
+    	<div class="slds-col slds-size_1-of-4 colHeader firstRadius">
+        	<span class="colHeaderText">Fields selected from iContract</span>                
+        </div>           
+        <div class="slds-col slds-size_3-of-4 colHeader secondRadius">
+        	<span class="colHeaderText">Values for Selected Fields</span>
+        </div>
+    </div>   
+    <div class="slds-grid gridHeader">
+    	<div class="slds-col slds-size_1-of-4 firstRadius">                              
+        	<table class="slds-table slds-table_bordered slds-table_col-bordered tableClass">
+            	<tbody>
+                	<aura:iteration items="{!v.iContractFieldsList}" var="enumValue" indexVar="index">
+                    	<tr>
+                        	<th scope="col" onclick="{!c.popValues}" data-value="{!index}" aura:id="main">{!enumValue.Display_Name__c}                           	
+                            </th>
+            			</tr>
+                     </aura:iteration>
+                 </tbody>
+             </table>
+        </div>
+        <div class="slds-col slds-size_3-of-4 secondRadius">
+         	<div class="slds-grid slds-gutters">
+            	<div class="slds-col pickVal">
+                	<span class="colHeaderText1">Values in iContract</span>
+                    <table class="slds-table slds-table_cell-buffer">
+                        <tbody>                      
+                            <aura:iteration items="{!v.pickValueWrapper}" var="pickValWrap" indexVar="index">
+                                <tr class="slds-hint-parent col ">                                           	
+                                    <td scope="row">                                        
+								    	<ui:inputSelectOption text="{!pickValWrap.IContractValue}" label="{!pickValWrap.IContractValue}" class="slds-select trtext"/>																					                                                                        	
+                                    </td>                           
+                                </tr>
+                            </aura:iteration> 
+                        </tbody>
+                	</table>
+                </div>
+                <div class="slds-col pickVal">
+                    <span class="colHeaderText1">Salesforce Contract Object</span>
+                    <table class="slds-table slds-table_cell-buffer">
+						<tbody>
+							<aura:iteration items="{!v.pickValueWrapper}" var="pickValWrap" indexVar="index">
+								<aura:if isTrue="{!pickValWrap.fieldValues1.length>0}">
+                                <tr class="slds-hint-parent col">                                           	
+									<td scope="row">                                    
+										<ui:inputSelect aura:id="f1v" value="{!pickValWrap.Value1}" class="slds-select">
+											<ui:inputSelectOption text="Select" label="Select"/>
+											<aura:iteration items="{!pickValWrap.fieldValues1}" var="level">                                            
+												<ui:inputSelectOption text="{!level}" label="{!level}" value="{!(pickValWrap.Value1 !=level) ? 'false':'true'}"/>
+											</aura:iteration>
+										</ui:inputSelect>
+									</td>                           
+								</tr>
+                                </aura:if>
+							</aura:iteration> 
+						  </tbody>
+					</table>
+                </div>
+                <div class="slds-col pickVal">
+                    <span class="colHeaderText1">Salesforce Opportunity Object</span>
+                    <table class="slds-table slds-table_cell-buffer">
+						<tbody>
+							<aura:iteration items="{!v.pickValueWrapper}" var="pickValWrap" indexVar="index">
+								<aura:if isTrue="{!pickValWrap.fieldValues2.length>0}">
+                                <tr class="slds-hint-parent col">                                           	
+									<td scope="row">                                       
+										<ui:inputSelect aura:id="f2v" value="{!pickValWrap.Value2}" class="slds-select">                                           
+											<ui:inputSelectOption text="Select" label="Select"/>                                            
+											<aura:iteration items="{!pickValWrap.fieldValues2}" var="level">
+												<ui:inputSelectOption text="{!level}" label="{!level}" value="{!(pickValWrap.Value2 !=level) ? 'false':'true'}"/>
+											</aura:iteration>
+										</ui:inputSelect>                                        
+									</td>                                    
+								</tr>
+                                </aura:if>								
+							</aura:iteration>
+                            <aura:if isTrue="{!v.notMapped}">
+                            <div class="heading">
+                                <br/>
+                                <b><aura:unescapedHtml value="{!$Label.c.Value_Mapping_Field_Mapping_not_done}"></aura:unescapedHtml></b>
+    						</div>
+                            </aura:if>                                                       
+						</tbody>
+                	</table>
+                </div>
+            </div>
+        </div>
+    </div>
+       <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+            <br/><br/>
+        </aura:if>
+    
+    <div aria-hidden="false" id="SuccessErrorModal" style="display:none;">
+    	<div class="demo-only" style="height: 640px;">
+        	<section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            	<div class="slds-modal__container" style="width: 23%;">
+                	<header class="slds-modal__header slds-modal__header_empty">
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <p>
+                    {!v.SuccessErrormsg}<br/>
+                    </p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                    	<div class="slds-align_absolute-center">
+                        	<button class="slds-button slds-button_neutral" onclick="{!c.closeModal}" style="color:black;">OK</button><!-- stay on same page-->
+                            
+                        </div>
+                    </footer>
+                 </div>
+             </section>
+         <div class="slds-backdrop slds-backdrop_open"></div>
+       </div>
+    </div>
+    <!-- Model popup used to display popup to display unmapped values -->
+    <!-- Displaying model popup is controlled by style display attribute-->
+    <div aria-hidden="false" id="FieldMismatchErrorMessageModal" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            <center><lightning:icon iconName="action:close" size="small" alternativeText="Indicates approval"/></center>
+                            <aura:unescapedHtml value="{!v.fieldMismatchErrMsg}"></aura:unescapedHtml>
+                        </p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.onFieldMismatchModalCancel}" style="color:black;">Ok</button><!-- go backs to Home page-->
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    <!-- Model popup used to display popup to display duplicate values -->
+    <!-- Displaying model popup is controlled by style display attribute-->
+    <div aria-hidden="false" id="DuplicateValueErrorMessageModal" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            <center><lightning:icon iconName="action:close" size="small" alternativeText="Indicates approval"/></center>
+                            <aura:unescapedHtml value="{!v.DuplicateValueErrMsg}"></aura:unescapedHtml>
+                        </p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.onDuplicateValueModalCancel}" style="color:black;">Ok</button><!-- go backs to Home page-->
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+           <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+             <span class="slds-assistive-text">Loading</span>
+             <div class="slds-spinner__dot-a"></div>
+             <div class="slds-spinner__dot-b"></div>
+           </div>
+        </div>
+    </aura:if>
+</aura:component>

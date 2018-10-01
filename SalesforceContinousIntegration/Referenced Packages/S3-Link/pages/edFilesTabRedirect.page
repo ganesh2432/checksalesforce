@@ -1,0 +1,13 @@
+<!--**********************************************************************************
+* Copyright © 2015, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edFilesTabRedirect
+* Created by Anil Meghnathi
+
+* - Override the list view for files
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page action="{!URLFOR($Action.File__c.List, $ObjectType.File__c)}"/>

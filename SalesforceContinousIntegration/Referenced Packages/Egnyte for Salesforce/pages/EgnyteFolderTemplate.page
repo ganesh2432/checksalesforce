@@ -1,0 +1,20 @@
+<apex:page standardController="efs__EgnyteFolderTemplate__c" extensions="efs.EgnyteFolderTemplateController">
+    <apex:sectionHeader title="Egnyte Folder Template Edit"
+        subtitle="{!If(efs__EgnyteFolderTemplate__c.Id != null, efs__EgnyteFolderTemplate__c.Name, 'New Egnyte Folder Template')}"/>
+    <apex:pagemessages />
+    <apex:form >
+        <apex:pageBlock title="Egnyte Folder Template Edit" mode="edit">
+            <apex:pageblocksection columns="2" >
+                <apex:selectList value="{!efs__EgnyteFolderTemplate__c.efs__RecordType__c}" size="1">
+                    <apex:selectOptions value="{!recordTypes}"/>
+                </apex:selectList>
+                <apex:inputField value="{!efs__EgnyteFolderTemplate__c.efs__Active__c}"  />
+                <apex:inputHidden value="{!efs__EgnyteFolderTemplate__c.efs__EgnyteSyncObject__c}"/>
+            </apex:pageblocksection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,191 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component for Line item Value mapping selection.
+ * Created By  :   Jayanth B
+ * Created Date:   10/05/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="LineItemValueMapping">
+    
+    <!-- attributes declaration -->
+    <aura:attribute name="iContractFieldsList" type="IContract_MetaData__c[]" description="store icontract enum fields" access="global"/>
+    <aura:attribute name="pickValueWrapper" type="Value_Mapping__c[]" access="global" description="valuemapping data created to save in the backend"/>
+    <aura:attribute name="ObjectName" type="String" access="global" description="stores the object name"/>
+    <aura:attribute name="selectedFieldPickListVal" type="String[]" access="global" description="picklist fields value to map"/>
+    <aura:attribute name="firstVal" type="boolean" default="false" access="global"/>
+    <aura:attribute name="selectedField" type="String" access="global"/>
+    <aura:attribute name="fieldMismatchErrMsg" type="String" access="global" description="if duplicated field matched error message"/>
+    <aura:attribute name="savedSuccessfully" type="boolean" default="false" access="global" description="successfull save check"/>
+    <aura:attribute name="dontAllowNextPleaseExit" type="boolean" default="false" access="global" description="for incompletion of value mapping"/>
+    <aura:attribute name="notFoundAnyError" type="boolean" default="true" access="global"/>
+    <aura:attribute name="themeURL" type="string" access="global" description="defines environment whether lightning or classic"/>
+    
+    
+    <aura:registerEvent name="goToHomePage" type="c:GoToHomePage" access="global"/>
+    <aura:registerEvent name="EvntToDisableSaveAndFinish" type="c:EvntToDisableSaveAndFinish" access="global"/>
+    <aura:registerEvent name="LineItemMappingSpinnerEvent" type="c:LineItemMappingSpinnerEvent" access="global"/>
+    
+    <aura:method name="saveMappedValues" action="{!c.saveButtonClick}" access="PUBLIC"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:if isTrue="{!v.iContractFieldsList.length > 0}">
+        <!-- header -->
+        <div class="heading" style="background-color:white">
+            <b>{!$Label.c.LineItemValueMapping_header}</b>&nbsp;
+        </div>
+        <br/>
+        
+        <!-- Value Mapping table -->
+        <div class="slds-grid gridHeader">
+            <aura:if isTrue="{!v.themeURL != $Label.c.Theme4d}">
+                <div class="slds-col slds-size_1-of-4 colHeader firstRadius icontTablHeadr">
+                    <span class="colHeaderText">Fields selected from iContract</span>                
+                </div>     
+            </aura:if>
+            <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+                <div class="slds-col slds-size_1-of-4 colHeader firstRadius icontTablHeadrlght">
+                    <span class="colHeaderText">Fields selected from iContract</span>                
+                </div>     
+            </aura:if>
+            <div class="slds-col slds-size_3-of-4 colHeader secondRadius">
+                <span class="colHeaderText">Values for Selected Fields</span>
+            </div>
+        </div>   
+        <div class="slds-grid gridHeader">
+            <div class="slds-col slds-size_1-of-4 firstRadius">                              
+                <table class="slds-table slds-table_bordered slds-table_col-bordered tableClass">
+                    <tbody>
+                        <aura:iteration items="{!v.iContractFieldsList}" var="enumValue" indexVar="index">
+                            <tr>
+                                <th  class="fieldValuesStyle" scope="row" onclick="{!c.onChange}" data-value="{!index}" aura:id="main" >{!enumValue.Display_Name__c}                           	
+                                </th>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+            
+            
+            <div class="slds-col slds-size_3-of-4 secondRadius ValueMappingHearderStyles">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col pickVal">
+                        <table class="slds-table slds-table_cell-buffer" >
+                            <thead style="">
+                                <tr >
+                                    <th scope="col" class="firstColStyleValmppng" >                                        
+                                        <span class="colHeaderText">Values in iContract</span>																					                                                                        	
+                                    </th> 
+                                    <th scope="col" class="secondColStyleVlmppng">                                        
+                                        <span class="colHeaderText">Salesforce LineItem Object</span>																					                                                                        	
+                                    </th> 
+                                </tr>
+                            </thead>
+                            <tbody>    
+                                <aura:iteration items="{!v.pickValueWrapper}" var="pickValWrap" indexVar="index">
+                                    <tr class="slds-hint-parent col ">                                           	
+                                        <td scope="row">                                        
+                                            <ui:inputSelectOption text="{!pickValWrap.IContract_Value__c}" label="{!pickValWrap.IContract_Value__c}" value="{!pickValWrap.IContract_Value__c}" class="slds-select trtext toDisplayvalueBox"/>																					                                                                        	
+                                        </td>     
+                                        <td scope="row">      <!--variant="label-hidden" --> 
+                                            <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+                                                <div class="valMppngFieldValuesLightng" >
+                                                    <lightning:select class="toDisplayAbove" aura:id="mappedValue" value="{!pickValWrap.Mapping_Value__c}">
+                                                        <aura:iteration items="{!v.selectedFieldPickListVal}" var="val">
+                                                            <option selected="{!val==pickValWrap.Mapping_Value__c}" value="{!val}">{!val}</option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </aura:if>
+                                            <aura:if isTrue="{!v.themeURL != $Label.c.Theme4d}">
+                                                <div class="valMppngFieldValuesClassic" >
+                                                    <lightning:select class="toDisplayAbove" aura:id="mappedValue" value="{!pickValWrap.Mapping_Value__c}">
+                                                        <aura:iteration items="{!v.selectedFieldPickListVal}" var="val">
+                                                            <option selected="{!val==pickValWrap.Mapping_Value__c}" value="{!val}">{!val}</option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </aura:if>
+                                        </td> 
+                                    </tr>
+                                </aura:iteration> 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+            <aura:if isTrue="{!v.iContractFieldsList.length == 1}"><br/><br/><br/><br/><br/><br/><br/><br/><br/></aura:if>
+            <aura:if isTrue="{!v.iContractFieldsList.length == 2}"><br/><br/><br/><br/><br/><br/><br/><br/><br/></aura:if>
+            <aura:if isTrue="{!v.iContractFieldsList.length == 3}"><br/><br/><br/><br/><br/><br/><br/><br/><br/></aura:if>
+            <aura:if isTrue="{!v.iContractFieldsList.length == 4}"><br/><br/><br/><br/><br/><br/><br/><br/></aura:if>
+            <aura:if isTrue="{!v.iContractFieldsList.length == 5}"><br/><br/><br/><br/><br/><br/></aura:if>
+            <aura:if isTrue="{!v.iContractFieldsList.length == 6}"><br/><br/><br/><br/></aura:if>
+            <aura:if isTrue="{!v.iContractFieldsList.length == 7}"><br/><br/></aura:if>
+        </aura:if>
+        <aura:if isTrue="{!not(v.themeURL == $Label.c.Theme4d)}">
+            <aura:if isTrue="{!v.iContractFieldsList.length == 1}"><br/><br/><br/><br/><br/><br/></aura:if>
+            <aura:if isTrue="{!v.iContractFieldsList.length == 2}"><br/><br/><br/><br/><br/><br/></aura:if>
+            <aura:if isTrue="{!v.iContractFieldsList.length == 3}"><br/><br/><br/><br/><br/><br/></aura:if>
+            <aura:if isTrue="{!v.iContractFieldsList.length == 4}"><br/><br/><br/><br/><br/></aura:if>
+            <aura:if isTrue="{!v.iContractFieldsList.length == 5}"><br/><br/><br/></aura:if>
+            <aura:if isTrue="{!v.iContractFieldsList.length == 6}"><br/></aura:if>
+        </aura:if>
+    </aura:if>
+    <aura:if isTrue="{!not(v.iContractFieldsList.length > 0)}">
+        <br/><br/><br/><br/><br/><br/><br/><br/>
+        <div class="emptyValueMappingFields">
+            <center> <b><ui:outputText value="{!$Label.c.Empty_Value_mapping_fields}" /></b>
+            </center>
+        </div>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    </aura:if>
+    
+    <div aria-hidden="false" id="FieldMismatchErrorMessageModal" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            <center><lightning:icon iconName="action:close" size="small" alternativeText="Indicates approval"/></center>
+                            <aura:unescapedHtml value="{!v.fieldMismatchErrMsg}"></aura:unescapedHtml>
+                        </p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.onFieldMismatchModalCancel}" style="color:black;">Ok</button><!-- go backs to Home page-->
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    
+    
+    <div aria-hidden="false" id="lineItemConfirmation" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            <center>{!$Label.c.LineItemFinalExitMessage}</center></p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.yesExitConfig}" style="color:black;">Yes,Exit</button><!-- go backs to Home page-->
+                            <button class="slds-button slds-button_neutral" onclick="{!c.CloasePopUpForConfir}" style="color:black;">Cancel</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+</aura:component>

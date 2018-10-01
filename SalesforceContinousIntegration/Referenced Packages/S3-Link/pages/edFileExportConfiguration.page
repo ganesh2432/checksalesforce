@@ -1,0 +1,436 @@
+<!--**********************************************************************************
+* Copyright © 2015-2017, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edFileExportConfiguration
+* Created by Anil Meghnathi: 07/06/2017
+
+* - File export configuration page
+
+* - Modifications:
+* - Anil Meghnathi : 07/06/2017 - Initial Development 
+***********************************************************************************-->
+<apex:page controller="NEILON.edFileExportConfigurationController" action="{!init}">
+	<c:apJsAndCssIncludeComponent importJquery="true"
+                              importAppurinUtil="true"
+                              importJQueryLayout="false"
+                              importFancyTree="false"
+                              importJqGrid="false"
+                              importEasyTooltip="true"
+                              importAppurinCss="true"
+                              importCkEditor="false"
+                              importGnattChart="false"
+                              importLightningDesign="true"/>
+                              
+	<script>
+        var twistyLightningSectionStatus = {};
+        j$(document).ready(function() {
+			easyToolTipForAll();
+			
+		});
+		
+        function easyToolTipForAll() {
+            j$('.apHelpText').easyTooltip({width: '200px', isLightning:true, isFormatted:true});
+            return false;
+        }
+    </script>
+                              
+    <apex:actionStatus id="splashStatus" onstart="startSplash();" onstop="endSplash(); " />
+	<div class="slds">
+        <div id="splashDiv" class="apInitiallyDivDisplayNone" style="z-index:9998;">
+            <div class="slds-spinner_container apLightningSpinnerContainer">
+                <div role="status" class="slds-spinner slds-spinner--medium slds-spinner--brand">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <apex:outputPanel rendered="{!isError}">
+        <apex:pagemessages id="pageLoadErrorMessage"/>
+        <script>
+            Appurin.lightning.createLightningPageMessage({'classicPageMessageId' : '{!$Component.pageLoadErrorMessage}'});   
+        </script>
+    </apex:outputPanel>
+    
+	<apex:form id="form" rendered="{!!isError}">
+	    <apex:outputPanel styleClass="slds">
+    		<div class="apPageHeader" id="PageHeader">
+    			<div class="apPageHeaderMedia">
+    	          	<div id="pageHeaderMedia" class="apPageHeaderMediaFigure">
+    	          	    <c:apLightningSvg parentId="pageHeaderMedia" styleClass="apLightningPageHeaderIcon slds-button__icon" path="/assets/icons/utility-sprite/svg/symbols.svg#settings"/>
+    	            </div>
+    	            <div class="apPageHeaderMediaBody">
+    	                <p class="slds-text-title--caps slds-line-height--reset">{!$Label.Configuration}</p>
+    					<div class="apPageHeaderTitle" >{!$Label.File_Export_Configuration_Subtitle}</div>
+    	              	<div class="apPageHeaderInfo">
+    	              		<label>{!$Label.File_Export_Configuration_Page_Description}</label>
+    	              	</div>
+              		</div>
+    	            <div style="float:right;" class="apPageHeaderMediaButtons">
+    	                <apex:commandButton styleClass="slds-button slds-button--brand" value="{!$Label.neilon__save}" action="{!Save}" status="splashStatus" onComplete="easyToolTipForAll();" reRender="fileExportConfiguration"/>
+                        <apex:commandButton styleClass="slds-button slds-button--brand" value="{!$Label.neilon__reset_to_system_default_button}" action="{!initialize}" onComplete="easyToolTipForAll();" reRender="fileExportConfiguration" status="splashStatus"/>
+    	            </div>
+    	           <script>
+    	           		Appurin.lightning.createPageHeader('PageHeader');
+    	           </script>
+    	        </div>
+            </div>
+	    </apex:outputPanel>
+	    <apex:outPutPanel layout="block" styleClass="slds" id="fileExportConfiguration">
+	        <apex:outputPanel >
+                <apex:pagemessages id="errorMessages"/>
+                <script>
+                    Appurin.lightning.createLightningPageMessage({'classicPageMessageId' : '{!$Component.errorMessages}'});   
+                </script>
+            </apex:outputPanel>
+			<apex:outPutPanel layout="block" styleClass="slds-section slds-is-open" id="emailAttachmentSection">
+		       <h3 class="slds-section__title">
+		           <apex:outputPanel id="emailAttachmentHeader" layout="block" styleclass="slds-button slds-section__title-action">
+		               <c:apLightningSvg parentId="emailAttachmentHeader" parentType="div" styleClass="slds-section__title-action-icon slds-button__icon slds-button__icon--left" path="/assets/icons/utility-sprite/svg/symbols.svg#switch"/>
+		               <label class="avLightningFormElementLabel">{!$Label.neilon__inbound_email_attachments_export_section_header}</label>
+		           </apex:outputPanel>
+		       </h3>
+		       <apex:outputPanel layout="block" styleClass="slds-section__content">
+		           <apex:outputPanel layout="block" styleClass="slds-grid slds-grid--pull-padded-medium">
+		               <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+		                   <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                           <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Group_Email_Attachments_by_Date__c.label}"></apex:outputLabel>
+		                       </apex:outputPanel>
+		                       <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Group_Email_Attachments_by_Date__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Group_Email_Attachments_by_Date__c.inlineHelpText}"/>
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+		                           <apex:outputPanel styleClass="slds-checkbox">
+		                               <apex:inputField value="{!fileExportConfiguration.NEILON__Group_Email_Attachments_by_Date__c}" id="autoCopyLeadFilesField"/>
+		                               <apex:outputlabel styleClass="slds-checkbox__label" for="autoCopyLeadFilesField">
+		                                   <apex:outputPanel styleClass="slds-checkbox--faux"></apex:outputPanel>
+		                                   <apex:outputPanel styleClass="slds-form-element__label"></apex:outputPanel>
+		                               </apex:outputlabel>
+		                           </apex:outputPanel>
+		                       </apex:outputPanel>
+		                   </apex:outputPanel> 
+		               </apex:outputPanel>
+		               
+		               <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+		                   <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                           <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Folder_to_Export_Inbound_Email_Files__c.label}"></apex:outputLabel>
+		                       </apex:outputPanel>
+		                       <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Folder_to_Export_Inbound_Email_Files__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Folder_to_Export_Inbound_Email_Files__c.inlineHelpText}"/>
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+	                               <apex:inputField styleClass="slds-input" value="{!fileExportConfiguration.NEILON__Folder_to_Export_Inbound_Email_Files__c}" id="deleteLeadFilesField"/>
+		                       </apex:outputPanel>
+		                   </apex:outputPanel> 
+		               </apex:outputPanel>
+		           </apex:outputPanel>
+		           <script>
+						Appurin.lightning.createLightningSection('{!$Component.emailAttachmentSection}');
+					</script>
+				</apex:outputPanel>
+	        </apex:outputPanel>
+  			<apex:outPutPanel layout="block" styleClass="slds-section slds-is-open" id="standardAttachmentSection">
+		       <h3 class="slds-section__title">
+		           <apex:outputPanel id="standardAttachmentHeader" layout="block" styleclass="slds-button slds-section__title-action">
+		               <c:apLightningSvg parentId="standardAttachmentHeader" parentType="div" styleClass="slds-section__title-action-icon slds-button__icon slds-button__icon--left" path="/assets/icons/utility-sprite/svg/symbols.svg#switch"/>
+		               <label class="avLightningFormElementLabel">{!$Label.neilon__standard_attachments_export_section_header}</label>
+		           </apex:outputPanel>
+		       </h3>
+		       <apex:outputPanel layout="block" styleClass="slds-section__content">
+		           <apex:outputPanel layout="block" styleClass="slds-grid slds-grid--pull-padded-medium">
+		               <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+		                   <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                           <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Auto_Create_S3_Link_File_for_Attachment__c.label}"></apex:outputLabel>
+		                       </apex:outputPanel>
+		                       <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Auto_Create_S3_Link_File_for_Attachment__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Auto_Create_S3_Link_File_for_Attachment__c.inlineHelpText}"/>
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+		                           <apex:outputPanel styleClass="slds-checkbox">
+		                               <apex:inputField value="{!fileExportConfiguration.NEILON__Auto_Create_S3_Link_File_for_Attachment__c}" id="autoCreateFilesField"/>
+		                               <apex:outputlabel styleClass="slds-checkbox__label" for="autoCreateFilesField">
+		                                   <apex:outputPanel styleClass="slds-checkbox--faux"></apex:outputPanel>
+		                                   <apex:outputPanel styleClass="slds-form-element__label"></apex:outputPanel>
+		                               </apex:outputlabel>
+		                           </apex:outputPanel>
+		                       </apex:outputPanel>
+		                   </apex:outputPanel> 
+		               </apex:outputPanel>
+		               
+		               <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+		                   <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                           <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Create_S3_Link_Files_for_Attachments__c.label}"></apex:outputLabel>
+		                       </apex:outputPanel>
+		                       <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Create_S3_Link_Files_for_Attachments__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Create_S3_Link_Files_for_Attachments__c.inlineHelpText}"/>
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+		                           <apex:outputPanel styleClass="slds-checkbox">
+		                               <apex:inputField value="{!fileExportConfiguration.NEILON__Create_S3_Link_Files_for_Attachments__c}" id="createFilesField"/>
+		                               <apex:outputlabel styleClass="slds-checkbox__label" for="createFilesField">
+		                                   <apex:outputPanel styleClass="slds-checkbox--faux"></apex:outputPanel>
+		                                   <apex:outputPanel styleClass="slds-form-element__label"></apex:outputPanel>
+		                               </apex:outputlabel>
+		                           </apex:outputPanel>
+		                       </apex:outputPanel>
+		                   </apex:outputPanel> 
+		               </apex:outputPanel>
+		           </apex:outputPanel>
+		           
+		           <apex:outputPanel layout="block" styleClass="slds-grid slds-grid--pull-padded-medium">
+		               <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+		                   <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                           <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Delete_Salesforce_Attachment__c.label}"></apex:outputLabel>
+		                       </apex:outputPanel>
+		                       <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Delete_Salesforce_Attachment__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Delete_Salesforce_Attachment__c.inlineHelpText}"/>
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+		                           <apex:outputPanel styleClass="slds-checkbox">
+		                               <apex:inputField value="{!fileExportConfiguration.NEILON__Delete_Salesforce_Attachment__c}" id="deleteAttachmentsField"/>
+		                               <apex:outputlabel styleClass="slds-checkbox__label" for="deleteAttachmentsField">
+		                                   <apex:outputPanel styleClass="slds-checkbox--faux"></apex:outputPanel>
+		                                   <apex:outputPanel styleClass="slds-form-element__label"></apex:outputPanel>
+		                               </apex:outputlabel>
+		                           </apex:outputPanel>
+		                       </apex:outputPanel>
+		                   </apex:outputPanel> 
+		               </apex:outputPanel>
+		               
+		               <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+		                   <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                           <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Group_Attachments_by_Parent_Name__c.label}"></apex:outputLabel>
+		                       </apex:outputPanel>
+		                       <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Group_Attachments_by_Parent_Name__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Group_Attachments_by_Parent_Name__c.inlineHelpText}"/>
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+		                           <apex:outputPanel styleClass="slds-checkbox">
+		                               <apex:inputField value="{!fileExportConfiguration.NEILON__Group_Attachments_by_Parent_Name__c}" id="groupAttachmentsByParentField"/>
+		                               <apex:outputlabel styleClass="slds-checkbox__label" for="groupAttachmentsByParentField">
+		                                   <apex:outputPanel styleClass="slds-checkbox--faux"></apex:outputPanel>
+		                                   <apex:outputPanel styleClass="slds-form-element__label"></apex:outputPanel>
+		                               </apex:outputlabel>
+		                           </apex:outputPanel>
+		                       </apex:outputPanel>
+		                   </apex:outputPanel> 
+		               </apex:outputPanel>
+		           </apex:outputPanel>
+		           
+		           <apex:outputPanel layout="block" styleClass="slds-grid slds-grid--pull-padded-medium">
+		               <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+		                   <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                           <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Link_S3_Link_Files_to_Attachment_Parent__c.label}"></apex:outputLabel>
+		                       </apex:outputPanel>
+		                       <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Link_S3_Link_Files_to_Attachment_Parent__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Link_S3_Link_Files_to_Attachment_Parent__c.inlineHelpText}"/>
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+		                           <apex:outputPanel styleClass="slds-checkbox">
+		                               <apex:inputField value="{!fileExportConfiguration.NEILON__Link_S3_Link_Files_to_Attachment_Parent__c}" id="linkFilesToParentField"/>
+		                               <apex:outputlabel styleClass="slds-checkbox__label" for="linkFilesToParentField">
+		                                   <apex:outputPanel styleClass="slds-checkbox--faux"></apex:outputPanel>
+		                                   <apex:outputPanel styleClass="slds-form-element__label"></apex:outputPanel>
+		                               </apex:outputlabel>
+		                           </apex:outputPanel>
+		                       </apex:outputPanel>
+		                   </apex:outputPanel> 
+		               </apex:outputPanel>
+		               
+		               <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+		                   <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                           <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Folder_to_Export_Salesforce_Attachments__c.label}"></apex:outputLabel>
+		                       </apex:outputPanel>
+		                       <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Folder_to_Export_Salesforce_Attachments__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Folder_to_Export_Salesforce_Attachments__c.inlineHelpText}"/>
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+	                               <apex:inputField styleClass="slds-input" value="{!fileExportConfiguration.NEILON__Folder_to_Export_Salesforce_Attachments__c}" id="folderToExportAttachmentsField"/>
+		                       </apex:outputPanel>
+		                   </apex:outputPanel> 
+		               </apex:outputPanel>
+		           </apex:outputPanel>
+		           <apex:outputPanel layout="block" styleClass="slds-grid slds-grid--pull-padded-medium">
+	                   <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+	                       <apex:outputPanel layout="block" styleClass="slds-form-element">
+	                           <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+	                               <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Add_Date_In_File_Name__c.label}"></apex:outputLabel>
+	                           </apex:outputPanel>
+	                           <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Add_Date_In_File_Name__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Add_Date_In_File_Name__c.inlineHelpText}"/>
+	                           <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+	                               <apex:outputPanel styleClass="slds-checkbox">
+	                                   <apex:inputField value="{!fileExportConfiguration.NEILON__Add_Date_In_File_Name__c}" id="addDateInFileNameField"/>
+	                                   <apex:outputlabel styleClass="slds-checkbox__label" for="addDateInFileNameField">
+	                                       <apex:outputPanel styleClass="slds-checkbox--faux"></apex:outputPanel>
+	                                       <apex:outputPanel styleClass="slds-form-element__label"></apex:outputPanel>
+	                                   </apex:outputlabel>
+	                               </apex:outputPanel>
+	                           </apex:outputPanel>
+	                       </apex:outputPanel> 
+	                   </apex:outputPanel>
+	                   <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+	                   </apex:outputPanel>
+		           </apex:outputPanel>
+		           <script>
+						Appurin.lightning.createLightningSection('{!$Component.standardAttachmentSection}');
+					</script>
+				</apex:outputPanel>
+	        </apex:outputPanel>
+	        <apex:outputPanel layout="block">
+                <apex:outPutPanel layout="block" styleClass="slds-section slds-is-open" id="emailToCaseSection">
+                    <h3 class="slds-section__title">
+                        <apex:outputPanel id="emailToCaseHeader" layout="block" styleclass="slds-button slds-section__title-action">
+                            <c:apLightningSvg parentId="emailToCaseHeader" parentType="div" styleClass="slds-section__title-action-icon slds-button__icon slds-button__icon--left" path="/assets/icons/utility-sprite/svg/symbols.svg#switch"/>
+                            <label class="avLightningFormElementLabel">{!$Label.neilon__email_to_case_section_header}</label>
+                        </apex:outputPanel>
+                    </h3>
+                    <apex:outputPanel layout="block" styleClass="slds-section__content">
+                        <apex:outputPanel layout="block" styleClass="slds-grid slds-grid--pull-padded-medium">
+                            <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+                                <apex:outputPanel layout="block" styleClass="slds-form-element">
+                                    <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+                                        <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Auto_Move_Case_Email_Attachments__c.label}"></apex:outputLabel>
+                                    </apex:outputPanel>
+                                    <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Auto_Move_Case_Email_Attachments__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Auto_Move_Case_Email_Attachments__c.inlineHelpText}"/>
+                                    <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+                                        <apex:outputPanel styleClass="slds-checkbox">
+                                            <apex:inputField value="{!fileExportConfiguration.NEILON__Auto_Move_Case_Email_Attachments__c}" id="autoMoveCaseEmailAttachmentsField"/>
+                                            <apex:outputlabel styleClass="slds-checkbox__label" for="autoMoveCaseEmailAttachmentsField">
+                                                <apex:outputPanel styleClass="slds-checkbox--faux"></apex:outputPanel>
+                                                <apex:outputPanel styleClass="slds-form-element__label"></apex:outputPanel>
+                                            </apex:outputlabel>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                </apex:outputPanel> 
+                            </apex:outputPanel>
+                    	</apex:outputPanel>
+                    </apex:outputPanel> 
+                    <script>
+    				    Appurin.lightning.createLightningSection('{!$Component.emailToCaseSection}');
+    				</script>
+                </apex:outputPanel>
+            </apex:outputPanel>
+	        <apex:outPutPanel layout="block" styleClass="slds-section slds-is-open" id="eventLogFileSection">
+		       <h3 class="slds-section__title">
+		           <apex:outputPanel id="eventLogFileHeader" layout="block" styleclass="slds-button slds-section__title-action">
+		               <c:apLightningSvg parentId="eventLogFileHeader" parentType="div" styleClass="slds-section__title-action-icon slds-button__icon slds-button__icon--left" path="/assets/icons/utility-sprite/svg/symbols.svg#switch"/>
+		               <label class="avLightningFormElementLabel">{!$Label.neilon__event_log_files_export_section_header}</label>
+		           </apex:outputPanel>
+		       </h3>
+		       <apex:outputPanel layout="block" styleClass="slds-section__content">
+		           <apex:outputPanel layout="block" styleClass="slds-grid slds-grid--pull-padded-medium">
+		               <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+		                   <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                           <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Auto_Export_Event_Log_Files__c.label}"></apex:outputLabel>
+		                       </apex:outputPanel>
+		                       <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Auto_Export_Event_Log_Files__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Auto_Export_Event_Log_Files__c.inlineHelpText}"/>
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+		                           <apex:outputPanel styleClass="slds-checkbox">
+		                               <apex:inputField value="{!fileExportConfiguration.NEILON__Auto_Export_Event_Log_Files__c}" id="autoExportEventLogFilesField"/>
+		                               <apex:outputlabel styleClass="slds-checkbox__label" for="autoExportEventLogFilesField">
+		                                   <apex:outputPanel styleClass="slds-checkbox--faux"></apex:outputPanel>
+		                                   <apex:outputPanel styleClass="slds-form-element__label"></apex:outputPanel>
+		                               </apex:outputlabel>
+		                           </apex:outputPanel>
+		                       </apex:outputPanel>
+		                   </apex:outputPanel> 
+		               </apex:outputPanel>
+		               
+		               <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+		                   <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                           <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Folder_to_Export_Event_Log_Files__c.label}"></apex:outputLabel>
+		                       </apex:outputPanel>
+		                       <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Folder_to_Export_Event_Log_Files__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Folder_to_Export_Event_Log_Files__c.inlineHelpText}"/>
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+	                               <apex:inputField styleClass="slds-input" value="{!fileExportConfiguration.NEILON__Folder_to_Export_Event_Log_Files__c}" id="folderToExportEventLogFilesField"/>
+		                       </apex:outputPanel>
+		                   </apex:outputPanel> 
+		               </apex:outputPanel>
+		           </apex:outputPanel>
+		           <script>
+						Appurin.lightning.createLightningSection('{!$Component.eventLogFileSection}');
+					</script>
+				</apex:outputPanel>
+	        </apex:outputPanel>
+	        <apex:outPutPanel layout="block" styleClass="slds-section slds-is-open" id="objectsToExportAttachmentSection">
+		        <h3 class="slds-section__title">
+		            <apex:outputPanel id="objectsToExportAttachmentHeader" layout="block" styleclass="slds-button slds-section__title-action">
+		                <c:apLightningSvg parentId="objectsToExportAttachmentHeader" parentType="div" styleClass="slds-section__title-action-icon slds-button__icon slds-button__icon--left" path="/assets/icons/utility-sprite/svg/symbols.svg#switch"/>
+		                <label class="avLightningFormElementLabel">{!$Label.neilon__objects_to_export_section_header}</label>
+		            </apex:outputPanel>
+		        </h3>
+		        <apex:outPutPanel layout="block" styleClass="slds-section__content">
+		            <apex:outputPanel layout="block" styleClass="slds-grid">
+		                <apex:outputPanel layout="block" style="padding-left:0px;" styleClass="slds-p-horizontal--medium">
+		                    <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                        <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                            <apex:outputLabel value="{!$Label.neilon__available} {!$Label.neilon__objects}"></apex:outputLabel>
+		                        </apex:outputPanel>
+		                        <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+		                            <apex:selectList styleClass="selectListStyle slds-select" style="width:200px; height: 200px;" multiselect="true" size="7"
+		                                    value="{!leftSelectedObjects}">
+		                                <apex:selectOptions value="{!leftAvailableObjects}"></apex:selectOptions>
+		                            </apex:selectList>
+		                        </apex:outputPanel>
+		                    </apex:outputPanel>
+		                </apex:outputPanel>
+		                <apex:outputPanel layout="block" styleClass="slds-grid slds-grid--vertical-align-center">
+		                    <apex:outputPanel layout="block" style="display: table;">
+		                        <apex:commandButton style="display: table-row; width:20px; height:20px;" image="{!URLFOR($Resource.NEILON__SLDS, 'assets/icons/utility/right_60.png')}" action="{!movingObjectsToRight}" onComplete="easyToolTipForAll();" reRender="objectsToExportAttachmentSection"/>
+		                        <br/>
+		                        <apex:commandButton style="display: table-row; width:20px; height:20px;" image="{!URLFOR($Resource.NEILON__SLDS, 'assets/icons/utility/left_60.png')}" action="{!movingObjectsToLeft}" onComplete="easyToolTipForAll();" reRender="objectsToExportAttachmentSection"/>
+		                    </apex:outputPanel>
+		                </apex:outputPanel> 
+		                <apex:outputPanel layout="block" styleClass="slds-p-horizontal--medium">
+		                    <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                        <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                            <apex:outputLabel value="{!$Label.neilon__selected} {!$Label.neilon__objects}"></apex:outputLabel>
+		                        </apex:outputPanel>
+		                        <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+		                             <apex:selectList styleClass="selectListStyle slds-select" style="width:200px; height: 200px;" multiselect="true" size="7"
+		                                    value="{!rightSelectedObjects}">
+		                                <apex:selectOptions value="{!rightAvailableObjects}"></apex:selectOptions>
+		                            </apex:selectList>
+		                        </apex:outputPanel>
+		                    </apex:outputPanel> 
+		                </apex:outputPanel>
+		            </apex:outputPanel>
+		        </apex:outputPanel>
+		        <script>
+				Appurin.lightning.createLightningSection('{!$Component.objectsToExportAttachmentSection}');
+				</script>
+	        </apex:outputPanel>
+	        <apex:outputPanel layout="block">
+                <apex:outPutPanel layout="block" styleClass="slds-section slds-is-open" id="otherSettingSection">
+                    <h3 class="slds-section__title">
+                        <apex:outputPanel id="otherSettingHeader" layout="block" styleclass="slds-button slds-section__title-action">
+                            <c:apLightningSvg parentId="otherSettingHeader" parentType="div" styleClass="slds-section__title-action-icon slds-button__icon slds-button__icon--left" path="/assets/icons/utility-sprite/svg/symbols.svg#switch"/>
+                            <label class="avLightningFormElementLabel">{!$Label.neilon__other} {!$Label.neilon__settings}</label>
+                        </apex:outputPanel>
+                    </h3>
+                    <apex:outputPanel layout="block" styleClass="slds-section__content">
+                        <apex:outputPanel layout="block" styleClass="slds-grid slds-grid--pull-padded-medium">
+                            <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+                                <apex:outputPanel layout="block" styleClass="slds-form-element">
+                                    <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+                                        <apex:outputLabel value="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Enable_File_Numbers__c.label}"></apex:outputLabel>
+                                    </apex:outputPanel>
+                                    <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Enable_File_Numbers__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Export_Configuration__c.fields.NEILON__Enable_File_Numbers__c.inlineHelpText}"/>
+                                    <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+                                        <apex:outputPanel styleClass="slds-checkbox">
+                                            <apex:inputField value="{!fileExportConfiguration.NEILON__Enable_File_Numbers__c}" id="enableFileNumberField"/>
+                                            <apex:outputlabel styleClass="slds-checkbox__label" for="enableFileNumberField">
+                                                <apex:outputPanel styleClass="slds-checkbox--faux"></apex:outputPanel>
+                                                <apex:outputPanel styleClass="slds-form-element__label"></apex:outputPanel>
+                                            </apex:outputlabel>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                </apex:outputPanel> 
+                            </apex:outputPanel>
+                    	</apex:outputPanel>
+                    </apex:outputPanel> 
+                    <script>
+    				    Appurin.lightning.createLightningSection('{!$Component.otherSettingSection}');
+    				</script>
+                </apex:outputPanel>
+            </apex:outputPanel>
+	    </apex:outputPanel>
+    </apex:form>
+</apex:page>

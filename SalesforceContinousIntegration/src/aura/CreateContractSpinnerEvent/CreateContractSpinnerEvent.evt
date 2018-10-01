@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="spinner while loading" >
+    <aura:attribute type="boolean" name="spin" access="global"/>
+</aura:event>

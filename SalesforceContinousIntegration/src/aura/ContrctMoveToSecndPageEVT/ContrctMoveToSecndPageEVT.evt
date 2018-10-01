@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="used to move for next step">
+    <aura:attribute name="moveToStepNo" type="String" access="global"/>
+    <aura:attribute name="contractRecordId" type="String" access="global"/>
+</aura:event>

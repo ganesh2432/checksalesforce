@@ -1,0 +1,13 @@
+<!--**********************************************************************************
+* Copyright © 2015, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edFoldersTabRedirect
+* Created by Anil Meghnathi
+
+* - Override the list view for folder
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page action="{!URLFOR($Action.Folder__c.List, $ObjectType.Folder__c)}"/>

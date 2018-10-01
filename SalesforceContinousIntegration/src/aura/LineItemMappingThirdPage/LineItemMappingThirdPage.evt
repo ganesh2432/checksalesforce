@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="Event moves to value mapping page">
+    <aura:attribute type="String" name="movetoStep"/>
+    <aura:attribute type="Object[]" name="fieldsForValueMapping"/>
+</aura:event>

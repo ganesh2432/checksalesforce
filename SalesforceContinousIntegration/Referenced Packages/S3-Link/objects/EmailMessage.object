@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <webLinks>
+        <fullName>Email_Attachments</fullName>
+        <availability>online</availability>
+        <description>This button is used to open list of email attachments for email message.</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Email Attachments</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>{!URLFOR(&quot;/apex/NEILON__edRelatedFilesList&quot;, &quot;&quot;)}?parentId={!EmailMessage.Id}&amp;retURL=/{!EmailMessage.Id}</url>
+    </webLinks>
+</CustomObject>

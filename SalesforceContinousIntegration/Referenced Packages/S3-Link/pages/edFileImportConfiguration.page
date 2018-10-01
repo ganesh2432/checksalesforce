@@ -1,0 +1,123 @@
+<!--**********************************************************************************
+* Copyright © 2015-2017, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edFileImportConfiguration
+* Created by Anil Meghnathi: 23/09/2017
+
+* - File import configuration page
+
+* - Modifications:
+* - Anil Meghnathi : 23/09/2017 - Initial Development 
+***********************************************************************************-->
+<apex:page controller="NEILON.edFileImportConfigurationController" action="{!init}">
+	<c:apJsAndCssIncludeComponent importJquery="true"
+                              importAppurinUtil="true"
+                              importJQueryLayout="false"
+                              importFancyTree="false"
+                              importJqGrid="false"
+                              importEasyTooltip="true"
+                              importAppurinCss="true"
+                              importCkEditor="false"
+                              importGnattChart="false"
+                              importLightningDesign="true"/>
+                              
+	<script>
+        var twistyLightningSectionStatus = {};
+        j$(document).ready(function() {
+			easyToolTipForAll();
+			
+		});
+		
+        function easyToolTipForAll() {
+            j$('.apHelpText').easyTooltip({width: '200px', isLightning:true, isFormatted:true});
+            return false;
+        }
+    </script>
+                              
+    <apex:actionStatus id="splashStatus" onstart="startSplash();" onstop="endSplash(); " />
+	<div class="slds">
+        <div id="splashDiv" class="apInitiallyDivDisplayNone" style="z-index:9998;">
+            <div class="slds-spinner_container apLightningSpinnerContainer">
+                <div role="status" class="slds-spinner slds-spinner--medium slds-spinner--brand">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <apex:outputPanel rendered="{!isError}">
+        <apex:pagemessages id="pageLoadErrorMessage"/>
+        <script>
+            Appurin.lightning.createLightningPageMessage({'classicPageMessageId' : '{!$Component.pageLoadErrorMessage}'});   
+        </script>
+    </apex:outputPanel>
+    
+	<apex:form id="form" rendered="{!!isError}">
+	    <apex:outputPanel styleClass="slds">
+    		<div class="apPageHeader" id="PageHeader">
+    			<div class="apPageHeaderMedia">
+    	          	<div id="pageHeaderMedia" class="apPageHeaderMediaFigure">
+    	          	    <c:apLightningSvg parentId="pageHeaderMedia" styleClass="apLightningPageHeaderIcon slds-button__icon" path="/assets/icons/utility-sprite/svg/symbols.svg#settings"/>
+    	            </div>
+    	            <div class="apPageHeaderMediaBody">
+    	                <p class="slds-text-title--caps slds-line-height--reset">{!$Label.Configuration}</p>
+    					<div class="apPageHeaderTitle" >{!$Label.File_Import_Configuration_Subtitle}</div>
+    	              	<div class="apPageHeaderInfo">
+    	              		<label>{!$Label.File_Import_Configuration_Page_Description}</label>
+    	              	</div>
+              		</div>
+    	            <div style="float:right;" class="apPageHeaderMediaButtons">
+    	                <apex:commandButton styleClass="slds-button slds-button--brand" value="{!$Label.neilon__save}" action="{!Save}" status="splashStatus" onComplete="easyToolTipForAll();" reRender="fileImportConfiguration"/>
+                        <apex:commandButton styleClass="slds-button slds-button--brand" value="{!$Label.neilon__reset_to_system_default_button}" action="{!initialize}" onComplete="easyToolTipForAll();" reRender="fileImportConfiguration" status="splashStatus"/>
+    	            </div>
+    	           <script>
+    	           		Appurin.lightning.createPageHeader('PageHeader');
+    	           </script>
+    	        </div>
+            </div>
+	    </apex:outputPanel>
+	    <apex:outPutPanel layout="block" styleClass="slds" id="fileImportConfiguration">
+	        <apex:outputPanel >
+                <apex:pagemessages id="errorMessages"/>
+                <script>
+                    Appurin.lightning.createLightningPageMessage({'classicPageMessageId' : '{!$Component.errorMessages}'});   
+                </script>
+            </apex:outputPanel>
+			<apex:outPutPanel layout="block" styleClass="slds-section slds-is-open" id="otherSettingSection">
+		       <h3 class="slds-section__title">
+		           <apex:outputPanel id="otherSettingHeader" layout="block" styleclass="slds-button slds-section__title-action">
+		               <c:apLightningSvg parentId="otherSettingHeader" parentType="div" styleClass="slds-section__title-action-icon slds-button__icon slds-button__icon--left" path="/assets/icons/utility-sprite/svg/symbols.svg#switch"/>
+		               <label class="avLightningFormElementLabel">{!$Label.neilon__other} {!$Label.neilon__settings}</label>
+		           </apex:outputPanel>
+		       </h3>
+		       <apex:outputPanel layout="block" styleClass="slds-section__content">
+		           <apex:outputPanel layout="block" styleClass="slds-grid slds-grid--pull-padded-medium">
+		               <apex:outputPanel layout="block" styleClass="slds-col slds-p-horizontal--medium slds-size--1-of-2">
+		                   <apex:outputPanel layout="block" styleClass="slds-form-element">
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+		                           <apex:outputLabel value="{!$ObjectType.NEILON__File_Import_Configuration__c.fields.NEILON__Delete_S3_Link_Files__c.label}"></apex:outputLabel>
+		                       </apex:outputPanel>
+		                       <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File_Import_Configuration__c.fields.NEILON__Delete_S3_Link_Files__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File_Import_Configuration__c.fields.NEILON__Delete_S3_Link_Files__c.inlineHelpText}"/>
+		                       <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+		                           <apex:outputPanel styleClass="slds-checkbox">
+		                               <apex:inputField value="{!fileImportConfiguration.NEILON__Delete_S3_Link_Files__c}" id="autoCopyLeadFilesField"/>
+		                               <apex:outputlabel styleClass="slds-checkbox__label" for="autoCopyLeadFilesField">
+		                                   <apex:outputPanel styleClass="slds-checkbox--faux"></apex:outputPanel>
+		                                   <apex:outputPanel styleClass="slds-form-element__label"></apex:outputPanel>
+		                               </apex:outputlabel>
+		                           </apex:outputPanel>
+		                       </apex:outputPanel>
+		                   </apex:outputPanel> 
+		               </apex:outputPanel>
+	               </apex:outputPanel>
+					<script>
+						Appurin.lightning.createLightningSection('{!$Component.otherSettingSection}');
+					</script>
+				</apex:outputPanel>
+			</apex:outputPanel>
+		</apex:outputPanel>
+	</apex:form>
+</apex:page>

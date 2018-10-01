@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Configuration for file export from Saleforce to Amazon S3.</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Add_Date_In_File_Name__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, date will be added in file name before export.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, date will be added in file name before export.</inlineHelpText>
+        <label>Add Date in File Name</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Auto_Create_S3_Link_File_for_Attachment__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, S3 Link file will automatically created for new standard attachments.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, S3 Link file will automatically created for new standard attachments.</inlineHelpText>
+        <label>Auto Create S3 Link File for Attachment</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Auto_Export_Event_Log_Files__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, Event Log Files will be automatically backed up on Amazon S3 every day.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, Event Log Files will be automatically backed up on Amazon S3 every day. To change the backup frequency, you can start schedule job from Setup &gt; Develope &gt; Apex Classes &gt; Schedule Apex &gt; Class edExportEventLogFilesSchedulable.</inlineHelpText>
+        <label>Auto Backup Event Log Files</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Auto_Move_Case_Email_Attachments__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, case email attachments will be moved to Amazon S3 only when case will be closed. Reopen of that case will import S3 files back to Salesforce.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, case email attachments will be moved to Amazon S3 only when case will be closed. Reopen of that case will import S3 files back to Salesforce.</inlineHelpText>
+        <label>Export Closed Cases Email Attachments</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Create_S3_Link_Files_for_Attachments__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, S3 Link file will be created for attachment.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, S3 Link file will be created for attachment.</inlineHelpText>
+        <label>Create S3-Link Files for Attachments</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Delete_Salesforce_Attachment__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, Salesforce attachments will be deleted once they are moved to Amazon S3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, Salesforce attachments will be deleted once they are moved to Amazon S3.</inlineHelpText>
+        <label>Delete Salesforce Attachments?</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Enable_File_Numbers__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, file number will be added in name if file with same name found. i.e if file.pdf alredy exist new file name will be file(1).pdf.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, file number will be added in name if file with same name found. i.e if file.pdf alredy exist new file name will be file(1).pdf.</inlineHelpText>
+        <label>Enable File Numbers</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Folder_to_Export_Event_Log_Files__c</fullName>
+        <deprecated>false</deprecated>
+        <description>S3 Link Folder Id where all event log files will be exported.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>S3 Link Folder Id where all event log files will be exported.</inlineHelpText>
+        <label>Where to Export Event Log Files?</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Folder_to_Export_Inbound_Email_Files__c</fullName>
+        <deprecated>false</deprecated>
+        <description>S3 Link Folder Id where all inbound email attachments will be exported.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>S3 Link Folder Id where all inbound email attachments will be exported.</inlineHelpText>
+        <label>Where to Export Inbound Email Files?</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Folder_to_Export_Salesforce_Attachments__c</fullName>
+        <deprecated>false</deprecated>
+        <description>S3 Link Folder Id where all salesforce attachments will be exported.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>S3 Link Folder Id where all salesforce attachments will be exported.</inlineHelpText>
+        <label>Where to Export Salesforce Attachments?</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Group_Attachments_by_Parent_Name__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, Salesforce attachments will be grouped by parent record name.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, Salesforce attachments will be grouped by parent record name.</inlineHelpText>
+        <label>Group Attachments by Parent Name?</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Group_Email_Attachments_by_Date__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, email attachments will be grouped by date.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, email attachments will be grouped by date.</inlineHelpText>
+        <label>Group Email Attachments by Date?</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Inbound_Email_Attachment_Container__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Id of Metrics which is container of Inbound Email Attachments.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Id of Metrics which is container of Inbound Email Attachments.</inlineHelpText>
+        <label>Inbound Email Attachment Container</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Link_S3_Link_Files_to_Attachment_Parent__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, S3 Link files created for Salesforce Attachments will linked to respective parent records.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, S3 Link files created for Salesforce Attachments will linked to respective parent records.</inlineHelpText>
+        <label>Link S3-Link Files to Attachment Parent</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Objects_to_Export_Salesforce_Attachments__c</fullName>
+        <deprecated>false</deprecated>
+        <description>List of object API names seperated by &quot;;&quot; whose standard attachments need to be exported on Amazon S3. 
+If &quot;All&quot;, all attachments will be moved to Amazon S3.
+If empty, no attachments will be moved to Amazon S3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>List of object API names seperated by &quot;;&quot; whose standard attachments need to be exported on Amazon S3. 
+If &quot;All&quot;, all attachments will be moved to Amazon S3.
+If empty, no attachments will be moved to Amazon S3.</inlineHelpText>
+        <label>Objects to Export Salesforce Attachments</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Salesforce_Document_Folder_to_Export__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Standard Salesforce Document folder, whose files needs to be exported in Amazon S3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Standard Salesforce Document folder, whose files needs to be exported in Amazon S3.</inlineHelpText>
+        <label>Salesforce Document Folder to Export</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>File Export Configuration</label>
+    <visibility>Public</visibility>
+</CustomObject>

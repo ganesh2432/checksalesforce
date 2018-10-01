@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="contract party back next visibility purpose">
+    <aura:attribute type="Integer" name="currntpageno" access="global"/>
+    <aura:attribute type="boolean" name="stillDataExist" access="global"/>
+</aura:event>

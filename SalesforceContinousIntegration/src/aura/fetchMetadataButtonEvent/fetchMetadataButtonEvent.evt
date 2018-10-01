@@ -1,0 +1,5 @@
+<aura:event type="COMPONENT" description="Called on Fetch Metadata Button Click" >
+    <aura:attribute name="showMapping" type="Boolean"/>
+    <aura:attribute name="controllingFieldValue" type="String"/>
+    <aura:attribute name="dependentFieldValue" type="String"/>
+</aura:event>

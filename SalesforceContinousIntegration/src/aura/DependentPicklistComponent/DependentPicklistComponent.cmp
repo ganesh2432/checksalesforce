@@ -1,0 +1,43 @@
+<aura:component controller="DependentPickListController">
+	
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+ 
+    <!--Using Attributes-->
+    <aura:attribute name="objInfo" type="string" description="store object Info." />
+    <aura:attribute name="controllingField" type="string"  description="store controllingField  Info." />
+    <aura:attribute name="controllingFieldLabel" type="string"  description="store controllingField Label  Info." />
+	<aura:attribute name="dependentField" type="string"  description="store dependentField  Info." />
+    <aura:attribute name="dependentFieldLabel" type="string"  description="store dependentField Label Info." />
+
+    <aura:attribute name="depnedentFieldMap" type="map" description="store controller(key)--> dependent(values) picklist value as a map." />
+    <aura:attribute name="isDependentDisable" type="boolean" default="true" description="use for, make disbale depandent field." />
+
+    <aura:attribute name="selectedControllingFieldValue" type="string"  description="store controllingField value for event" />
+    <aura:attribute name="selectedDependentFieldValue" type="string"  description="store dependentField value  for event" />
+
+    <aura:registerEvent name="PickListEvt" type="c:DependentPicklistEvt"/>
+
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-3">
+ 
+            <div>
+                <!--Controller Field-->
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="select-01"><b>{!v.controllingFieldLabel}</b></label>
+                    <div class="slds-select_container">
+                        <ui:inputSelect aura:id="conCountry" class="slds-select" change="{!c.onControllerFieldChange}" />
+                    </div>
+                </div>
+                
+                <br/>
+                <!--Dependent Field-->
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="select-01"><b>{!v.dependentFieldLabel}</b></label>
+                    <div class="slds-select_container">
+                        <ui:inputSelect aura:id="conState" disabled="{!v.isDependentDisable}" class="slds-select" change="{!c.onDependentFieldChange}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

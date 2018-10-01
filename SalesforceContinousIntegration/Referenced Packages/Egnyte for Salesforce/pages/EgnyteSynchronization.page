@@ -1,0 +1,20 @@
+<apex:page controller="efs.EgnyteSynchronizationController"  tabStyle="EgnyteDomainConfiguration__tab">
+    <apex:pageMessages id="msg" />
+    <apex:sectionHeader title="Bulk Actions"/>
+    <apex:form id="form" >
+        <apex:pageBlock title="Select Egnyte Sync Configurations">
+            <apex:pageBlockTable value="{!esoWrapperList}" var="obj">
+                <apex:column headerValue="Object Name" value="{!obj.eso.efs__ObjectLabel__c}" />
+                <apex:column headerValue="Select" width="15%">
+                    <apex:inputCheckbox value="{!obj.selected}"/>
+                </apex:column>                
+            </apex:pageBlockTable>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Create Template Folders" title="Create template folder structures for records of selected object types." action="{!createFolders}" reRender="msg, form" />
+            	<apex:commandButton value="Update Folder Locations" title="Update folder locations based on most recent Egnyte Sync Configurations for selected object types. This is recommended if changing parent relationships for Egnyte Sync Configurations." action="{!moveFolders}" reRender="msg, form" />
+            	<apex:commandButton value="Upload Notes & Attachments" title="Upload notes and attachments for selected object types. Notes and attachments are only uploaded if the 'Upload Notes & Attachments' option is selected in the Egnyte Domain Configuration tab." action="{!moveFiles}" reRender="msg, form" />
+                <apex:commandButton value="Cancel"  title="Cancel"  action="{!cancel}" />
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

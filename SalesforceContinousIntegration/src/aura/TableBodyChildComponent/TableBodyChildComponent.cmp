@@ -1,0 +1,77 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component Used to Setup the Questions for Requesting contracts.
+ * Created By  :   Jayanth B
+ * Created Date:   27/04/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component >
+    <!--attribute definitions -->
+    <!--used to store each records data throught iterater from parent component-->
+    <aura:attribute name="RequestWizardInstance" type="sObject" access="global" description="Request wizard single data"/>
+    <aura:attribute name="SelectedFieldsList" type="String[]" access="global"/>
+    <!-- used to store the index -->
+    <aura:attribute name="rowIndex" type="String" access="global" description="specifies the row index"/>
+    <aura:attribute name="disable" type="boolean" default="false" access="global" description="used to disable or enable the aura elements used in specific row"/>
+    <aura:attribute name="disableCheckBox" type="boolean" default="false" access="global" description="was used for check box toggle. not using as of now but need this variable in future"/>
+    <aura:attribute name="disableRemoveLinkStrng" type="String" access="global" description="to display or hide the links"/>
+    <aura:attribute name="disableRowBackgroundColor" type="String" access="global" description="to change the background color"/>
+    
+    
+    <!-- events registered from this child component on click of "Add next or remove" and handled in parent component -->
+    <aura:registerEvent name="DeleteRow" type="c:DeleteRow"/> 
+    <aura:registerEvent name="AddRow" type="c:AddRow"/> 
+    <aura:registerEvent name="FilledQuestion" type="c:FilledQuestion"/>
+    <aura:registerEvent name="RemovedQuestion" type="c:RemovedQuestion"/>
+    <aura:registerEvent name="OrderIndexDuplicateCheckEvnt" type="c:OrderIndexDuplicateCheckEvnt"/>
+    <aura:registerEvent name="OrderIndexRemoveEvt" type="c:OrderIndexRemoveEvt"/>
+    <aura:registerEvent name="OrderIndexAddEvt" type="c:OrderIndexAddEvt"/>
+    <aura:registerEvent name="addRowDeleteRowOrderNoEvt" type="c:addRowDeleteRowOrderNoEvt"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:method name="removeDuplicateOrder" action="{!c.removeDuplicateOrderNo}" access="PUBLIC"/>
+    <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
+
+    
+    <tr id="{!v.rowIndex+'disableRow'}">
+           
+        <td class="slds-border_bottom slds-border_left slds-p-around_x-small">
+            <div class="slds-m-left_xx-small slds-align_absolute-center slds-m-left_large"  style="width:57%;"><ui:inputText class="slds-input" disabled="{!v.disable}" value="{!v.RequestWizardInstance.Order_No__c}" maxlength="3" change="{!c.orderIndexduplicateCheck}"/></div>
+        </td>
+        
+        <td class="slds-border_bottom slds-p-around_x-small">
+        <div class="slds-float_left slds-m-left_medium slds-truncate">
+        {!v.RequestWizardInstance.Field_Name__c}
+        </div>
+        </td>
+
+        <td class="slds-border_bottom slds-p-around_x-small">
+            <div class="slds-m-left_xx-small">
+            <ui:inputText class="slds-input" disabled="{!v.disable}" placeholder="{!$Label.c.request_wizard_question_placeholder+' '+v.RequestWizardInstance.Field_Name__c+'?'}" value="{!v.RequestWizardInstance.Question__c}" change="{!c.filledQuestionEvnt}"/>
+            </div>
+        </td>
+        <td class="slds-border_bottom  slds-p-around_x-small" >
+            <div class="demo-only slds-size_1-of-2 slds-m-left_large slds-m-top_xx-small">
+                <div class="slds-form-element">
+                    <label class="slds-checkbox_toggle slds-grid"> <!--disabled="{!v.disableCheckBox}"-->
+                        <ui:inputCheckbox disabled="{!v.disable}" value="{!v.RequestWizardInstance.Mandatory__c}"/>
+                        <span id="toggle-desc" class="slds-checkbox_faux_container " aria-live="assertive">
+                            <span class="slds-checkbox_faux"></span>
+                            <span class="slds-checkbox_on">Yes</span>
+                            <span class="slds-checkbox_off">No</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+            
+        </td>
+        <td class="slds-border_bottom slds-border_right slds-p-around_x-small">
+            <div id="{!v.rowIndex+'AddBack'}" style="display:none">
+             <a onclick="{!c.addBack}">Add back</a>
+            </div>
+            <div id="{!v.rowIndex+'Remove'}" style="display:block">
+              <a class="{!v.disableRemoveLinkStrng}" onclick="{!c.remove}">Remove</a>
+            </div>
+            
+        </td> 
+    </tr>
+</aura:component>

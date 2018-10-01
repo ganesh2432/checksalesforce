@@ -1,0 +1,59 @@
+.THIS.hide {
+ 	display: none;
+ }
+ 
+ .THIS.btn {
+ 	margin-bottom: 10px;
+ }
+
+.THIS label.uiLabel {
+    padding-right: 12px;
+}
+
+.THIS .field{
+  padding: 5px;
+  border: 1px solid #dce4ec;
+  border-radius: 2px;
+}
+
+.THIS .uiInput--datetime .datePicker-openIcon{
+    background:none !important;
+}
+
+.THIS .uiInput--datetime .timePicker-openIcon {
+    background:none !important; 
+}
+
+.THIS .slds-select_container{
+    width: 24% !important;
+        margin-left: 1% !important;
+    margin-top: -1% !important;
+}
+
+.THIS .fieldSelectStleclsc{
+    margin-bottom: 1% !important;
+}
+
+.THIS .fieldSelectStleLightning{
+    margin-bottom: 0% !important;
+}
+
+.THIS .buttonsearchStyle{
+        height: 1% !important;
+    margin-top: 0.4rem !important;
+        margin-left: 1rem !important; 
+}
+
+.THIS .headerStyleChange{
+    text-align: left !important; 
+    padding: 0.4rem !important; 
+    background-color:#EEF5F7 !important; 
+    
+}
+.THIS .buttoneFetchallApi{
+        vertical-align: unset !important;
+        margin-left: 2% !important;
+}
+.THIS .slds-button_icon-bare{
+ color:white !important;   
+}

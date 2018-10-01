@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Configuration for S3 file import from Amazon S3 to Salesforce.</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Delete_S3_Link_Files__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, S3-Link files will be deleted once Salesforce attachments created.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, S3-Link files will be deleted once Salesforce attachments created.</inlineHelpText>
+        <label>Delete S3-Link Files?</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>File Import Configuration</label>
+    <visibility>Public</visibility>
+</CustomObject>

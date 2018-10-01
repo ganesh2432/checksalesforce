@@ -1,0 +1,259 @@
+<!--**********************************************************************************
+* Copyright (c) 2015-2017, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edReplaceFile
+* Controller: edReplaceFileController
+* Created by Suresh Meghnathi: 11/09/2017
+* 
+* - Modifications:
+* - Suresh Meghnathi, 11/09/2017 - Initial Developement
+***********************************************************************************-->
+<apex:page standardController="NEILON__File__c" extensions="NEILON.edReplaceFileController" sidebar="false" showHeader="{!!isChildWindow}" standardStylesheets="false" tabStyle="Amazon_File_System__tab">
+    <c:apJsAndCssIncludeComponent importJquery="true"
+                              importAppurinUtil="true"
+                              importJQueryLayout="false"
+                              importFancyTree="false"
+                              importJqGrid="false"
+                              importEasyTooltip="true"
+                              importAppurinCss="true"
+                              importCkEditor="false"
+                              importGnattChart="false"
+                              importLightningDesign="true"
+                              importJqForm="true"/>
+    <style>
+    	.apLightningOneTile{
+   		    margin-top: 25px !important;
+		    margin-right: 20% !important;
+		    margin-left: 20% !important;
+    	}
+    </style>
+    <script>
+        function easyToolTipForAll() {
+            j$('.apHelpText').easyTooltip({width: '200px', isLightning:true, isFormatted:true});
+            return false;
+        }
+        
+        j$(document).ready(function(){
+            easyToolTipForAll();
+        	Appurin.processbar.createProcessBar({formId: 'fileSubmitForm', 
+            									percentId: 'percentDiv', 
+            									barId: 'barDiv',
+            									responseXMLId: 'responseXMLDiv',
+            									successFunction: new Function("createFile();"), 
+            									errorFunction: new Function("showFileUploadError();")
+            									});
+        });
+        
+        function createFile(){
+        	j$("div[id$='fileReplaceSuccessSection']").css('display', '');
+        	j$("div[id$='fileDetailSection']").css('display', 'none');
+			closeWindow('{!lightningBackRecordId}');
+        }
+        
+        function showFileUploadError(){
+        	j$("div[id$='fileReplaceSuccessSection']").css('display', '');
+        	j$("div[id$='fileDetailSection']").css('display', 'none');
+        	j$("div[id$='responseXMLDiv']").css('display', '');
+        	Appurin.lightning.createLightningPageMessage({'lightningPageMessageId' : 'successMessageDiv', 'severity' : 'error', 'summary' : '{!JSENCODE($Label.File_Upload_Fail)}'});   
+			resizeWindow();
+        }
+        
+        function uploadFile(){
+            var input = document.getElementById('fileToUpload');
+            if(input.files.length === 0 ){
+                j$('#fileError').html('{!$Label.Please_Select_File}');
+                j$('#fileError').css('display','block');
+                return false;
+            }else{
+                var file = input.files[0];
+                if(('{!JSENCODE(s3LinkConfig.configForMaxFileSize.Configured_Value__c)}' != '') && ((file.size/1024) > parseFloat('{!JSENCODE(s3LinkConfig.configForMaxFileSize.Configured_Value__c)}'))){
+                    j$('#fileError').html('{!JSENCODE($Label.Max_File_Size_Error)}');
+                    j$('#fileError').css('display','block');
+                    return false;
+                } else{
+                    submitForm();
+                }
+            }
+        }
+        
+        function resizeWindow(){
+            var caller = '{!JSENCODE($CurrentPage.parameters.clr)}';
+            if({!isChildWindow}){
+                if(caller == '1'){
+                    window.parent.resizeReplaceFileWindow();
+                }
+            }
+        }
+        
+        function submitForm(){
+        	j$("#uploadindMessage").css('display', 'block');
+           	j$("#fileSubmitForm").css('display', 'none').submit();
+           	resizeWindow();
+        }
+        
+        function closeWindow(lightningBackRecordId){
+            var retURL = '{!JSENCODE($CurrentPage.parameters.retURL)}';
+            var caller = '{!JSENCODE($CurrentPage.parameters.clr)}';
+            if({!isChildWindow}){
+                if(caller == '1'){
+                    window.parent.closeWindowForReplaceFile();
+                }
+            } else {
+            	if(Appurin.lightning.isLightningExperience()){
+	                if(lightningBackRecordId != ''){
+	                	if(!lightningBackRecordId.startsWith('00B')){
+	                    	sforce.one.navigateToSObject(lightningBackRecordId);
+	                   	} else{
+	                    	sforce.one.navigateToList(lightningBackRecordId, null, '{!JSENCODE(nameSpacePrefix)}File__c');
+	                    }
+	                } else{
+	                    Appurin.lightning.back(true);
+	                }
+	            } else{
+	                if(retURL != ''){
+	                    window.open(retURL, '_self');
+	                }
+	            }
+            }
+        }
+        
+        function hideFileErrorMessage(){
+        	j$('#fileError').css('display','none');
+        }
+    </script>
+    <div style="background:#f4f6f9; {!IF(isChildWindow, '', 'padding: 1rem;')}">
+		<div class="slds-panel slds-nowrap" style="background:#f4f6f9;">
+			<div class="{!IF(isChildWindow, '', 'apLightningOneTile')}" style="{!IF(isChildWindow, '', 'padding: 0px;')}">
+                <apex:outputPanel rendered="{!isNoAmazonCredential}">
+                    <apex:pagemessages id="pageLoadErrorMessage"/>
+                    <script>
+                        Appurin.lightning.createLightningPageMessage({'classicPageMessageId' : '{!$Component.pageLoadErrorMessage}'});   
+                    </script>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!!isUserHasFileEditAccess}">
+                    <apex:pagemessage id="fileEditAccessErrorMessage" summary="{!$Label.neilon__insufficient_access_for_replace_file_error}" severity="Error" strength="3"/>
+                    <script>
+                        Appurin.lightning.createLightningPageMessage({'classicPageMessageId' : '{!$Component.fileEditAccessErrorMessage}'});   
+                    </script>
+                </apex:outputPanel>
+                
+                <apex:outputPanel id="fileDetailSection" styleClass="slds" layout="block" rendered="{!!isNoAmazonCredential && isUserHasFileEditAccess}">
+                    <div id="uploadindMessage" style="display:none;{!IF(isChildWindow, 'padding: 0px;', 'padding: 50px;')}" class="slds">
+            	        <div style="display:none;" id="processDiv" class="progress">
+            		        <div id="barDiv" class="bar"></div>
+            		        <div id="percentDiv" class="percent">0%</div>
+            		    </div>
+            	        <div class="slds-grid" style="background:#f4f6f9;">
+            	            <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap slds-is-editing" style="box-shadow: none;">
+                                <div class="slds-form--stacked slds-grow slds-scrollable--y">
+                                    <div class="slds-panel__section slds-text-heading--small">
+			                            <div id="uploadingLabelDiv" class="slds-text-heading--medium" style="text-align: center;font-weight: normal;">
+			                        		<apex:outputLabel value="{!$Label.neilon__uploading}"/>
+			                        	</div>
+			                            <div id="processDiv" style="margin-top:20px;" class="progress">
+									        <div id="barDiv" class="bar"></div>
+									        <div id="percentDiv" class="percent">0%</div>
+			                            </div>
+			                    		<div style="margin-top: 20px;" class="apFileUploadMessageLabel">
+			                    			<apex:outputLabel value="{!$Label.neilon__file_upload_in_progress_message}"/>
+		                    			</div>
+			                    	</div>
+                            	</div>
+                        	</div>
+                    	</div>
+                    </div>
+                    <apex:panelGroup >
+                        <form id="fileSubmitForm" action="{!endpointURL}" method="post" enctype="multipart/form-data">
+                            <input type="hidden" id="filekey" name="key" value="{!fileKey}"/> 
+                            <input type="hidden" id="acl" name="acl" value="{!accessControlLevel}"/> 
+                            <input type="hidden" name="content-type" value=""/>
+                            <input type="hidden" name="success_action_status" value="201"/>
+                            <input type="hidden" name="x-amz-server-side-encryption" value="AES256"/>
+                            <input type="hidden" id="credential" name="x-amz-credential" value="{!credential}"/>
+                            <input type="hidden" name="x-amz-algorithm" value="AWS4-HMAC-SHA256"/>
+                            <input type="hidden" name="x-amz-date" value="{!formatedDate}" />
+                            <input type="hidden" id="policy" name="policy" value="{!policy}"/> 
+                            <input type="hidden" id="signature" name="x-amz-signature" value="{!signature}"/>
+                            <div class="slds-grid" style="background:#f4f6f9;padding: 0px;">
+                            	<div class="slds-panel slds-grid slds-grid--vertical slds-nowrap slds-is-editing" style="box-shadow: none;">
+                            		<div class="slds-form--stacked slds-grow slds-scrollable--y">
+                            			<div class="slds-panel__section slds-has-divider--bottom">
+                                            <div class="slds-media">
+                                                <div class="slds-media__body">
+                                                    <p class="slds-truncate slds-text-heading--small"><a href="javascript:void(0);">{!$Label.Replace_Button} {!$Objecttype.File__c.label}</a></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                            			<div class="slds-panel__section">
+                            				<h3 class="slds-text-heading--small slds-m-bottom--medium">{!$Label.Detail}</h3>
+                            				<apex:outputPanel layout="block" styleClass="slds-form-element">
+	                                            <apex:outputPanel layout="block" style="margin:0px;" styleClass="slds-form-element__label">
+	                                                <label>{!$ObjectType.NEILON__File__c.label}</label>
+	                                            </apex:outputPanel>
+	                                            <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+	                                                <apex:outputLink target="_blank" value="/{!objFile.Id}">{!objFile.Name}</apex:outputLink>
+	                                            </apex:outputPanel>
+	                                        </apex:outputPanel>
+                            				<apex:outputPanel layout="block" styleClass="slds-form-element">
+                                                <apex:outputPanel layout="block" style="margin:0px;" styleClass="slds-form-element__label">
+                                    				<label id="fileLabel"><span class="slds-required" title="required">*</span>{!$ObjectType.NEILON__File__c.Label}</label>
+                                    				<apex:outputLabel rendered="{!s3LinkConfig.configForMaxFileSize.NEILON__Configured_Value__c != null}" value=" - {!$Label.neilon__max_file_size_message} {!s3LinkConfig.configForMaxFileSize.NEILON__Configured_Value__c} KB" />
+                                				</apex:outputPanel>
+                                				<c:apLightningHelpText helptext="{!$Label.neilon__select_file_helptext}"/>
+                                                <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+                                                    <input id="fileToUpload" type="file" onChange="hideFileErrorMessage();" name="file"/>
+                                                    <div class="slds-has-error"><div id="fileError" style="display:none;" class="slds-form-element__help">{!$Label.Please_Select_File}</div></div>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>
+                            			</div>
+                            		</div>
+                            		<div class="slds-panel__actions slds-has-divider--top">
+                            			<div class="slds-grid slds-grid--align-center">
+                            				<button type="button" class="slds-button slds-button--brand" onClick="return uploadFile();">{!$Label.Replace_Button}</button>
+                            				<button type="button" class="slds-button slds-button--neutral" onClick="return closeWindow('{!lightningBackRecordId}');">{!$Label.Cancel}</button>
+                            			</div>
+                            		</div>
+                            	</div>
+                            </div>
+                        </form>
+                    </apex:panelGroup>
+                </apex:outputPanel>
+                <apex:form >
+            	    <apex:outputPanel styleClass="slds" layout="block" style="display:none;" id="fileReplaceSuccessSection">
+            	        <apex:outputPanel layout="block" style="padding: 0px;">
+                            <div class="slds-grid" style="background:#f4f6f9; padding:0px;">
+                	            <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap slds-is-editing" style="box-shadow: none;">
+                                    <div class="slds-form--stacked slds-grow slds-scrollable--y">
+                                        <div class="slds-panel__section slds-has-divider--bottom">
+                                            <div class="slds-media">
+                                                <div class="slds-media__body">
+                                                    <p class="slds-truncate slds-text-heading--small"><a href="javascript:void(0);">{!IF(isNoAmazonCredential, $Label.Error, $Label.Status)}</a></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-panel__section">
+                                            <div style="padding:5px 0px;" id="successMessageDiv"></div>
+                                            <div style="display:none;padding:5px 0px;" id="responseXMLDiv"></div>
+                                            <script>
+                                                Appurin.lightning.createLightningPageMessage({'lightningPageMessageId' : 'successMessageDiv', 'severity' : 'success', 'summary' : '{!JSENCODE($Label.File_Uploaded_Succesfully)}'});   
+                                            </script>
+                                        </div>
+                                        <div class="slds-panel__actions slds-has-divider--top">
+                                            <div class="slds-grid slds-grid--align-center">
+                                                <button class="slds-button slds-button--brand" onClick="return closeWindow('{!lightningBackRecordId}');">{!$Label.Ok}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </apex:form>
+            </div>
+        </div>
+    </div>
+    <script>
+    	j$("table[id$='bodyTable']").parent().css('background', '#f4f6f9');
+    </script>
+</apex:page>

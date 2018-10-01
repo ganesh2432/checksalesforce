@@ -1,0 +1,44 @@
+<apex:page standardController="efs__EgnyteFolderPath__c" extensions="efs.EgnyteFolderPathController">
+    <style>
+        .multiLineText{
+            width:75%;
+        }
+    </style>
+    <script type="text/javascript">
+        function removeWhiteSpaces(obj)
+        {
+        	obj.value = obj.value.replace(/\s{2,}/g, ' ');
+        }
+    </script>
+    <apex:sectionHeader title="Egnyte Folder Path Edit" subtitle="New Egnyte Folder Path"/>
+    <apex:variable value="{!0}" var="rowNumber" />
+    <apex:pagemessages />
+    <apex:form >
+        <apex:pageBlock mode="edit">
+            <apex:outputPanel id="panelWithVar">
+                <apex:variable value="{!0}" var="rowNumber" />
+            </apex:outputPanel>
+            <apex:pageBlockTable value="{!egnyteFolderPaths}" var="acc" id="pagetable">
+                <apex:column headerValue="Folder Template" width="15%">
+                    <apex:outputField value="{!acc.efs__EgnyteFolderTemplate__c}" id="folderTemplate" rendered="{!NOT(ISNULL(acc.efs__EgnyteFolderTemplate__c))}"/>
+                    <apex:inputField value="{!acc.efs__EgnyteFolderTemplate__c}" rendered="{!ISNULL(acc.efs__EgnyteFolderTemplate__c)}" />
+                </apex:column>
+                <apex:column headerValue="Folder Path" width="75%">
+                    <apex:inputField value="{!acc.efs__FolderPath__c}" styleClass="multiLineText" onchange="removeWhiteSpaces(this)"/>
+                    <apex:variable var="rowNumber" value="{!rowNumber + 1}" />
+                </apex:column>
+                <apex:column headerValue="Remove" width="10%">
+                    <apex:commandlink action="{!removeObject}" type="image/gif" reRender="panelWithVar,pagetable">
+                        <apex:image value="/img/func_icons/remove12_on.gif"/>
+                        <apex:param name="p1" value="{!rowNumber}" assignTo="{!numberOfRowToRemove}"/>
+                    </apex:commandlink>
+                </apex:column>
+            </apex:pageBlockTable>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!savePaths}"/>
+                <apex:commandButton value="Add Path" action="{!addPath}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

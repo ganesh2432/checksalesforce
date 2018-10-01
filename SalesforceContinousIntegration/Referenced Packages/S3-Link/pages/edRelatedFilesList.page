@@ -1,0 +1,75 @@
+<!--**********************************************************************************
+* Copyright (c) 2015-2017, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edRelatedFiles
+* Created by Anil Meghnathi: 19/10/2017
+* 
+* - Modifications:
+* - Anil Meghnathi, 19/10/2017 - Initial Developement
+***********************************************************************************-->
+<apex:page controller="NEILON.edRelatedFilesListController" readOnly="true" sidebar="false" tabStyle="Amazon_File_System__tab" title="{!$Label.neilon__related_files}">
+	<c:apJsAndCssIncludeComponent importJquery="true" 
+	                                importAppurinUtil="true"
+	                                importAppurinCss="true"
+	                                importLightningDesign="true"/>
+    
+	<apex:form id="form">
+	    <apex:outputPanel styleClass="slds">
+	        <div class="slds-page-header">
+                <div class="slds-grid">
+                    <div class="slds-col slds-has-flexi-truncate">
+                        <nav class="slds-m-bottom--xx-small" role="navigation">
+                            <ol class="slds-breadcrumb slds-list--horizontal">
+                                <li class="slds-breadcrumb__item slds-text-title--caps"><a href="javascript:void(0);">{!parentObjectLabel}</a></li>
+                                <li class="slds-breadcrumb__item slds-text-title--caps"><apex:outputLink styleClass="apPageHeaderLink" target="_blank" value="/{!parent['Id']}">{!parent[parentObjectNameFieldAPI]}</apex:outputLink></li>
+                            </ol>
+                        </nav>
+                        <h1 class="slds-page-header__title slds-truncate">{!$ObjectType.NEILON__File__c.labelPlural}</h1>
+                    </div>
+                    <div class="slds-col slds-no-flex slds-grid slds-align-top">
+                        <div class="slds-button-group">
+                            <apex:commandButton styleClass="slds-button slds-button--neutral" value="Close" action="{!cancel}" rerender="" oncomplete="if(Appurin.lightning.isLightningExperience()){Appurin.lightning.back(true);}"/>
+                        </div>
+                    </div> 
+                </div>
+                 <div class="slds-grid">
+                    <div class="slds-col slds-align-bottom">
+                        <p class="slds-text-body--small">{!files.size} {!$Label.neilon__items} • {!$Label.neilon__sorted_by} {!$ObjectType.NEILON__File__c.fields.CreatedDate.Label}</p>
+                    </div>
+                </div>
+            </div>
+	    </apex:outputPanel>
+	    <apex:outPutPanel styleClass="slds">
+	        <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+            	<tr class="slds-text-heading--label">
+                	<th scope="col">
+                    	<div class="slds-truncate">{!$ObjectType.NEILON__File__c.fields.Name.Label}</div>
+                    </th>
+                	<th scope="col">
+                    	<div class="slds-truncate">{!$ObjectType.NEILON__File__c.fields.NEILON__Size__c.Label}</div>
+                    </th>
+                    <th scope="col">
+                    	<div class="slds-truncate">{!$ObjectType.NEILON__File__c.fields.CreatedById.Label}</div>
+                    </th>
+                </tr>
+                <apex:repeat value="{!files}" var="file">
+                	<tr>
+                        <td>
+                            <a href="/{!file.Id}">{!file.Name}</a>
+                        </td>
+                        <td>
+                            <apex:outputField value="{!file.NEILON__Size__c}" />
+                        </td>
+                        <td>
+                            <apex:outputField value="{!file.CreatedById}" />
+                        </td>
+                        <td>
+                            <apex:outputField value="{!file.CreatedDate}" />
+                        </td>
+                    </tr>
+                </apex:repeat>                       
+        	</table>
+	    </apex:outPutPanel>
+	</apex:form>
+</apex:page>

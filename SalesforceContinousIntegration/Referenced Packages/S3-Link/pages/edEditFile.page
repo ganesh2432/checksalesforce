@@ -1,0 +1,44 @@
+<!--**********************************************************************************
+* Copyright © 2015, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edEditFile
+* Created by Anil Meghnathi
+
+* - Edit file in multi upload file component
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page extensions="NEILON.edEditFileController" title="{!$Label.neilon__new} {!$ObjectType.NEILON__File__c.label}" sidebar="false" showHeader="true" tabStyle="Amazon_File_System__tab" standardController="NEILON__File__c">
+    <c:apJsAndCssIncludeComponent importJquery="true"
+                              importAppurinUtil="true"
+                              importJQueryLayout="false"
+                              importFancyTree="false"
+                              importJqGrid="false"
+                              importEasyTooltip="true"
+                              importAppurinCss="true"
+                              importCkEditor="false"
+                              importGnattChart="false"
+                              importLightningDesign="true"/>
+                              
+    <apex:outputPanel rendered="{!isError}">
+        <apex:pagemessages id="pageLoadErrorMessage"/>
+        <script>
+            Appurin.lightning.createLightningPageMessage({'classicPageMessageId' : '{!$Component.pageLoadErrorMessage}'});   
+        </script>
+    </apex:outputPanel>
+    
+    <apex:panelGroup rendered="{!!isError}">
+        <head>
+            <script>
+                var uploadFileWindowURL = '{!JSENCODE(uploadFileURL)}';
+                if(Appurin.lightning.isLightningExperience()){
+                    Appurin.lightning.navigateToURL(uploadFileWindowURL, false);
+                } else{
+                    window.open(uploadFileWindowURL,"_self");
+                }
+            </script>
+        </head>
+    </apex:panelGroup>
+</apex:page>

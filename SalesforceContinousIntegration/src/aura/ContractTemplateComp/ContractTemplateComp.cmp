@@ -1,0 +1,286 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component used to select or upload templates for contract
+ * Created By  :   Jayanth B
+ * Created Date:   18/07/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="ContractTemplateFileUpload" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="opportunityIdforFileUpload" type="Id" access="global" description="opp id for file upload"/>  
+    <aura:attribute name="contrctIdToUploadFile" type="String" access="global" description="contrct id for file upload"/>
+    <aura:attribute name="displayOppAttachments" type="boolean" default="false" access="global"/>
+    <aura:attribute name="disabled" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="uploadedFileName" type="String" access="global" description="file name of custom file"/>
+    <aura:attribute name="uploadedFileId" type="String" access="global" description="file id of custom file"/>
+    <aura:attribute name="stndrduploadedFileName" type="String" access="global" description="file name of standard file"/>
+    <aura:attribute name="stndrduploadedFileId" type="String" access="global" description="file name of standard file"/>
+    <aura:attribute name="IsstandardTemplate" type="boolean" access="global" description="defines standard or custom templete"/>
+    <aura:attribute name="isEditing" type="boolean" default="false" access="global" description="defines edit or create contract"/>
+    <aura:attribute name="showuploadedFile" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="existingOppFileList" type="Object[]" access="global" description="holds the attchments from opp"/>
+    <aura:attribute name="removeFromOpp" type="boolean" default="false" access="global"/>
+    <aura:attribute name="customTmplt" type="boolean" default="false" access="global" description="used for custom tmplt"/>
+    <aura:attribute name="stsndrdTmplt" type="boolean" default="false" access="global" description="used for standard tmplt"/>
+    <aura:attribute name="stndrdTemplateList" type="Object[]" access="global"/>
+    <aura:attribute name="typeValue" type="String" description="used to store selected Type value." access="public"/>
+    <aura:attribute name="subTypeValue" type="String" description="used to store selected SubType value." access="public"/>    
+    <aura:attribute name="iscalledFromKeep" type="boolean" default="false" access="global"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>   
+    <aura:registerEvent name="CreateContractSpinnerEvent" type="c:CreateContractSpinnerEvent" access="global" description="to fire spinner event"/>
+
+    <aura:registerEvent name="KeepSaveEvnt" type="c:KeepSaveEvnt" access="global" description="to fire spinner event"/>
+
+    
+    <aura:method name="finishContract" action="{!c.finishSaveContract}" access="PUBLIC" description="method invoked from parent component to create contract"/>
+    <aura:method name="keepSave" action="{!c.keepSaveContrctTemplt}" access="PUBLIC" description="method invoked from parent component to create contract">
+	<aura:attribute name="param1" type="boolean" access="global"/>
+    </aura:method>
+    
+    <p><b>{!$Label.c.Contract_draft_ready_msg}</b></p><br/>
+    <div>
+        <div aura:id="cstmTmplt" style="float:left;background-color:#fafafa;width: 8rem;margin-left: 2rem;border: 2px solid #ccc;" onclick="{!c.CustomTemplate}">
+            <br/><br/>
+            <center>
+                <lightning:icon iconName="doctype:box_notes" size="large" alternativeText="sss"/>
+                <br/>
+                <br/>
+                {!$Label.c.Custom_Template}
+            </center>
+            <br/>  
+        </div>
+        <aura:if isTrue="{!v.customTmplt}">
+            <lightning:icon iconName="standard:task2" size="xx_small" style="position: absolute;margin-top: -1rem;margin-left: -1rem;border-radius: 50%;" alternativeText="sss"/>
+        </aura:if>
+        <aura:if isTrue="{!v.stsndrdTmplt}">
+            <lightning:icon iconName="standard:task2" size="xx_small" style="position: absolute;margin-top: -1rem;margin-left: 12rem;border-radius: 50%;" alternativeText="sss"/>
+        </aura:if>
+        <div style="float:left; width: 2rem;margin-left: 2rem;margin-top: 4rem;">
+            OR
+        </div>
+        <div aura:id="stndrddTmplt" style="float:left;background-color:#fafafa;width: 8rem;margin-left: 1rem;border: 2px solid #ccc;" onclick="{!c.standardTemplate}">
+            <br/><br/>
+            <center>
+                <lightning:icon iconName="doctype:box_notes" size="large" alternativeText="sss"/>
+                <br/>
+                <br/>
+                {!$Label.c.Standard_Template}
+            </center>
+            <br/>  
+        </div>
+    </div>
+    
+    <div style="margin-top: 11rem;">
+        {!$Label.c.contract_template_msg1}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!$Label.c.contract_template_msg2}
+    </div>
+    
+    
+    <br/>
+    <aura:if isTrue="{!v.customTmplt}">
+        <div style="margin-top: 0%;">  
+            <div class="slds-box" style="background-color:#fafafa;">
+                
+                <aura:if isTrue="{!v.showuploadedFile}">
+                    <p style="margin-bottom: 1%;"><b>Uploaded document</b>{!$Label.c.reupload_by_removing_existing_file_msg} <br/>
+                        {!v.uploadedFileName}  
+                        
+                        <aura:if isTrue="{!not(v.removeFromOpp)}">  
+                            <lightning:button iconName="utility:close" class="buttonRemoveStyle"  onclick="{!c.showDeleteConfirm }">
+                                <span style="color:#000;">Remove</span></lightning:button>
+                        </aura:if>
+                        <aura:if isTrue="{!v.removeFromOpp}">
+                            <lightning:button iconName="utility:close" class="buttonRemoveStyle"  onclick="{!c.removeSelected }">
+                                <span style="color:#000;">Remove</span></lightning:button>
+                        </aura:if> 
+                    </p>
+                </aura:if>
+                
+                
+                <p style=""><b>{!$Label.c.contract_template_msg3}</b>{!$Label.c.contract_template_msg4}</p>
+                
+                <!--div style="border-top: dashed 3px #ccc; border-right: dashed 3px #ccc;
+                    border-left: dashed 3px #ccc; height: 100px;margin-top: -1.6%;  "><br/-->
+                <center><lightning:fileUpload class="fileUploadCSS"
+                                              multiple="false" 
+                                              accept=".pdf, .doc, .xls, .ppt, .docx, .xlsx, .pptx, .txt, .jpg, .jpeg, .gif, .png, .zip, .rar, .tif, .tiff, .stp, .iges, .model, .dwg"
+                                              recordId="{!v.contrctIdToUploadFile}" 
+                                              aura:id="singleUpload"
+                                              disabled="{!v.disabled}"
+                                              onuploadfinished="{!c.handleUploadFinished}" >
+                    <div style="background-color:red;">
+                    </div>
+                    
+                    </lightning:fileUpload>
+                </center>
+                <!--/div-->
+                
+                
+                <div style="    border: solid 1px #a7acad;
+                            background: #ecebeb;
+                            padding: 4px 12px;
+                            font-weight: bold;
+                            border-radius: 0px 5px;
+                            font-size: 11px;"><span>{!$Label.c.contract_template_supported_file}</span> <span style="margin-left: 28.80rem;">Max file size:2GB</span></div>
+                <br/>
+                <p><b>Or select from the <a onclick="{!c.enableOpportuityAttachment}">Attachments in this Opportunity</a></b></p>
+                <br/>
+                
+                <aura:if isTrue="{!v.displayOppAttachments == true}">
+                    
+                    <aura:if isTrue="{!v.existingOppFileList.length>0}">
+                        <table style="border-collapse: collapse; text-align:left;"> 
+                            <thead>
+                                <tr style="width:100%; line-height: 2.5;background-color:#dbe8ed">
+                                    
+                                    <th style="width:3.25rem;border-top-left-radius:6px; background-color:#dbe8ed;width : 22%;padding: 6px 14px;">
+                                        <div class="slds-truncate" title="Document Name">Document Name
+                                        </div>
+                                        
+                                    </th>
+                                    <th style="width:12%;">
+                                        <div class="slds-truncate" title="Document Type">Document Type
+                                            
+                                        </div>
+                                    </th>
+                                    <th style="width:12%;">
+                                        <div class="slds-truncate" title="Uploaded By">Uploaded By
+                                        </div>
+                                    </th>
+                                    <th style="width:14%;">
+                                        <div class="slds-truncate" title="Uploaded On">Uploaded On
+                                        </div>
+                                    </th>
+                                    <th style="width:5%;">
+                                        <div class="slds-truncate" title="Action">
+                                        </div>
+                                    </th>
+                                    <th style="width:5%;">
+                                        <div class="slds-truncate" title="Action">
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            
+                            <aura:iteration items="{!v.existingOppFileList}" var="fileRec" indexVar="index">
+                                <tr style="width:100%;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;"> 
+                                    
+                                    <td class="slds-truncate" style="width:3.25rem;; width : 5%;    padding: 6px 14px;">{!fileRec.fileName}</td>
+                                    <td>{!fileRec.fileType}</td>
+                                    <td>{!fileRec.createdBy}</td>
+                                    <td><lightning:formattedDateTime value="{!fileRec.createdOn}" year="numeric" month="numeric" day="numeric"/></td>
+                                    <td><lightning:button class="slds-button  VIEW" label="View" onclick="{! c.viewdocument }" value="{!index}"/></td>  
+                                    <td><lightning:button class="slds-button  VIEW" label="Select" disabled="{!v.disabled}" onclick="{! c.selectedDocument }" value="{!index}"/></td>  
+                                </tr>
+                            </aura:iteration>
+                        </table>
+                    </aura:if>  
+                    
+                    <aura:if isTrue="{!not(v.existingOppFileList.length>0)}">
+                    <div style="margin-top: 0%;"> 
+                        <div class="slds-box" style="background-color:#fafafa;">
+                            <!--aura:if isTrue="{!not(v.stndrdTemplateList.length>0)}"-->
+                                <center>{!$Label.c.attchment_not_available_msg2} <b>{!v.typeValue}</b> and SubType: <b>{!v.subTypeValue}</b>{!$Label.c.attchment_not_available_msg3}</center>
+                            <!--/aura:if-->
+                        </div>
+                    </div>
+                </aura:if>
+                    
+                </aura:if>
+                
+                
+                
+            </div><br/><br/><br/>
+        </div>
+    </aura:if>
+    
+    
+    <aura:if isTrue="{!v.stsndrdTmplt}">
+        <div style="margin-top: 0%;"> 
+            <div class="slds-box" style="background-color:#fafafa;">
+                <aura:if isTrue="{!v.stndrdTemplateList.length>0}">     
+                   {!$Label.c.CT_Please_select_one_from_below}<br/>
+                </aura:if>
+                
+                <aura:if isTrue="{!not(v.stndrdTemplateList.length>0)}">
+                    <center>{!$Label.c.CT_stndrd_not_avail_msg1} <b>{!v.typeValue}</b> and SubType: <b>{!v.subTypeValue}</b>{!$Label.c.CT_stndrd_not_avail_msg2}</center>
+                </aura:if>
+                
+                <table style="border-collapse: collapse; text-align:left;margin-top: 0%;"> 
+                    <tr > 
+                        <aura:iteration items="{!v.stndrdTemplateList}" var="fileRec" indexVar="index">
+                            <aura:if isTrue="{!fileRec.templateNumber != v.uploadedFileId}">    
+                                <lightning:button class="slds-button slds-button_neutral slds-truncate bttnTemplateStyle"  aura:id="bttnmain" onclick="{! c.standardTemplateSelected }" value="{!index}" title="{!fileRec.templateTitle}"><b><br/>{!fileRec.templateTitle}</b></lightning:button>
+                            </aura:if> 
+                            <aura:if isTrue="{!fileRec.templateNumber == v.uploadedFileId}">
+                                <lightning:button class="slds-button slds-button_neutral slds-truncate bttnTemplateStyle onSelectStyle"  aura:id="bttnmain" onclick="{! c.standardTemplateSelected }" value="{!index}" title="{!fileRec.templateTitle}"><b><br/>{!fileRec.templateTitle}</b></lightning:button>
+                                
+                            </aura:if>
+                        </aura:iteration>
+                        <!--aura:iteration items="{!v.existingOppFileList}" var="fileRec" indexVar="index">
+                         <aura:if isTrue="{!fileRec.fileName != v.uploadedFileId}">   
+                            <lightning:button class="slds-button slds-button_neutral slds-truncate bttnTemplateStyle"  aura:id="bttnmain" onclick="{! c.standardTemplateSelected }" value="{!index}" title="{!fileRec.fileName}"><b><br/>{!fileRec.fileName}</b></lightning:button>
+                            </aura:if>
+                          <aura:if isTrue="{!fileRec.fileName == v.uploadedFileId}">
+    
+                            <lightning:button class="slds-button slds-button_neutral slds-truncate bttnTemplateStyle onSelectStyle"  aura:id="bttnmain" onclick="{! c.standardTemplateSelected }" value="{!index}" title="{!fileRec.fileName}"><b><br/>{!fileRec.fileName}</b></lightning:button>
+                            </aura:if>
+                        </aura:iteration-->
+                        
+                    </tr>
+                </table>
+                
+                
+            </div>
+        </div>
+    </aura:if>
+    
+    <br/><br/>
+    
+    
+    <div aria-hidden="false" aura:id="fileunslterr" id="fileUnselectedErrorMsg"  class="slds-hide">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 23%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            <center>{!$Label.c.upload_template_error_msg}</center>
+                        </p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick = "{!c.closePopUpOK}">OK</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>   
+    
+    <div aura:id="deleteconfirmppop" aria-hidden="false" id="DeleteFileConfirmationModalTemplate" class="slds-hide">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 23%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            <center>{!$Label.c.contract_template_delete_file_msg}</center>
+                        </p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick = "{!c.deleteTemplateFile}">Yes</button>
+                            <button class="slds-button slds-button_neutral" onclick = "{!c.closeDeleteConfirm}">No</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+</aura:component>

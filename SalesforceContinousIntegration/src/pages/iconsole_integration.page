@@ -1,0 +1,9 @@
+<apex:page id="page" controller="Iconsole_Controller">
+	<apex:form >
+		
+			<apex:commandButton value="iconsole" action="{!newCallOut}" rendered="{!$CurrentPage.parameters.offline!='1'}"></apex:commandButton>
+		
+			<apex:outputText value="{!iconsole}" />
+	</apex:form>
+			
+</apex:page>

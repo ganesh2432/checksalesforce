@@ -1,0 +1,184 @@
+<!--**********************************************************************************
+* Copyright © 2015-2017, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edFileDetail
+* Created by Anil Meghnathi
+
+* - File detail with download history
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page controller="NEILON.edFileDetailController" showHeader="false" title="{!$Label.neilon__file_download}" tabStyle="NEILON__File__c" action="{!init}">
+    <c:apJsAndCssIncludeComponent importJquery="true"
+                              importAppurinUtil="true"
+                              importJQueryLayout="false"
+                              importFancyTree="false"
+                              importJqGrid="false"
+                              importEasyTooltip="false"
+                              importAppurinCss="true"
+                              importCkEditor="false"
+                              importGnattChart="false"
+                              importJqForm="true"
+                              importLightningDesign="true"/>
+                              
+    
+    <script>
+        // Close the window if file downloaded.
+        j$(document).ready(function(){
+            if({!!isShowMsg}){
+                downloadFile();
+            }
+        });
+    
+        var downloadRequest;
+        
+        function download(downloadURL, fileName){
+            downloadRequest = new XMLHttpRequest();
+            downloadRequest.open("GET", downloadURL, true);
+            downloadRequest.responseType = "blob";
+            downloadRequest.onload = function (event) {
+                if(downloadRequest.status == '200'){
+                    var downloadLink= document.createElement("a");
+                    downloadLink.href = window.URL.createObjectURL(downloadRequest.response);
+                    downloadLink.download = fileName;
+                    downloadLink.click();
+                } else{
+                    abortDownload();
+                    Appurin.lightning.showAlertPrompt({'modalPopupId':'lightningInfoPopup', 'messageType':'Error', 'title': 'Error', 'message': 'Something went wrong. File not found. Please contact your System Administrator.', 'buttonLabel': '{!JSENCODE($Label.neilon__ok)}', 'isRedirect' : false});
+                }
+            };
+            downloadRequest.onprogress = function(event){
+                if(event.lengthComputable){
+                    var percentComplete = parseInt(event.loaded / event.total * 100);
+                    Appurin.showProgressBar('barDiv', 'percentDiv', percentComplete);
+                    j$("input[id$='abortDownloadButton']").css('display', '');
+                    j$("input[id$='startDownloadButton']").css('display', 'none');
+                    j$("input[id$='closeButton']").css('display', 'none');
+                }
+            };
+            downloadRequest.onerror = function(event){
+                abortDownload();
+                Appurin.lightning.showAlertPrompt({'modalPopupId':'lightningInfoPopup', 'messageType':'Error', 'title': 'Error', 'message': 'Something went wrong. File not found. Please contact your System Administrator.', 'buttonLabel': '{!JSENCODE($Label.neilon__ok)}', 'isRedirect' : false});
+            };
+            downloadRequest.onabort = function(event){
+                j$("input[id$='abortDownloadButton']").css('display', 'none');
+                j$("input[id$='startDownloadButton']").css('display', '');
+                j$("input[id$='closeButton']").css('display', '');
+            };
+            downloadRequest.send();
+        }
+        
+        function abortDownload(){
+            downloadRequest.abort();
+        }
+    
+        function cancel(){
+            var retURL = '{!JSENCODE($CurrentPage.parameters.retURL)}';
+            if(Appurin.lightning.isLightningExperience()){
+                Appurin.lightning.back(true);
+            } else {
+                if(retURL != ''){
+                    window.open(retURL, '_self');
+                } else if(window.parent =! null){
+                    window.close();
+                }
+            }
+            return false;
+        }
+    </script>
+    
+    <apex:actionStatus id="splashStatus" onstart="startSplash();" onstop="endSplash();" />
+    <div class="slds">
+        <div id="splashDiv" class="apInitiallyDivDisplayNone" style="z-index:9998;">
+            <div class="slds-spinner_container apLightningSpinnerContainer">
+                <div role="status" class="slds-spinner slds-spinner--medium slds-spinner--brand">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <apex:form id="form">
+        <apex:actionFunction name="downloadFile" action="{!download}" rerender="form" onComplete="download('{!JSENCODE(fileDownloadURL)}', '{!JSENCODE(fileDownloadName)}');"/>
+        <apex:outputPanel layout="block" styleClass="slds">
+            <div style="background:#f4f6f9; padding:1rem;">
+                <div class="slds-panel slds-nowrap" style="background:#f4f6f9;">
+                    <div class="apLightningOneTile">
+                        <apex:outputPanel id="errorMessage" layout="block" rendered="{!isShowMsg}">
+                            <div style="padding:10px 0px 10px 0px;">
+                                <apex:outputLabel value="{!errMessage}"></apex:outputLabel>
+                                <apex:outputLabel value="{!$Label.neilon__close_window_message}"></apex:outputLabel>
+                            </div>
+                            <div>
+                                <apex:commandButton value="{!$Label.neilon__close}" style="width:100%; margin:0px !important;" styleClass="slds-button slds-button--brand" onClick="cancel(); return false;"/>
+                            </div>
+                        </apex:outputPanel>
+                        <apex:outputPanel id="downloadindMessage" layout="block" rendered="{!!isShowMsg}">
+                            <div>
+                                <div style="padding:10px 0px 10px 0px;">
+                                    <apex:outputLabel value="{!$Label.neilon__downloading}"></apex:outputLabel>
+                                    <apex:outputLabel value="{!$Label.neilon__manual_file_download_message}"></apex:outputLabel>
+                                </div>
+                                <apex:outputPanel layout="block" styleClass="slds-form-element">
+                                    <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+                                        <apex:outputLabel title="{!$ObjectType.NEILON__File__c.fields.Name.inlineHelpText}" value="{!$ObjectType.NEILON__File__c.fields.Name.label}"></apex:outputLabel>
+                                    </apex:outputPanel>
+                                    <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File__c.fields.Name.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File__c.fields.Name.inlineHelpText}"/>
+                                    <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+                                        <apex:outputLink value="/{!objFile.Id}">{!objFile.Name}</apex:outputLink>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="block" styleClass="slds-form-element">
+                                    <apex:outputPanel layout="block" styleClass="slds-form-element__label avLightningFormElementLabel">
+                                        <apex:outputLabel title="{!$ObjectType.NEILON__File__c.fields.NEILON__Size__c.inlineHelpText}" value="{!$ObjectType.NEILON__File__c.fields.NEILON__Size__c.label}"></apex:outputLabel>
+                                    </apex:outputPanel>
+                                    <c:apLightningHelpText rendered="{!$ObjectType.NEILON__File__c.fields.NEILON__Size__c.inlineHelpText != null}" helptext="{!$ObjectType.NEILON__File__c.fields.NEILON__Size__c.inlineHelpText}"/>
+                                    <apex:outputPanel layout="block" styleClass="slds-form-element__control">
+                                        <apex:outputField value="{!objFile.NEILON__Size__c}"/>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                            </div>
+                            <div id="processDiv" style="display:none; margin-top:20px;" class="progress">
+                                <div id="barDiv" class="bar"></div>
+                                <div id="percentDiv" class="percent">0%</div>
+                            </div>
+                            <div>
+                                <apex:commandButton id="abortDownloadButton" value="Abort" style="display:none;" styleClass="apLightningOneTileButton slds-button slds-button--brand" onClick="abortDownload(); return false;"/>
+                                <apex:commandButton id="startDownloadButton" value="{!$Label.neilon__download}" styleClass="apLightningOneTileButton slds-button slds-button--brand" onClick="downloadFile(); return false;"/>
+                                <apex:commandButton id="closeButton" value="{!$Label.neilon__close}" style="width:100%; margin:0px !important;" styleClass="slds-button slds-button--neutral" onClick="cancel(); return false;"/>
+                            </div>
+                        </apex:outputPanel>
+                    </div>
+                </div>
+            </div>
+            <apex:outputPanel layout="block" id="lightningInfoPopup" style="display: none; z-index: 8552;"> 
+                <div class="apModal" style="z-index: 8551;">
+                    <div class="apModalContainer">
+                        <div class="apModalHeader">
+                            <h2 class="apModalHeading" id="lightningInfoPopupHeader">{$Label.neilon__Warning}</h2>
+                        </div>
+                        <div class="apModalContent">
+                            <div class="apNotifyContainer" style="position: relative; text-align:left;">
+                                <div>
+                                    <h2 id="lightningInfoPopupMessage"></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="apModalFooter">
+                            <button id="lightningInfoPopupOkButton">{!$Label.neilon__Ok}</button>
+                            <button id="lightningInfoPopupCloseButton">{!$Label.neilon__close}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open" style="z-index: 5881;"></div>
+            </apex:outputPanel>
+        </apex:outputPanel>
+    </apex:form>
+    <script>
+        j$("form[id$='form']").parent().css('background', '#f4f6f9');
+    </script>
+</apex:page>

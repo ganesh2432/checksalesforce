@@ -1,0 +1,240 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <!-- Parent component for All Progress Bar Components -->
+    <!-- Attribute definition -->
+    <aura:attribute name="currStep" type="String" default="step1" description="Used to maintain the current step" access="public"/>    
+    <aura:attribute type="String" name="selectedType" description="Used to store selected Type value" access="public"></aura:attribute>
+    <aura:attribute type="String" name="selectedSubType" description="Used to store selected Sub Type value" access="public"></aura:attribute>
+    <aura:attribute type="String" name="mapConfigId" description="Used to store Mapping Config Id" access="public"></aura:attribute>
+    <aura:attribute type="string" name="themeURL" description="Used to store value, if App is opened in Lightning or Classic" access="public"/>
+    <aura:attribute type="Integer" name="selectedFieldCount" description="Used to store number of fields selected for fieldSelection Component." access="public"/>
+    <!--aura:handler event="c:SelectedFieldsEvt" action="{!c.getSelectedFields}" description="Not using"/ -->
+    
+    
+    <aura:handler event="c:MovetoNextProgressBarEvt" action="{!c.setStepNumber}" description="to set the next Progress Bar step"/>
+    <!-- Event Handler -->
+    <!--aura:handler event="c:DependentPicklistEvt" name="DependentPicklistEvt" action="{!c.getselectedTypeAndSubType}" includeFacets="true" phase="bubble" description="Not using"/ -->
+    
+    <aura:handler name="selectedFieldCountEvt" event="c:SelectedFieldCountEvt"
+                  action="{!c.setSelectedFieldCount}" description="to get the number of Selected fields in Field Selection Component."/>
+    
+    <!--Moves to Document Setup Step from RequestWizard step by onclick of Skip or save button-->
+    <aura:handler event="c:MoveToStepFive" action="{!c.MoveToStepFive}"/>
+    
+    <!--Moves Back To Home Page-->
+    <aura:registerEvent name="goToHomePage" type="c:GoToHomePage"/>
+    
+    <aura:attribute name="currentStage" type="String" default="step1"/>
+    
+    
+    <!-- Component Body -->
+    <!--Displaying type and subtype-->
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col headingTypeSubType">
+            <b><div class="slds-text-align_left slds-text-heading_small headingTypeSubTypeFont">{!$Label.c.Heading_Progress_Bar_Component_Header}</div></b>
+        </div>
+        <!--div class="slds-col" style="width:10%">
+        </div>
+        <div class="slds-col" style="width:16%">
+        </div-->
+        <div class="slds-col slds-float_right typeSubType">
+            <div type="text" id="text-input-id-1" class="slds-input typeSubTypeText">
+                Contract Type: <b>{!v.selectedType}</b> &nbsp;<span class="verticalLine"></span>&nbsp; Contract Sub type: <b>{!v.selectedSubType}</b>
+            </div>
+            <!--div style="background-color: #fafafa;width: auto;" type="text" id="text-input-id-1" class="slds-input">
+                Contract Sub type: <b>{!v.selectedSubType}</b>
+            </div-->
+            <!--input style="background-color: #fafafa;" type="text" id="text-input-id-1" class="slds-input" placeholder="{!'Contract Sub type: '+v.selectedSubType}" disabled="true"/-->
+        </div>
+    </div>
+    <br/>
+    
+    <!-- path new component -->
+    
+    <div class="slds-path" style="width: 101%;">
+        <div class="slds-grid slds-path__track">
+            <div class="slds-grid slds-path__scroller-container">
+                <div class="slds-path__scroller" role="application">
+                    <div class="slds-path__scroller_inner">
+                        <ul class="slds-path__nav" role="tablist">
+                            <li class="slds-path__item slds-is-current" aura:id="step1" role="presentation">
+                                <a aria-controls="path-content-1" aria-expanded="false" aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-1" role="tab" tabindex="-1">
+                                    <span class="slds-path__stage">
+                                        {!$Label.c.Heading_Progress_Bar_Component_Field_Selection}        
+                                    </span>
+                                    <span class="slds-path__title">{!$Label.c.Heading_Progress_Bar_Component_Field_Selection}   
+                                        &nbsp;&nbsp;
+                                        <!--aura:if isTrue="{!v.themeURL != 'Theme4d'}">
+    <lightning:helptext aura:id="helpTextStep1" style="position: fixed;" class="slds-m-top_xx-small" title="{!$Label.c.FieldSelection_HelpText}"/>
+</aura:if>
+<aura:if isTrue="{!v.themeURL == 'Theme4d'}">
+    <lightning:helptext aura:id="helpTextStep1" style="position: fixed;margin-top: -3px;" content="{!$Label.c.FieldSelection_HelpText}"/>
+</aura:if-->     
+                                    </span>    
+                                </a>
+                            </li>
+                            <li class="slds-path__item slds-is-incomplete " aura:id="step2" role="presentation">
+                                <a aria-controls="path-content-2" aria-expanded="false" aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-2" role="tab" tabindex="-1">
+                                    <span class="slds-path__stage">
+                                        {!$Label.c.Heading_Progress_Bar_Component_Field_Mapping}
+                                    </span>
+                                    <span class="slds-path__title">{!$Label.c.Heading_Progress_Bar_Component_Field_Mapping}
+                                        &nbsp;&nbsp;
+                                        <aura:if isTrue="{!(v.themeURL != $Label.c.Theme4d)}">
+                                            <lightning:helptext aura:id="helpTextStep2" style="position: fixed;" class="slds-m-top_xx-small" title="{!$Label.c.FieldMapping_HelpText}" />    
+                                        </aura:if>
+                                        <aura:if isTrue="{!(v.themeURL == $Label.c.Theme4d)}">
+                                            <lightning:helptext aura:id="helpTextStep2" style="position: fixed;margin-top: -3px;" content="{!$Label.c.FieldMapping_HelpText}" />    
+                                        </aura:if>   
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="slds-path__item slds-is-incomplete " aura:id="step3" role="presentation">
+                                <a aria-controls="path-content-3" aria-expanded="false" aria-selected="true" class="slds-path__link" href="javascript:void(0);" id="path-3" role="tab" tabindex="0">
+                                    <span class="slds-path__stage">
+                                        {!$Label.c.Heading_Progress_Bar_Component_Value_Mapping}
+                                    </span>
+                                    <span class="slds-path__title">{!$Label.c.Heading_Progress_Bar_Component_Value_Mapping}
+                                        &nbsp;&nbsp;
+                                        <aura:if isTrue="{!(v.themeURL != $Label.c.Theme4d)}">
+                                            <lightning:helptext aura:id="helpTextStep3" style="position: fixed;" class="slds-m-top_xx-small" title="{!$Label.c.ValueMapping_HelpText}"/>
+                                        </aura:if>
+                                        <aura:if isTrue="{!(v.themeURL == $Label.c.Theme4d)}">
+                                            <lightning:helptext aura:id="helpTextStep3" style="position: fixed;margin-top: -3px;" content="{!$Label.c.ValueMapping_HelpText}"/>
+                                        </aura:if>  
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="slds-path__item slds-is-incomplete " aura:id="step4" role="presentation">
+                                <a aria-controls="path-content-4" aria-expanded="false" aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-4" role="tab" tabindex="-1">
+                                    <span class="slds-path__stage">
+                                        {!$Label.c.Heading_Progress_Bar_Component_Setup_Request_Wizard} 
+                                    </span>
+                                    <span class="slds-path__title">{!$Label.c.Heading_Progress_Bar_Component_Setup_Request_Wizard}
+                                        &nbsp;&nbsp;
+                                        <aura:if isTrue="{!(v.themeURL != $Label.c.Theme4d)}">
+                                            <lightning:helptext aura:id="helpTextStep4" style="position: fixed;" class="slds-m-top_xx-small" title="{!$Label.c.Contract_Request_form_HelpText}" />
+                                        </aura:if>
+                                        <aura:if isTrue="{!(v.themeURL == $Label.c.Theme4d)}">
+                                            <lightning:helptext aura:id="helpTextStep4" style="position: fixed;margin-top: -3px;" content="{!$Label.c.Contract_Request_form_HelpText}" />
+                                        </aura:if>    
+                                    </span>    
+                                </a>
+                            </li>
+                            <li class="slds-path__item slds-is-incomplete " aura:id="step5" role="presentation">
+                                <a aria-controls="path-content-5" aria-expanded="false" aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-5" role="tab" tabindex="-1">
+                                    <span class="slds-path__stage">
+                                        {!$Label.c.Heading_Progress_Bar_Component_Document_Setup}
+                                    </span>
+                                    <span class="slds-path__title">{!$Label.c.Heading_Progress_Bar_Component_Document_Setup}
+                                        &nbsp;&nbsp;
+                                        <aura:if isTrue="{!(v.themeURL != $Label.c.Theme4d)}">
+                                            <lightning:helptext aura:id="helpTextStep5" style="position: fixed;" class="slds-m-top_xx-small" title="{!$Label.c.Doc_Setup_HelpText}" />    
+                                        </aura:if>
+                                        <aura:if isTrue="{!(v.themeURL == $Label.c.Theme4d)}">
+                                            <lightning:helptext aura:id="helpTextStep5" style="position: fixed;margin-top: -3px;" content="{!$Label.c.Doc_Setup_HelpText}" />    
+                                        </aura:if>    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- progress indicators label  displayed form custom label-->
+    <!--lightning:progressIndicator type="path" currentStep="{!v.currStep}" >
+        <lightning:progressStep label="{!$Label.c.Heading_Progress_Bar_Component_Field_Selection}" value="step1">
+            
+        </lightning:progressStep>
+        <lightning:progressStep label="{!$Label.c.Heading_Progress_Bar_Component_Field_Mapping}" value="step2"/>
+        <lightning:progressStep label="{!$Label.c.Heading_Progress_Bar_Component_Value_Mapping}" value="step3"/>
+        <lightning:progressStep label="{!$Label.c.Heading_Progress_Bar_Component_Setup_Request_Wizard}" value="step4"/>
+        <lightning:progressStep label="{!$Label.c.Heading_Progress_Bar_Component_Document_Setup}" value="step5"/>
+    </lightning:progressIndicator-->
+    <aura:if isTrue="{!v.currStep == 'step1'}">
+        <c:FieldMapping aura:id="fieldMappingCompId" themeURL="{!v.themeURL}" selectedType="{!v.selectedType}" selectedSubType="{!v.selectedSubType}"/>
+    </aura:if>
+    <aura:if isTrue="{!v.currStep == 'step2'}">
+        <c:ObjectBasedFieldMapping aura:id="objectBasedFieldMappingCompId" mapConfigId="{!v.mapConfigId}" themeURL="{!v.themeURL}"/>
+    </aura:if>
+    <aura:if isTrue="{!v.currStep == 'step3'}">
+        <c:ValueMapping mapConfigId="{!v.mapConfigId}" aura:id="valueMapping" themeURL="{!v.themeURL}" currStep="{!v.currStep}"/>
+    </aura:if>
+    <aura:if isTrue="{!v.currStep == 'step4'}">
+        <c:TableHeaderParentComponent aura:id="tableheaderComponent" themeURL="{!v.themeURL}" mapConfigId="{!v.mapConfigId}" selectedType="{!v.selectedType}" selectedSubType="{!v.selectedSubType}"/>
+    </aura:if>
+    <aura:if isTrue="{!v.currStep == 'step5'}">
+        <c:DocumentSetup aura:id="DocSetup" themeURL="{!v.themeURL}" SelectedType="{!v.selectedType}" SelectedSubType="{!v.selectedSubType}"/>
+    </aura:if>
+    <div class="slds-docked-form-footer">  
+        <div class="slds-col slds-size_1-of-2" style="margin-left:2.5%">  
+            <aura:if isTrue="{!v.currStep == 'step1'}"> 
+                <div class="slds-m-top_x-small slds-m-left_xx-small"></div>&nbsp;&nbsp;&nbsp;&nbsp;<b  style="background-color: #dbe8ed!important;">&nbsp;&nbsp;{!v.selectedFieldCount}&nbsp;&nbsp;</b> Fields Selected
+            </aura:if>    
+            <aura:if isTrue="{!v.currStep != 'step1'}">
+                <!--div style="text-align: right;"-->
+                <lightning:button class="slds-button slds-button_neutral slds-m-left_x-small" label="Back" onclick="{!c.gotoBack}"/>
+                <!--/div-->
+            </aura:if> 
+        </div>
+        
+        <div class="slds-col slds-size_1-of-2 ">  
+            <aura:if isTrue="{!v.currStep != 'step4'}">
+                <lightning:button class="slds-button slds-button_neutral exitandSaveButtonStyle" label="Exit Configuration"  onclick="{!c.ExitConfigurationModel}"/>
+            </aura:if>
+            <aura:if isTrue="{!v.currStep == 'step4'}">
+                <lightning:button class="slds-button slds-button_neutral exitandSaveButtonStyleForReq" label="Exit Configuration"  onclick="{!c.ExitConfigurationModel}"/>
+            </aura:if>
+            <aura:if isTrue="{!v.currStep != 'step5'}"> 
+                <lightning:button class="slds-button slds-button_brand " label="Save and Next"  onclick="{!c.gotoNext}"/>
+            </aura:if>
+            <aura:if isTrue="{!v.currStep == 'step4'}">
+                <lightning:button class="slds-button slds-button_brand "  type="submit" label="Skip" onclick="{!c.enableSkipPopUpFromChild}"/>
+            </aura:if>
+            <aura:if isTrue="{!v.currStep == 'step5'}">
+                <lightning:button class="slds-button slds-button_brand " label="Save and Finish"  onclick="{!c.DocumentSetupFinish}"/>
+            </aura:if> 
+        </div>    
+        
+    </div>
+    
+    
+    
+    <!-- Model popup used to display popup when ExitConfiguration button is pressed to go back for Home screen-->
+    <!-- Displaying model popup is controlled by style display attribute-->
+    <div aria-hidden="false" id="ExitConfigurationModel" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 25%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>{!$Label.c.ExitConfigMessage}</p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.goToHomePage}" style="color:black;">OK</button><!-- go backs to Home page-->
+                            <button class="slds-button slds-button_neutral" onclick="{!c.CloseExitConfigurationModel}">Cancel</button><!-- remains in same page-->
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    
+    
+</aura:component>

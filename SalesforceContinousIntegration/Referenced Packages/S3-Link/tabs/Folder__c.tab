@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customObject>true</customObject>
+    <description>All amazon folders.</description>
+    <icon>Appurin_Images/Folder_64x64.png</icon>
+    <mobileReady>false</mobileReady>
+    <motif>Custom108: TV Widescreen</motif>
+</CustomTab>

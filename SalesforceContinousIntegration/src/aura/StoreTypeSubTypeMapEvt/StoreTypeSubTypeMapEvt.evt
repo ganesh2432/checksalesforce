@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="To Store Type and Subtype Map">
+    <aura:attribute name="typeSubTypeMap" type="map" description="used to store Type and SubType Mapping."/>
+</aura:event>

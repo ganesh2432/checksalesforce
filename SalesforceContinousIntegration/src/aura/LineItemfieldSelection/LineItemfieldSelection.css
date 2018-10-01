@@ -1,0 +1,27 @@
+.THIS {
+}
+.THIS th{
+    background-color:#DBE8ED !important;
+    border-collapse: collapse !important;
+}
+.THIS .firstColumnStyle{
+    width:4% !important;
+    border-top-left-radius:6px !important;
+}
+.THIS .secondColumnStyle{
+    width:24% !important;
+}
+.THIS .thirdColumnStyle{
+    width:14% !important;
+}
+.THIS .fourthColumnStyle{
+    width:31% !important;
+}
+.THIS .fifthColumnStyle{
+    width:39% !important;
+}
+.THIS .sixthColumnStyle{
+    width:20% !important;
+    border-top-right-radius:6px !important;
+    margin-left: -15% !important;
+}

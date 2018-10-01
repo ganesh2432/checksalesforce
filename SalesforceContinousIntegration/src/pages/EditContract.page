@@ -1,0 +1,22 @@
+<apex:page standardController="Contract" extensions="CreateContractVisualforceController" standardStylesheets="false" sidebar="false" showHeader="true">
+    <apex:includeLightning />
+    
+    <div id="EditContractDiv" style="margin-left: 1%;"/>
+      <script>
+          var totalPageURL = window.location.toString();
+          var protocalType= totalPageURL.split("//")[0];
+          var tempbaseURL = totalPageURL.split("//")[1].split("/");
+          var finalBaseURL = protocalType+'//'+tempbaseURL[0] + "{!$Site.Prefix}";
+          console.log('....'+finalBaseURL);
+          debugger;
+         $Lightning.use("c:EditContractApplication", function() {
+            $Lightning.createComponent("c:EditContractCoomponent",{recordId:"{!currentRecordId}",isclassic:true},                      
+              "EditContractDiv",
+              function(cmp) {
+                // do some stuff
+              });
+            });
+    </script>
+      
+    
+</apex:page>

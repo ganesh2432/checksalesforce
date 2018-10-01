@@ -1,0 +1,160 @@
+<aura:component controller="FieldMappingController">
+   <!-- Purpose : To let the User select field which will be used in Contract generation next steps. -->
+
+   <!-- Attributes definition used in this component -->
+   <aura:attribute name="ListOfContact" type="Object[]" access="public" description="List of All fields coming from IContract API."/>
+   <aura:attribute name="selectedCount" type="integer" access="public" default="0" description="Total count of Selected fields."/>
+   <aura:attribute name="isNextVisible" type="boolean" access="public" default="false" description="not using"/>
+   <aura:attribute type="String" name="selectedType" access="public" description="to get the selected Type"/>
+   <aura:attribute type="String" name="selectedSubType" access="public" description="to get the selected SubType"/>
+   <aura:attribute type="String" name="fieldSelErrMsg" access="public" description="to Show any Error while saving the selected fields."/>
+   <aura:attribute name="Spinner" type="Boolean" access="public" description="to Show Spinner."/>
+    <aura:attribute name="themeURL" type="string" access="global" description="to know component running in lightning or classic"/>
+    
+   <!-- SelectedFieldEvt registration -->
+   <aura:registerEvent type="c:SelectedFieldsEvt" name="SelectedFieldsEvt" />
+   <aura:registerEvent type="c:MovetoNextProgressBarEvt" name="moveToNextEvt" />
+   <aura:registerEvent name="goToHomePage" type="c:GoToHomePage"/>
+   <aura:registerEvent name="selectedFieldCountEvt" type="c:SelectedFieldCountEvt"/>
+    
+   <aura:method name="saveFieldMapping" action="{!c.goNext}" access="PUBLIC"/>
+   <!-- Component Body -->
+
+    
+    <div class="slds-p-around_small">
+      <aura:unescapedHtml value="{!$Label.c.Heading_Field_Selection_Component_Select_Field}"/>
+        <br/>
+    </div>
+    
+	<table class="slds-table slds-table--bordered slds-table--cell-buffer slds-table_fixed-layout" style="border: 1px solid #8080803d;border-top-rigth-radius: 8px;border-top-left-radius: 8px;">
+      <thead>
+         <tr>
+            <th style="width:3.25rem; background-color:#dbe8ed;width : 5%; text-align:right" class="slds-text-align--right">
+               <div class="slds-form-element">
+                  <div class="slds-form-element__control">
+                     <label class="slds-checkbox">
+                        <!--header checkbox for select all-->
+                        <ui:inputCheckbox aura:id="box3" change="{!c.selectAll}"/>
+                        <span class="slds-checkbox--faux"></span>
+                        <span class="slds-form-element__label text"></span>
+                     </label>
+                  </div>
+               </div>
+            </th>
+            <th style="background-color:#dbe8ed; width : 15%">
+               <span class="slds-truncate slds-p-vertical_x-small" title="Field Name"><b>{!$Label.c.Field_Name_Table_Heading_Field_Selection}</b></span>      
+            </th>
+            <th style="background-color:#dbe8ed; width : 10%">
+               <span class="slds-truncate" title="Data Type"><b>{!$Label.c.Datatype_Table_Heading_Field_Selection}</b></span>
+            </th>
+            <th style="background-color:#dbe8ed ; width : 40%">       
+               <span class="slds-truncate" title="Sample Values"><b>{!$Label.c.Sample_Values_Table_Heading_Field_Selection}</b></span>
+            </th>
+            <th style="background-color:#dbe8ed; width : 15%">
+               <div class="slds-truncate" title="Field Dependency"><b>{!$Label.c.Field_Dependency_Table_Heading_Field_Selection}</b></div>
+            </th>
+             <th style="background-color:#dbe8ed;; width : 15%">
+               <div class="slds-truncate" title="Is Mandatory ?"><b>{!$Label.c.Mandatory_Table_Heading_Field_Selection}</b></div>
+            </th>
+         </tr>
+      </thead>
+      <!--table body start, 
+         Iterate contact list as a <tr>
+         -->
+      <tbody>
+         <aura:iteration items="{!v.ListOfContact}" var="con">
+            <tr>
+               <td scope="row" class="slds-text-align--right" style="width:3.25rem;; width : 5%">
+                  <div class="slds-form-element">
+                     <div class="slds-form-element__control">
+                        <label class="slds-checkbox">
+                           <ui:inputCheckbox text="{!con.Id}" aura:id="boxPack" value="{!con.isSelected}" change="{!c.checkboxSelect}"
+                            disabled="{!(con.mandatory == 'YES')}"/>
+                           <span class="slds-checkbox--faux"></span>
+                           <span class="slds-form-element__label text"></span>
+                        </label>
+                     </div>
+                  </div>
+               </td>
+               <td scope="row" style="width : 15%">
+                  <div class="slds-truncate" title="{!con.fieldName}"><a>{!con.displayName}</a></div>
+               </td>
+               <td scope="row" style="width : 10%">
+                  <div class="slds-truncate" title="{!con.dataType}">{!con.dataType}</div>
+               </td>
+               <td scope="row" style="width : 40%" class="slds-truncate">
+                  <div class="slds-truncate" title="{!con.allowedValues}">{!con.allowedValues}</div>
+               </td>
+               <td scope="row" style="width : 15%">
+                   <div class="slds-truncate" title="{!con.dependantFields}">{!con.dependantFields}</div>
+                   <aura:if isTrue="{!(con.dependantFields == undefined || con.dependantFields == '')}">-
+                   </aura:if>
+                  </td>
+                <td scope="row" style="width : 15%">
+                  <div class="slds-truncate" title="{!con.mandatory}">{!con.mandatory}</div>
+               </td>
+            </tr>
+         </aura:iteration>
+      </tbody>
+    </table><br/>
+     <div aria-hidden="false" id="FieldSelectionSubmitErrMsgModel" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 23%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p><aura:unescapedHtml value="{!v.fieldSelErrMsg}"/></p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.closeSelectionErrModal}" style="color:black;">Ok</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    <div aria-hidden="false" id="ExitConfigurationModel" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 25%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>{!$Label.c.ExitConfigMessage}</p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.goToHomePage}" style="color:black;">OK</button><!-- go backs to Home page-->
+                            <button class="slds-button slds-button_neutral" onclick="{!c.CloseExitConfigurationModel}">Cancel</button><!-- remains in same page-->
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+      </div>
+      <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+           <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+             <span class="slds-assistive-text">Loading</span>
+             <div class="slds-spinner__dot-a"></div>
+             <div class="slds-spinner__dot-b"></div>
+           </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+        <br/><br/>
+        </aura:if>
+   
+    
+    
+</aura:component>

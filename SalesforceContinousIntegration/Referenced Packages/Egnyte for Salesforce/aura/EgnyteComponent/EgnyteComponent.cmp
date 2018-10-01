@@ -1,0 +1,40 @@
+<!--
+***********************************************************
+* Copyright Egnyte, Inc. All rights reserved. 
+***********************************************************
+-->
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId,force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" controller="efs.EgnyteComponentController" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="String" description="Record's Id for which Egnyte Files needs to be viewed" access="global" />
+    <aura:attribute name="permission" type="String" description="User's permission level" access="global" />
+    <aura:attribute name="height" type="String" description="CanvasApp height" default="600px" access="global" />
+    <aura:attribute name="parameters" type="String" />
+    <aura:attribute name="isSalesforce1" type="Boolean" default="false" />
+    <aura:attribute name="path" type="String" />
+	<aura:if isTrue="{!v.isSalesforce1}">
+        <force:canvasApp developerName="EgnyteForSalesforce" parameters="{!v.parameters}" scrolling="auto" width="100%" height="0px" onCanvasAppLoad="{!c.onCanvasLoad}" />
+        <div aura:id="mcontent101" class="top-bar" />
+        <div aura:id="mcontent102" class="logo-container">
+            <aura:if isTrue="{!$Browser.isIOS == true}">
+                <img id="backArrow" src="{!$Resource.efs__EgnyteArrowIcon}" onclick="{!c.goBack}"/>
+            </aura:if>
+            <img id="egnyteLogo" src="{!$Resource.efs__EgnyteLogoIcon}"/> 
+            <hr />
+        </div>
+        <div aura:id="mcontent103" class="main">
+            <p>{!$Label.efs.EgnyteFilesFirstTextLine}</p>
+            <p>{!$Label.efs.EgnyteFilesSecondTextLine}</p>
+            <img id="fileIcon" src="{!$Resource.efs__EgnyteFileIcon}"/>
+            <a class="pathLink" href="{!v.path}">{!$Label.efs.EgnyteFilesEgnyteAppButton}</a>
+                <aura:if isTrue="{!$Browser.isIOS == true}">
+                    <a class="storeLink" href="itms-apps://itunes.apple.com/us/app/egnyte/id380007014?mt=8">{!$Label.efs.EgnyteFilesAppStoreButton}</a>
+                    <aura:set attribute="else">
+                        <a class="storeLink" href="https://play.google.com/store/apps/details?id=com.egnyte.mobile&amp;hl=en">{!$Label.efs.EgnyteFilesPlayStoreButton}</a>
+                    </aura:set>
+                </aura:if>
+        </div>
+        <aura:set attribute="else">
+            <force:canvasApp developerName="EgnyteForSalesforce" parameters="{!v.parameters}" scrolling="auto" width="100%" height="{!v.height}"/>
+        </aura:set>
+    </aura:if>
+</aura:component>

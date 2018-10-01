@@ -1,0 +1,186 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component Used for Line item mapping.
+ * Created By  :   Jayanth B
+ * Created Date:   14/05/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">	
+    
+    <!-- Attribute definition -->
+    <aura:attribute name="currStep" type="String" default="step1" access="global" description="Used to maintain current step of Progress bar"/>
+    <aura:attribute name="selectedCount" type="Integer" default="0" access="global" description="display's the count of selected fields"/>
+    <aura:attribute type="Object[]" name="mappingSelectedFieldList" access="global" description="selected fields for LineItem field mapping"/>
+    <aura:attribute type="Object[]" name="fieldsForValueMapping" access="global" />
+    <aura:attribute type="boolean" name="spinner" default="true" description="loading icon" access="global"/>
+    <aura:attribute name="themeURL" type="string" description="Used to know whether component is running in Lightning Experience or classic" access="global"/>
+    <aura:attribute name="whenValueMappingISNull" type="boolean" default="true" access="global"/>
+    <aura:attribute name="helpText" type="String" default="" access="global" />
+    
+    <!-- Event Handler -->
+    <aura:handler name="LineItemSelectedFieldsCount" event="c:LineItemSelectedFieldsCount" action="{!c.LineItemSelectedFieldsCount}" description="selected fields count"/>
+    
+    <aura:handler name="LineItemMappingSecondPage" event="c:LineItemMappingSecondPage" action="{!c.LineItemMappingSecondPage}" description="to change current step to 2 and display 2nd component with values"/>
+    
+    <aura:handler name="LineItemMappingThirdPage" event="c:LineItemMappingThirdPage" action="{!c.LineItemMappingThirdPage}" description="to change current step to 3 and display 3rd component with values"/>
+    
+    <aura:handler name="LineItemMappingSpinnerEvent" event="c:LineItemMappingSpinnerEvent" action="{!c.LineItemMappingSpinnerEvent}" description="spinner event from child components"/>
+    
+    <aura:handler name="EvntToDisableSaveAndFinish"  event="c:EvntToDisableSaveAndFinish" action="{!c.EvntToDisableSaveAndFinish}" description="event to disable save and next button and enable save and exit button"/>    
+    
+    <!--Moves Back To Home Page(EventRegistration to move back to home page)-->
+    <aura:registerEvent name="goToHomePage" type="c:GoToHomePage"/>
+    <!-- Component Body -->
+    <div class="slds-box sldsboxcustomStl">
+        
+        <div class="slds-grid slds-gutters slds-m-left_medium">
+            <div class="slds-col">
+                <b><div class="slds-text-align_left slds-text-heading_small" style="font-family:Arial;">Salesforce - iContract Line-item Mapping</div></b>
+            </div>
+        </div>
+        <br/>
+        
+        
+        <!--Lightning progress indicator is not used, Because It was not flexible enough to add help Text in path component -->    
+        <div class="slds-path">
+            <div class="slds-grid slds-path__track">
+                <div class="slds-grid slds-path__scroller-container">
+                    <div class="slds-path__scroller" role="application">
+                        <div class="slds-path__scroller_inner">
+                            <ul class="slds-path__nav" role="tablist">
+                                <li class="slds-path__item slds-is-current" aura:id="step1" role="presentation">
+                                    <a aria-controls="path-content-1" aria-expanded="false" aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-1" role="tab" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            {!$Label.c.Selection_of_Line_item_fields}       
+                                            <span class="slds-assistive-text">Stage Complete</span>
+                                        </span>
+                                        <span class="slds-path__title">{!$Label.c.Selection_of_Line_item_fields}   
+                                            &nbsp;&nbsp;
+                                            <!--below commented code might use in future-->
+                                            <!--aura:if isTrue="{!v.themeURL != $Label.c.Theme4d}">
+                                            <lightning:helptext aura:id="helpTextStep1"  style="position: fixed;" class="slds-m-top_xx-small" title="{!$Label.c.LineItemFieldSelection_HelpText}" />    
+                                            </aura:if>
+                                            <aura:if isTrue="{!v.themeURL ==$Label.c.Theme4d}">
+                                            <lightning:helptext aura:id="helpTextStep1" style="position: fixed;margin-top: -3px;" content="{!$Label.c.LineItemFieldSelection_HelpText}" />    
+                                            </aura:if-->  
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete " aura:id="step2" role="presentation">
+                                    <a aria-controls="path-content-2" aria-expanded="false" aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-2" role="tab" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            {!$Label.c.Line_item_Field_Mapping}
+                                            <span class="slds-assistive-text">Stage Complete</span>
+                                        </span>
+                                        <span class="slds-path__title">{!$Label.c.Line_item_Field_Mapping}
+                                            &nbsp;&nbsp;<!--style is required here coz SLDS style is not aligned properly -->
+                                            <aura:if isTrue="{!v.themeURL != $Label.c.Theme4d}">
+                                                <lightning:helptext aura:id="helpTextStep2" style="position: fixed;" class="slds-m-top_xx-small" title="{!$Label.c.LineItem_FieldMapping_HelpText}" />    
+                                            </aura:if>
+                                            <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+                                                <lightning:helptext aura:id="helpTextStep2" style="position: fixed;margin-top: -3px;" content="{!$Label.c.LineItem_FieldMapping_HelpText}" />    
+                                            </aura:if>     
+                                        </span>    
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete " aura:id="step3" role="presentation">
+                                    <a aria-controls="path-content-3" aria-expanded="false" aria-selected="true" class="slds-path__link" href="javascript:void(0);" id="path-3" role="tab" tabindex="0">
+                                        <span class="slds-path__stage">
+                                            {!$Label.c.Line_item_Value_Mapping} 
+                                            <span class="slds-assistive-text">Current Stage:</span>
+                                        </span>
+                                        <span class="slds-path__title">{!$Label.c.Line_item_Value_Mapping}
+                                            &nbsp;&nbsp;
+                                            <aura:if isTrue="{!v.themeURL != $Label.c.Theme4d}">
+                                                <lightning:helptext aura:id="helpTextStep3" style="position: fixed;" class="slds-m-top_xx-small"  title="{!$Label.c.LineItem_ValueMapping_HelpText}" />
+                                            </aura:if>
+                                            <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+                                                <lightning:helptext aura:id="helpTextStep3" style="position: fixed;margin-top: -3px;"  content="{!$Label.c.LineItem_ValueMapping_HelpText}" />
+                                            </aura:if>         
+                                        </span>  
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+        
+        <!-- Based on the Lightning progress path step the child components will be displayed-->
+        <aura:if isTrue="{!v.currStep == 'step1'}">
+            <c:LineItemfieldMappingGetData aura:id="LineItemfieldSelection" themeURL="{!v.themeURL}"/>
+        </aura:if>
+        <aura:if isTrue="{!v.currStep == 'step2'}">
+            <c:LineItemFieldMapping aura:id="LineItemfieldMapping" themeURL="{!v.themeURL}" lineItemData="{!v.mappingSelectedFieldList}"/>
+        </aura:if>
+        <aura:if isTrue="{!v.currStep == 'step3'}">
+            <c:LineItemValueMapping themeURL="{!v.themeURL}" aura:id="LineItemValueMapping"/>
+        </aura:if>
+        <div class="slds-docked-form-footer" >  
+            
+            <div class="slds-col slds-size_1-of-2 ">  
+                <aura:if isTrue="{!v.currStep == 'step1'}"><!--Selected fields count form LineItem fieldSelection component --> 
+                    <div class="slds-m-top_x-small slds-m-left_xx-small"></div>&nbsp;&nbsp;&nbsp;&nbsp;<b  style="background-color: #dbe8ed!important;">&nbsp;&nbsp;{!v.selectedCount}&nbsp;&nbsp;</b> Fields Selected
+                </aura:if>    
+                <aura:if isTrue="{!v.currStep != 'step1'}"><!--available for 2nd and 3rd page to review whats done in previous step --> 
+                    <div>
+                        <lightning:button class="slds-button slds-button_neutral slds-m-left_medium" label="Back" onclick="{!c.gotoBcak}"  />
+                    </div>
+                </aura:if>
+            </div>
+            
+            
+            
+            <div class="slds-col slds-size_1-of-2">
+                <!--To return back to home page -->
+                <aura:if isTrue="{!v.currStep != 'step3'}"> 
+                    <lightning:button class="slds-button slds-button_neutral exitandSaveButtonStyle" label="Exit Configuration"  onclick="{!c.ExitConfigurationModel}"/>
+					<lightning:button class="slds-button slds-button_brand " label="Save and Next"  onclick="{!c.saveFieldselectionofLineItemMapping}"/>
+                </aura:if>
+                <aura:if isTrue="{!and(v.currStep == 'step3',v.whenValueMappingISNull)}"> <!--available in last step and redirects back to home page --> 
+                    <lightning:button class="slds-button slds-button_neutral FinishButtonStyle" label="Exit Configuration"  onclick="{!c.ExitConfigurationModel}"/>
+
+                    <lightning:button class="slds-button slds-button_brand " label="Finish"  onclick="{!c.finalStepSave}"/>
+                </aura:if>
+            </div>
+        </div>
+        
+        <!-- Model popup used to display popup when ExitConfiguration button is pressed to go back for Home screen-->
+        <!-- Displaying model popup is controlled by style display attribute-->
+        <div aria-hidden="false" id="ExitConfigurationModel" style="display:none;">
+            <div class="demo-only" style="height: 640px;">
+                <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container" style="width: 25%;">
+                        <header class="slds-modal__header slds-modal__header_empty">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                        </header>
+                        <!-- Messages displayed inside modal popup-->
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <p>{!$Label.c.ExitConfigMessage}</p>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <div class="slds-align_absolute-center">
+                                <button class="slds-button slds-button_neutral" onclick="{!c.goToHomePage}" style="color:black;">OK</button><!-- go backs to Home page-->
+                                <button class="slds-button slds-button_neutral" onclick="{!c.CloseExitConfigurationModel}">Cancel</button><!-- remains in same page-->
+                            </div>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </div>
+        
+        <!--Used for spinner loading icon -->
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+    </div>
+</aura:component>

@@ -1,0 +1,206 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component used for displaying Progress bar with header and footer functionality.
+ * Created By  :   Jayanth B
+ * Created Date:   18/07/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="LightningCreateContractPrgsIndtr" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="opportunityId" type="Id" access="global" description="holds opportunity id"/>
+    <aura:attribute name="contractRecId" type="String" access="global" description="holds contract record id"/>
+    <aura:attribute name="contrctIdFroTemplatecreation" type="String" access="global"/>
+    <aura:attribute name="isEditing" type="boolean" default="false" access="global" description="as the same component is been reused for creation and edition of contract, this varibale defines whether we are creating or editing the contract"/>
+    <aura:attribute name="typeSelectedValue" type="String" description="used to store selected Type value." access="global"/>
+    <aura:attribute name="subTypeSelectedValue" type="String" description="used to store selected SubType value." access="global"/>
+    <aura:attribute name="themeURL" type="string" default="Theme4d" description="Used to know whether component is running in Lightning Experience or classic" access="global"/>
+    <aura:attribute name="currStep" type="String" default="step1" access="global" description="Used to maintain current step of Progress bar"/>
+    <aura:attribute name="IsstandardTemplate" type="boolean" access="global" description="used in 3rd step where defines whether for particular contract standard template is selected or custom is uploaded"/>
+    <aura:attribute name="templateName" type="String" access="global" description="holds template fiel name uploaded in 3rd step"/>
+    <aura:attribute name="templateId" type="String" access="global" description="holds template id name uploaded in 3rd step"/> 
+    <aura:attribute type="boolean" name="spinner" default="false" description="loading icon" access="global"/>
+    <aura:attribute type="Integer" name="selectedFieldsCountOfdoc" access="global" default="0" description="defines no of supporting doc uploaded/selected"/>
+    <aura:attribute type="string" name="contractingParty" access="global" description="holds contracting party details"/>
+    <aura:attribute type="boolean" name="isLineItemAllowed" access="global" description="if true which was setup by admin during admin config then line item question appeares while creation of contract"/>
+    <aura:attribute type="boolean" name="scoperunningcreate" access="global" description="defines whether component running for creation or edition"/>
+    <aura:attribute type="boolean" name="isContractnumPresent" access="global" description="true if contract number from zycus is present in sfdc"/>
+    <aura:attribute type="boolean" name="redirectToOppOndiscrd" access="global" default="false" description="redirect for opp detail page on create"/>
+    <aura:attribute type="boolean" name="saveonBackAttachmnts" access="global" default="true" description="save based on back button -not implemented"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" description="onload function"/>
+    
+    <aura:handler name="CreateContractSpinnerEvent" event="c:CreateContractSpinnerEvent" action="{!c.CreateContractSpinnerEventmethod}" description="spinner event from child components"/>
+    <aura:handler name="KeepSaveEvnt" event="c:KeepSaveEvnt" action="{!c.KeepSaveEvntfunction}" description="Save of changes done by user on keep functionality"/>
+    <aura:handler name="ContrctMoveToSecndPageEvt" event="c:ContrctMoveToSecndPageEVT" action="{!c.CreateContrctSecondPage}" description="to change current step to 2 and display 2nd component with values"/>
+    <aura:handler name="selectedFilesCountEvt" event="c:SelectedFilesCountEvt" action="{!c.fileSelectedCount}" description="no of supporting doc uploaded in step 2 count"/>
+    <aura:handler name="ContractPartyNameForHeader" event="c:ContractPartyNameForHeader" action="{!c.contrctPartyName}" description="after contract party is selected in 1st step,displaying the sma ein 2nd page as header"/>
+    
+    <div class="slds-box sldsboxcustomStl" style="background-color: white; min-height: 100%;height: auto;">    
+        
+        <!--Displaying type and subtype-->
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col headingTypeSubType">
+                <b><div class="slds-text-align_left slds-text-heading_small headingTypeSubTypeFont">{!$Label.c.Contract_creation_header}</div></b>
+            </div>
+            <aura:if isTrue="{!v.currStep == 'step1'}">
+            <div class="slds-col slds-float_right typeSubType">
+                <div type="text" id="text-input-id-1" class="slds-input typeSubTypeText">
+                    Contract Type: <b>{!v.typeSelectedValue}</b> &nbsp;<span class="verticalLine"></span>&nbsp; Contract Sub-Type: <b>{!v.subTypeSelectedValue}</b>
+                </div>
+            </div>
+            </aura:if>
+            <aura:if isTrue="{!not(v.currStep == 'step1')}">
+            <div class="slds-col slds-float_right typeSubType">
+                <div type="text" id="text-input-id-1" class="slds-input typeSubTypeText">
+                    Contracting Party: <b>{!v.contractingParty}</b> &nbsp;<span class="verticalLine"></span>&nbsp; Contract Type: <b>{!v.typeSelectedValue}</b> &nbsp;<span class="verticalLine"></span>&nbsp; Contract Sub-Type: <b>{!v.subTypeSelectedValue}</b>
+                </div>
+            </div>
+            </aura:if>
+        </div>
+        <br/>
+        
+        <!--Lightning progress indicator is not used, Because It was not flexible enough to add help Text in path component -->    
+        <div class="slds-path">
+            <div class="slds-grid slds-path__track">
+                <div class="slds-grid slds-path__scroller-container">
+                    <div class="slds-path__scroller" role="application">
+                        <div class="slds-path__scroller_inner">
+                            <ul class="slds-path__nav" role="tablist">
+                                <li class="slds-path__item slds-is-current" aura:id="step1" role="presentation">
+                                    <a aria-controls="path-content-1" aria-expanded="false" aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-1" role="tab" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            {!$Label.c.CCStep1_label}     
+                                            <span class="slds-assistive-text">Stage Complete</span>
+                                        </span>
+                                        <span class="slds-path__title">{!$Label.c.CCStep1_label}   
+                                            &nbsp;&nbsp;
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete " aura:id="step2" role="presentation">
+                                    <a aria-controls="path-content-2" aria-expanded="false" aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-2" role="tab" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            {!$Label.c.CCStep2_label} 
+                                            <span class="slds-assistive-text">Stage Complete</span>
+                                        </span>
+                                        <span class="slds-path__title"> {!$Label.c.CCStep2_label} 
+                                            &nbsp;&nbsp;   
+                                        </span>    
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete " aura:id="step3" role="presentation">
+                                    <a aria-controls="path-content-3" aria-expanded="false" aria-selected="true" class="slds-path__link" href="javascript:void(0);" id="path-3" role="tab" tabindex="0">
+                                        <span class="slds-path__stage">
+                                            {!$Label.c.CCStep3_label} 
+                                            <span class="slds-assistive-text">Current Stage:</span>
+                                        </span>
+                                        <span class="slds-path__title"> {!$Label.c.CCStep3_label} 
+                                            &nbsp;&nbsp;       
+                                        </span>  
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+        
+        <!-- Based on the Lightning progress path step the child components will be displayed-->
+        <aura:if isTrue="{!v.currStep == 'step1'}">
+            <c:CreateContactComponent scoperunningcreate="{!v.scoperunningcreate}" isLineItemAllowed="{!v.isLineItemAllowed}" isEditing="{!v.isEditing}" themeURL="{!v.themeURL}" contractId="{!v.contractRecId}" aura:id="createcontractcomp" opportunityId="{!v.opportunityId}" typeSelectedValue="{!v.typeSelectedValue}" subTypeSelectedValue="{!v.subTypeSelectedValue}"/>
+        </aura:if>
+        <aura:if isTrue="{!v.currStep == 'step2'}">
+            <c:fileUpload contractId="{!v.contractRecId}" aura:id="fileUploadCmpId"/>
+        </aura:if>
+        <aura:if isTrue="{!v.currStep == 'step3'}">
+            <c:ContractTemplateComp isEditing="{!v.isEditing}" IsstandardTemplate="{!v.IsstandardTemplate}" uploadedFileName="{!v.templateName}" uploadedFileId="{!v.templateId}" aura:id="contractTemplateCompnent" contrctIdToUploadFile="{!v.contrctIdFroTemplatecreation}" opportunityIdforFileUpload="{!v.opportunityId}" typeValue="{!v.typeSelectedValue}" subTypeValue="{!v.subTypeSelectedValue}"/>
+        </aura:if>
+ 
+        
+        
+        <div class="slds-docked-form-footer" >  
+            
+            <aura:if isTrue="{!v.currStep != 'step1'}"><!--Selected fields count form LineItem fieldSelection component --> 
+            <lightning:button class="slds-button slds-button_neutral" label="Back" onclick="{!c.backbuttonFunction}"  /> 
+            </aura:if>  
+            
+                <aura:if isTrue="{!v.currStep == 'step2'}"><!--Selected fields count form LineItem fieldSelection component --> 
+                    <div class="slds-m-top_x-small slds-m-left_xx-small"></div>&nbsp;&nbsp;&nbsp;&nbsp;<b  style="height: 1.3rem;margin-top: 0.4rem;"><b  style="background-color: #dbe8ed!important;">&nbsp;&nbsp;{!v.selectedFieldsCountOfdoc}&nbsp;&nbsp;</b> Document(s) Selected</b>
+                </aura:if>  
+            
+                
+                <aura:if isTrue="{!v.currStep == 'step2'}">
+                    <lightning:button class="slds-button slds-button_neutral slds-m-left_medium canclebttnstyleforSecStp" label="Cancel" onclick="{!c.redirectToOppPageConfirmation}"  />
+                </aura:if>
+            
+                <aura:if isTrue="{!v.currStep != 'step2'}">
+                    <lightning:button class="slds-button slds-button_neutral slds-m-left_medium canclebttnstyle" label="Cancel" onclick="{!c.redirectToOppPageConfirmation}"  />
+                </aura:if>
+                <aura:if isTrue="{!v.currStep != 'step3'}">
+                    <lightning:button class="slds-button slds-button_neutral slds-m-left_medium" label="Save and Next" onclick="{!c.saveAndNext}"  />    
+                </aura:if>
+                <aura:if isTrue="{!v.currStep == 'step3'}">
+                    <lightning:button class="slds-button slds-button_neutral slds-m-left_medium" label="Finish" onclick="{!c.saveAndNext}"  /> 
+                </aura:if>
+            </div>
+        
+        
+    </div>
+    
+    
+    
+    <div aria-hidden="false" id="canclePopUp" class="slds-hide" aura:id="canclePopUpconfirm">
+        <div class="demo-only" style="height:400px">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 30%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" style="color:white">
+                            <span class="slds-assistive-text">Close</span><lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{! c.closePopUpForligthncrtcontrct }" alternativeText="Close window." />
+                        </button>
+                    </header>
+                    
+                    
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <center><lightning:icon iconName="utility:help" size="small" 
+                                                alternativeText="Indicates approval"/><br/><br/>
+                            <!--aura:if isTrue="{!v.isEditing == true}">
+                                {!$Label.c.redirect_contract_page_msg}    
+                            </aura:if>
+                            <aura:if isTrue="{!v.isEditing != true}"-->
+                                    <!--{!$Label.c.redirect_opp_page_msg}-->
+                                {!$Label.c.EditcontractCancleMessage}
+                            <!--/aura:if-->
+                            
+                        </center>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <!--aura:if isTrue="{!v.isEditing == true}">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.closePopUp}" style="color:black;">No</button>
+                            <button class="slds-button slds-button_success" onclick="{!c.redirectToOppDetailPage}">Yes</button>
+                            </aura:if>
+                            
+                            <aura:if isTrue="{!v.isEditing != true}"-->
+                            <button class="slds-button slds-button_brand" onclick="{!c.keepContractData}">Keep</button>
+                            <button class="slds-button slds-button_destructive" onclick="{!c.discardContractData}">Discard</button>
+                            <!--/aura:if-->
+                            
+                            </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    
+    <!--Used for spinner loading icon -->
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+</aura:component>

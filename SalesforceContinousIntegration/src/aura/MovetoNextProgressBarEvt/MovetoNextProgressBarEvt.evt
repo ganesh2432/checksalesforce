@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="Event for moving from 1 step to another in Progress bar." >
+    <aura:attribute type="String" name="movetoStep"/>
+    <aura:attribute type="String" name="mappingConfigId"/>
+</aura:event>

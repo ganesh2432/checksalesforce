@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>File Explorer Page configuration.</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Enable_Mass_Actions__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If true, mass selection and actions will be enabled.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If true, mass selection and actions will be enabled.</inlineHelpText>
+        <label>Enable Mass Actions</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Enable_Search__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If true, Seach functionality will be enabled.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If true, Seach functionality will be enabled.</inlineHelpText>
+        <label>Enable Search</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>File_Detail_Fields__c</fullName>
+        <deprecated>false</deprecated>
+        <description>File fields needs to be displayed on page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>File fields needs to be displayed on page.</inlineHelpText>
+        <label>File Detail Fields</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Home_Folder__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Landing folder for explorer. If empty default home folder will be used.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Landing folder for explorer. If empty default home folder will be used.</inlineHelpText>
+        <label>Home Folder</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Max_Search_Records__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Maximum number of records to display as search result.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Maximum number of records to display as search result.</inlineHelpText>
+        <label>Max Search Records</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Max_Sub_Folders_Files_Count__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Maximum count for sub folders / files as folder information.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Maximum count for sub folders / files as folder information. Set it to 0, if you don&apos;t want to display count.</inlineHelpText>
+        <label>Max Sub folders / files Count</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Page_Size__c</fullName>
+        <defaultValue>10</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Number of files / folders to show in a single page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of files / folders to show in a single page.</inlineHelpText>
+        <label>Page Size</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Page_Title__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This title is used to display assessment title on &quot;Home&quot; page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This title is used to display assessment title on &quot;Home&quot; page.</inlineHelpText>
+        <label>Page Title</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Show_Breadcrumb__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, breadcrumb will be displayed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, breadcrumb  will be displayed.</inlineHelpText>
+        <label>Show Breadcrumb</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Show_Extension_Icon__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Show / Hide file extension icon.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, show file extension icon.</inlineHelpText>
+        <label>Show File Extension Icon</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Show_Header__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, page header will be displayed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, page header will be displayed.</inlineHelpText>
+        <label>Show Header</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Show_Hierarchical_File_UI__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Show / Hide section for hierarchical file UI.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, show section for hierarchical file.</inlineHelpText>
+        <label>Show Hierarchical File UI</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Show_Related_Files_Folders__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Show files and folders related to any record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, files and folders related to any record of any object will also be displayed in the file system.</inlineHelpText>
+        <label>Show related files / folders</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Static_Resource_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Name of static resource where your file extension icons are added.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of static resource where your file extension icons are added. Keep it empty, if you want to use default icons.</inlineHelpText>
+        <label>Static Resource Name</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>File Explorer Page Configuration</label>
+    <visibility>Public</visibility>
+</CustomObject>

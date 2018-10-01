@@ -1,0 +1,14 @@
+.THIS table{
+    width: 85%;
+    margin-left: 8%;
+    border-collapse: collapse;
+    padding: 16px;
+    text-align:left;
+}
+
+.THIS th{
+    background-color:#DBE8ED;
+    border-collapse: collapse;
+    padding: 16px;
+    text-align:left;
+}

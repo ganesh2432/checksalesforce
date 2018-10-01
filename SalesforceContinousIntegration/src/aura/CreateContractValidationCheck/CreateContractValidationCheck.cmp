@@ -1,0 +1,17 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component for Contract creation validation check.
+ * Created By  :   Jayanth B
+ * Created Date:   17/07/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+	<aura:attribute name="recordId" type="Id" access="global" description="gets the current opportunity record ID where the create contract button is clicked"/>
+    <aura:attribute name="themeURL" type="string" description="Used to know whether component is running in Lightning Experience or classic"/> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" description="this function calls onload of component"/>
+  
+    <aura:if isTrue="{!v.themeURL=='Theme4d'}">
+    <center style="margin-top: 1%;margin-bottom: -3%;"><b style="font-size: 1.2rem;">{!$Label.c.Contract_Creation}</b></center><br/><br/>
+    <!--hr style="margin: 1rem"/-->
+    </aura:if>
+    <c:CreateContractValidator opportunityId="{!v.recordId}"/>
+</aura:component>

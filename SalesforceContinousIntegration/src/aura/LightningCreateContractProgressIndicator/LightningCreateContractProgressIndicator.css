@@ -1,0 +1,27 @@
+.THIS {
+}
+.THIS .headingTypeSubType {
+    width:25% ;
+}
+
+.THIS .headingTypeSubTypeFont {
+    font-family:Arial;
+}
+
+.THIS .typeSubTypeText {
+    background-color: #fafafa;width: auto !important;margin-right: 2%;float:right !important;
+}
+
+.THIS .verticalLine {
+    border-left: 1px solid rgb(217, 219, 221);
+}
+
+.THIS .canclebttnstyle{
+        margin-left: 70rem !important;
+}
+.THIS .canclebttnstyleforSecStp{
+     margin-left: 54rem !important;
+}
+.THIS .slds-button_icon-bare{
+ color:white !important;   
+}

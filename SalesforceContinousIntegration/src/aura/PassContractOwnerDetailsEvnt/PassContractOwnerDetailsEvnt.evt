@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="to passcontract owner details to parent component">
+    <aura:attribute type="Object" name="contractOwnerSelectedData" access="global"/>
+</aura:event>

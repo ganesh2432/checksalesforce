@@ -1,0 +1,10 @@
+global class TypeSubTypeMockHttpResponseGenerator implements HttpCalloutMock {
+ 
+    global HTTPResponse respond(HTTPRequest req) {
+        HttpResponse res = new HttpResponse();
+        res.setHeader('Content-Type', 'application/json');
+        res.setBody('{"IntegrationEntities":{"integrationEntity":[{"integrationEntityHeader":{"integrationTrackingNumber":"115#4ff0449c-984c-49b5-9c9a-c6d7c0942ca9#99711121-f52d-4759-86ff-37ebc998a909#1527680820090","referenceCodeForEntity":"contractHierarchy","additionalInfo":null},"integrationEntityDetails":{"contractTypes":{"types":{"type":[{"baseTypeName":"Procurment BT","typeName":"PURCHASEAGREEMENT","displayName":"Purchase Agreement","subTypes":{"subType":[{"subTypeName":"GOODS","displayName":"Goods"},{"subTypeName":"GOODSANDSERVICES","displayName":"Goods and Services"},{"subTypeName":"SERVICES","displayName":"Services"}]}},{"baseTypeName":"Procurment BT","typeName":"FACILITIESAGREEMENT","displayName":"Facilities Agreement","subTypes":{"subType":[{"subTypeName":"FAGOODS","displayName":"Goods"},{"subTypeName":"FAGOODSANDSERVICES","displayName":"Goods and Services"},{"subTypeName":"FASERVICES","displayName":"Services"}]}},{"baseTypeName":"Procurment BT","typeName":"PROCUREMENTAIRCRAFTAGREEMENT","displayName":"Procurement Aircraft Agreement","subTypes":{"subType":[{"subTypeName":"PAAGOODS","displayName":"Goods"},{"subTypeName":"PAAGOODSANDSERVICES","displayName":"Goods and Services"},{"subTypeName":"PAASERVICES","displayName":"Services"}]}},{"baseTypeName":"Procurment BT","typeName":"AIRLINEOPERATIONSAGREEMENT","displayName":"Airline Operations Agreement","subTypes":{"subType":[{"subTypeName":"AOAGOODS","displayName":"Goods"},{"subTypeName":"AOAGOODSANDSERVICES","displayName":"Goods and Services"},{"subTypeName":"AOASERVICES","displayName":"Services"}]}}]}}}}]}}');
+        res.setStatusCode(200);
+        return res;
+    }
+}

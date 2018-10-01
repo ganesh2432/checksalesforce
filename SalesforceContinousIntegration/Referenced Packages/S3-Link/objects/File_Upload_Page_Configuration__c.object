@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>File Upload Page configuration.</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Add_Date_In_File_Name__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, date will be added in file name.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, date will be added in file name.</inlineHelpText>
+        <label>Add Date in File Name</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Default_Allow_Download_by_Presigned_URL__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Default value for &quot;Allow to Download by Presigned URL&quot; for new file.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Default value for &quot;Allow to Download by Presigned URL&quot; for new file.</inlineHelpText>
+        <label>Default Allow Download by Presigned URL</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Default_Category__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Default category for new file.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Default category for new file.</inlineHelpText>
+        <label>Default Category</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Default_Copy_Move__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Default allow copy &amp; move for new files.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Default allow copy &amp; move for new files.</inlineHelpText>
+        <label>Default copy &amp; move</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Default_Grantees_for_Private_Files__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Default grantees for private files.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Default grantees for private files.</inlineHelpText>
+        <label>Default Grantees for Private Files</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Default_Presigned_URL_Frequency__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Default presigned URL generation frequency for new files.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Default presigned URL generation frequency for new files.</inlineHelpText>
+        <label>Default Presigned URL Frequency</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Default_Public_on_Amazon__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Default value for public on amazon for new file.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Default value for public on amazon for new file.</inlineHelpText>
+        <label>Default Public on Amazon</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Default_Salesforce_Access_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Default access type for new file.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Default access type for new file.</inlineHelpText>
+        <label>Default Salesforce Access Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Default_Track_Download_History__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Default track download history for new files.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Default track download history for new files.</inlineHelpText>
+        <label>Default Track Download History</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Enable_File_Numbers__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, file number will be added in name if file with same name found. i.e if file.pdf alredy exist new file name will be file(1).pdf.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, file number will be added in name if file with same name found. i.e if file.pdf alredy exist new file name will be file(1).pdf.</inlineHelpText>
+        <label>Enable File Numbers</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>File_Administrative_Fields__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Administrative fields need to be displayed in file upload page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Administrative fields need to be displayed in file upload page.</inlineHelpText>
+        <label>File Administrative Fields</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Show_Parent_Record_Link__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, link for parent record (like account, case etc) will be displayed in file upload page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, link for parent record (like account, case etc) will be displayed in file upload page.</inlineHelpText>
+        <label>Show Parent Record Link</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>File Upload Page Configuration</label>
+    <visibility>Public</visibility>
+</CustomObject>

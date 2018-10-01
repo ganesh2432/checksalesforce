@@ -1,0 +1,1093 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <content>edEditFile</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Files added by all users. After adding file on Amazon server we will created File for that imte in our org. So later we can use to display in grid or tree.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fieldSets>
+        <fullName>File_Detail</fullName>
+        <description>Used in File Detail page.</description>
+        <displayedFields>
+            <field>Name</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Description__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Size__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>CreatedById</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>CreatedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>File Detail</label>
+    </fieldSets>
+    <fieldSets>
+        <fullName>File_Fields_For_Email</fullName>
+        <description>These fieldsm will be displayed in email sent to user with downlaod link.</description>
+        <displayedFields>
+            <field>Name</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Description__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Access_Type__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Size__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>CreatedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>File Fields For Email</label>
+    </fieldSets>
+    <fieldSets>
+        <fullName>File_Fields_For_Upload_Page</fullName>
+        <description>File fields for multi file upload page.</description>
+        <displayedFields>
+            <field>Access_Type__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Category__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Public_On_Amazon__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Allow_to_Copy_Move__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Allow_to_Download_by_Presigned_URL__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Track_Download_History__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>File Fields For Upload Page</label>
+    </fieldSets>
+    <fieldSets>
+        <fullName>File_Headers_For_Upload_Page</fullName>
+        <availableFields>
+            <field>Access_Type__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Allow_To_Delete__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Allow_To_Rename__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Allow_to_Copy_Move__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Priority__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <description>Used in multi file upload page as header.</description>
+        <displayedFields>
+            <field>Name</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Description__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Size__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>File Headers For Upload Page</label>
+    </fieldSets>
+    <fields>
+        <fullName>Access_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Access type of the file</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Access type of the file. Based on this other users will be able to access the files.</inlineHelpText>
+        <label>Salesforce Access Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Private</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Public Download Only</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Public Download &amp; Write</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Account Id to which file will be linked.</description>
+        <externalId>false</externalId>
+        <label>Account</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Files</relationshipLabel>
+        <relationshipName>Files</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Allow_To_Delete__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If true, all users who have access for this file, can delete it from amazon.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If true, all users who have access for this file, can delete it from amazon.</inlineHelpText>
+        <label>Allow other users to Delete?</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Allow_To_Rename__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If true, all users who have edit access for this file, can rename files name on amazon server.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If true, all users who have edit access for this file, can rename files name on amazon server.</inlineHelpText>
+        <label>Allow other users to Edit?</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Allow_to_Copy_Move__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If true, all users who have access for this file, can copy or move file into another folder.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If true, all users who have access for this file, can copy or move file into another folder.</inlineHelpText>
+        <label>Allow copy &amp; move?</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Allow_to_Download_by_Presigned_URL__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Allow Download by Presigned URL Only?</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Amazon_File_Key__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Amazon File Key. Used for all operations on file.</description>
+        <externalId>false</externalId>
+        <label>Amazon File Key</label>
+        <length>10000</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>2</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Amazon_File_Path_With_Bucket__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Bucket_Name__c&amp;&quot;/&quot;&amp;IF(ISBLANK(Folder__r.Amazon_File_Path__c),  Salesforce_Unique_Number__c , Folder__r.Amazon_File_Path__c&amp;&quot;/&quot;&amp; Salesforce_Unique_Number__c)</formula>
+        <label>Salesforce File Path With Bucket</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Amazon_File_Path__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Salesforce path for folder hierarchy.</description>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Folder__r.Amazon_File_Path__c) , Salesforce_Unique_Number__c , Folder__r.Amazon_File_Path__c&amp;&quot;/&quot;&amp; Salesforce_Unique_Number__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Salesforce File Path</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Asset__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Asset Id to which file will be linked.</description>
+        <externalId>false</externalId>
+        <label>Asset</label>
+        <referenceTo>Asset</referenceTo>
+        <relationshipLabel>Files</relationshipLabel>
+        <relationshipName>Files</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Bucket_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Amazon bucket name</description>
+        <externalId>false</externalId>
+        <label>Bucket Name</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Bucket_Region__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Bucket Region</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>us-west-1</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>us-west-2</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>ca-central-1</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>eu-west-1</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>eu-west-2</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>eu-central-1</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>ap-south-1</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>ap-southeast-1</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>ap-southeast-2</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>ap-northeast-1</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>ap-northeast-2</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>sa-east-1</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>us-east-2</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>us-east-1</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Campaign__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Campaign Id to which file will be linked.</description>
+        <externalId>false</externalId>
+        <label>Campaign</label>
+        <referenceTo>Campaign</referenceTo>
+        <relationshipLabel>Files</relationshipLabel>
+        <relationshipName>Files</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Case__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Case Id to which file will be linked.</description>
+        <externalId>false</externalId>
+        <label>Case</label>
+        <referenceTo>Case</referenceTo>
+        <relationshipLabel>Files</relationshipLabel>
+        <relationshipName>Files</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Category__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Category</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Whitepapers</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Data Sheet</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Files</relationshipLabel>
+        <relationshipName>Files</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Content_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Content type of the file.</description>
+        <externalId>false</externalId>
+        <label>Content Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Contract__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Contract Id to which file will be linked.</description>
+        <externalId>false</externalId>
+        <label>Contract</label>
+        <referenceTo>Contract</referenceTo>
+        <relationshipLabel>Files</relationshipLabel>
+        <relationshipName>Files</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Description fo file.</description>
+        <externalId>false</externalId>
+        <label>Description</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Download_Link__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(OR(ISPICKVAL(Upload_Status__c, &apos;&apos;), ISPICKVAL( Upload_Status__c , &apos;Completed&apos;)), HYPERLINK(LEFT($Api.Partner_Server_URL_260, FIND(&apos;/services&apos;,$Api.Partner_Server_URL_260))&amp;&apos;apex/NEILON__edFileDetail?cleanId=&apos;&amp;Id,  IMAGE(LEFT($Api.Partner_Server_URL_260, FIND(&apos;/services&apos;,$Api.Partner_Server_URL_260))+&quot;resource/NEILON__AppurinUtils/resources/images/fileIcons/downloadlightning.png&quot;,&apos;Download&apos;, 25, 25), &quot;_blank&quot;), &apos;&apos;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Download</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Extension__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Extension of file</description>
+        <externalId>false</externalId>
+        <label>Extension</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>.doc</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.pdf</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.jpg</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.jpeg</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.gif</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.png</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.xml</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.xls</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.xlsx</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.txt</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.mp3</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.mkv</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.wmv</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.wsdl</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>xsl</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>.xsml</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>File_Downloads__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total numbers of file downloads.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Total numbers of file downloads.</inlineHelpText>
+        <label>File Downloads</label>
+        <summaryForeignKey>File_Download_History__c.File__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>File_Presigned_URL__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Amazon Presigned URL to download file.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Amazon Presigned URL to download file.</inlineHelpText>
+        <label>Download URL</label>
+        <length>20000</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>2</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Folder__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Folder of the file.</description>
+        <externalId>false</externalId>
+        <label>Folder</label>
+        <referenceTo>Folder__c</referenceTo>
+        <relationshipLabel>Files</relationshipLabel>
+        <relationshipName>Files</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Lead__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lead Id to which file will be linked.</description>
+        <externalId>false</externalId>
+        <label>Lead</label>
+        <referenceTo>Lead</referenceTo>
+        <relationshipLabel>Files</relationshipLabel>
+        <relationshipName>Files</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Location__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Location of the amazon server where file is placed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Location of the amazon server where file is placed.</inlineHelpText>
+        <label>Location</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Opportunity__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Opportunity Id to which file will be linked.</description>
+        <externalId>false</externalId>
+        <label>Opportunity</label>
+        <referenceTo>Opportunity</referenceTo>
+        <relationshipLabel>Files</relationshipLabel>
+        <relationshipName>Files</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Parent_Id__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Id of the parent record (If file is created for any record).</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Id of the parent record (If file is created for any record).</inlineHelpText>
+        <label>Parent Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Parent_Object_API_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>API Name of parent object.</description>
+        <externalId>false</externalId>
+        <label>Parent Object API Name</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Presigned_URL_Expire_Date__c</fullName>
+        <defaultValue>Today()</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Presigned URL Expire Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Presigned_URL_Frequency__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Presigned URL for file will be updated as per this frequency.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Presigned URL for file will be updated as per this frequency.</inlineHelpText>
+        <label>Presigned URL Frequency</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Every Day</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Every Week</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Priority__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Priority of file.</description>
+        <externalId>false</externalId>
+        <label>Priority</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Highest</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Higher</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Normal</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Lower</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Lowest</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Product2__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Product Id to which file will be linked.</description>
+        <externalId>false</externalId>
+        <label>Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>Files</relationshipLabel>
+        <relationshipName>Files</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Public_On_Amazon__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If true, any one can access or download the file just using the Amazon URL.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If true, any one can access or download the file just using the Amazon URL.</inlineHelpText>
+        <label>Public on Amazon?</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Salesforce_Unique_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Unique Number generated for File by Salesforce.</description>
+        <displayFormat>{0000000000}</displayFormat>
+        <externalId>true</externalId>
+        <label>Salesforce Unique Number</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>AutoNumber</type>
+    </fields>
+    <fields>
+        <fullName>Size__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Size of the file content.</description>
+        <externalId>false</externalId>
+        <label>Size (bytes)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Solution__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Solution Id to which file will be linked.</description>
+        <externalId>false</externalId>
+        <label>Solution</label>
+        <referenceTo>Solution</referenceTo>
+        <relationshipLabel>Files</relationshipLabel>
+        <relationshipName>Files</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Source_File__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Source File</label>
+        <referenceTo>File__c</referenceTo>
+        <relationshipLabel>Files</relationshipLabel>
+        <relationshipName>Files</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>System_Update__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>This flag will be set to true by the system when it is updating folder for file. It is mainly for System Use only.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This flag will be set to true by the system when it is updating folder for file. It is mainly for System Use only.</inlineHelpText>
+        <label>System Update</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Track_Download_History__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>This is used to enable the download history at the file level.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If true, download history will be tracked for this file.</inlineHelpText>
+        <label>Track Download History?</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Upload_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Upload Status</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Copying</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Deleting</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Moving</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Completed</fullName>
+                    <default>true</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <label>File</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Description__c</columns>
+        <columns>Folder__c</columns>
+        <columns>Size__c</columns>
+        <columns>Download_Link__c</columns>
+        <columns>CREATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+        <language>en_US</language>
+    </listViews>
+    <nameField>
+        <label>Name</label>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Files</pluralLabel>
+    <searchLayouts>
+        <excludedStandardButtons>Accept</excludedStandardButtons>
+        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
+        <listViewButtons>Send_Email</listViewButtons>
+    </searchLayouts>
+    <sharingModel>Private</sharingModel>
+    <sharingReasons>
+        <fullName>File_Access_Grantee__c</fullName>
+        <label>File Access Grantee</label>
+    </sharingReasons>
+    <startsWith>Vowel</startsWith>
+    <validationRules>
+        <fullName>File_Extension_Validation</fullName>
+        <active>false</active>
+        <description>File Extension cannot be updated once file get created.</description>
+        <errorConditionFormula>AND(NOT(ISNEW()), ISCHANGED(  Extension__c ))</errorConditionFormula>
+        <errorDisplayField>Extension__c</errorDisplayField>
+        <errorMessage>Extension cannot be updated manually. Its a system generated field.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>File_Name_Validation</fullName>
+        <active>true</active>
+        <description>The file name you provided cannot contain special characters like /, &lt;, &gt;, ? or &amp;.</description>
+        <errorConditionFormula>OR(CONTAINS( Name , &quot;/&quot;), CONTAINS( Name , &quot;&gt;&quot;), CONTAINS( Name , &quot;&lt;&quot;), CONTAINS( Name , &quot;?&quot;), CONTAINS( Name , &quot;&amp;&quot;))</errorConditionFormula>
+        <errorDisplayField>Name</errorDisplayField>
+        <errorMessage>The file name you provided cannot contain special characters like /, &lt;, &gt;, ? or &amp;.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>File_Size_Validation</fullName>
+        <active>true</active>
+        <description>File Size cannot be updated once file get created.</description>
+        <errorConditionFormula>AND(NOT(ISNEW()), ISCHANGED(  Size__c ))</errorConditionFormula>
+        <errorDisplayField>Size__c</errorDisplayField>
+        <errorMessage>Size cannot be updated manually. Its a system generated field.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Folder_Validation</fullName>
+        <active>true</active>
+        <description>Folder cannot updated manually.</description>
+        <errorConditionFormula>AND(NOT(System_Update__c), NOT(ISNEW()), ISCHANGED( Folder__c ))</errorConditionFormula>
+        <errorDisplayField>Folder__c</errorDisplayField>
+        <errorMessage>Folder cannot be updated manually. Its a system generated field.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Download</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Download</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>{!URLFOR(&quot;/apex/NEILON__edFileDetail&quot;, &quot;&quot;)}?cleanid={!File__c.Id}&amp;retURL=/{!File__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>File_Administration</fullName>
+        <availability>online</availability>
+        <description>Administration for file.</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>File Administration</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>{!URLFOR(&quot;/apex/NEILON__edFileAdministrator&quot;, &quot;&quot;)}?id={!File__c.Id}&amp;retURL=/{!File__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>File_Download_History</fullName>
+        <availability>online</availability>
+        <description>File Download History for file.</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>File Download History</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>{!URLFOR(&quot;/apex/NEILON__edFileDownloadHistory&quot;, &quot;&quot;)}?id={!File__c.Id}&amp;retURL=/{!File__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>File_Sharing_Settings</fullName>
+        <availability>online</availability>
+        <description>Sharing settings for file.</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>File Sharing Settings</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>{!URLFOR(&quot;/apex/NEILON__edFileSharing&quot;, &quot;&quot;)}?id={!File__c.Id}&amp;retURL=/{!File__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Manage_Files</fullName>
+        <availability>online</availability>
+        <description>Manage files from folder.</description>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Manage File(s)</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!URLFOR(&quot;/apex/NEILON__edMultiFileUpload&quot;, &quot;&quot;)}?id={!Folder__c.Id}&amp;callerName=FolderDetailManageFiles&amp;retURL=/{!Folder__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Replace_File</fullName>
+        <availability>online</availability>
+        <description>Replace a file content on amazon S3</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Replace File</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>{!URLFOR(&quot;/apex/NEILON__edReplaceFile&quot;, &quot;&quot;)}?id={!File__c.Id}&amp;retURL=/{!File__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Send_Email</fullName>
+        <availability>online</availability>
+        <description>Send file in email.</description>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Send Email</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!URLFOR(&quot;/apex/NEILON__edEmailFilesToUsers&quot;, &quot;&quot;)}?folderId={!Folder__c.Id}</url>
+    </webLinks>
+</CustomObject>

@@ -1,0 +1,76 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component is used to sync account details with Icontract
+                   system.
+ * Created By  :   Siva Krishna Reddy B
+ * Created Date:   22/05/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="ContractPartyCreationAPI" implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction" >
+   
+   <!-- attributes declaration -->   
+   <aura:attribute name="recordId" type="Id" access="global"/>
+   <aura:attribute name="currentpageCP" type="Integer" default="1" access="global"/>
+   <aura:attribute name="displayNextCP" type="boolean" default="true" access="global"/>
+   <aura:attribute name="countAnsweredonlyonceCP" type="boolean" default="false" access="global"/>
+   <aura:attribute name="contractPartyName" type="String" access="global"/>
+   <aura:attribute name="contractPartySelectedetails" type="Object" access="global"/> 
+   <aura:attribute name="typeSelectedValue" type="String" description="used to store selected Type value." access="public"/>
+   <aura:attribute name="successErrormessage" type="String" access="global" description="used to store successerrormessage on creation"/> 
+   <aura:attribute name="Spinner" type="boolean" default="false" description="loading spinner" access="global"/>
+   
+   <!-- aura handler --> 
+   <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+   
+    <!-- Create CP -->
+   <div align="right">
+   		<button class="slds-button slds-button_brand" onclick="{!c.CreateCP}">Create CP</button>	
+   </div>
+   
+    <!-- Search CP -->
+   <div align="left">   	
+   <b style="font-size:1.1rem !important;"> Fetching Contract Party(s)</b>&nbsp;<lightning:button class="buttoneFetchallApi"  label="Search All" title="Searches all zycus contract party" onclick="{! c.searchAllContractParty }" />  		
+       <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+        	<c:ContractPartyAPI aura:id="contractcpAPI" PassContractPartyDetailsEvnt="{!c.contractPartySelectedData}" BackNextContractPartyEvnt="{!c.backNextVisibilityCP}" typeSelectedValue="Purchase Agreement"/>
+        </div>
+       <aura:if isTrue="{!not(v.currentpageCP==1)}">
+        	<button class="slds-button slds-button_neutral" onclick="{!c.BackActionforCP}">Back</button>
+            	<aura:if isTrue="{!v.displayNextCP == true}">
+                	<button class="slds-button slds-button_brand" style="margin-left: 44rem;" onclick="{!c.NextActionforCP}">Next</button>
+                </aura:if>
+        </aura:if>
+        <aura:if isTrue="{!v.currentpageCP==1}">
+        	<aura:if isTrue="{!v.displayNextCP == true}">
+            	<button class="slds-button slds-button_brand" style="margin-left: 48rem;" onclick="{!c.NextActionforCP}">Next</button>
+            </aura:if>
+        </aura:if>
+    </div>
+    <!--  modal used to display success/Error message on cp creation -->
+    <div aria-hidden="false" id="SuccessErrorModal" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            	<div class="slds-modal__container">
+					<header class="slds-modal__header">										
+					</header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>{!v.successErrormessage}</p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                    	<button class="slds-button slds-button_neutral" onclick="{!c.closePopup}" style="color:black;">OK</button>                       
+                    </footer>
+                </div>
+            </section>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+    <!-- spinner -->
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+           <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+             <span class="slds-assistive-text">Loading</span>
+             <div class="slds-spinner__dot-a"></div>
+             <div class="slds-spinner__dot-b"></div>
+           </div>
+        </div>
+    </aura:if>
+    
+</aura:component>

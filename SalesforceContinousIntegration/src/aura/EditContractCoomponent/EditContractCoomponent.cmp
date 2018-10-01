@@ -1,0 +1,58 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component Used to Setup the Questions for Requesting contracts under EDIT mode.
+ * Created By  :   Jayanth B
+ * Created Date:   27/07/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="EditContractcontroller" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:attribute name="recordId" type="Id" access="global" description="holds the contract record id"/>
+    <aura:attribute name="openProgressBar" type="boolean" default="false" access="global"/>
+    <aura:attribute name="opportunityId" type="Id" access="global" description="holds the opp record id"/>
+    <aura:attribute name="isclassic" type="boolean" default="false" access="global" description="defines which environment code is running"/>
+    <aura:attribute name="IsstandardTemplate" type="boolean" access="global" description="defines whether template is standard or custom"/>
+    <aura:attribute name="templateName" type="String" access="global" description="holds the template name"/>
+    <aura:attribute name="templateId" type="String" access="global" description="holds the template id"/>
+    <aura:attribute name="themeURL" type="string" description="Used to know whether component is running in Lightning Experience or classic"/> 
+   <aura:attribute name="typeSelectedValue" type="String" description="used to store selected Type value." access="public"/>
+    <aura:attribute name="subTypeSelectedValue" type="String" description="used to store selected SubType value." access="public"/>
+    <aura:attribute name="isRequestWizardContrct" type="boolean" access="global" default="false"/>
+    <aura:attribute name="notallowedStatusmsg" type="boolean" access="global" default="false"/>
+    <aura:attribute name="scoperunningcrt" type="boolean" access="global" default="false"/>
+    <aura:attribute name="icontrctStatus" type="String" access="global" />
+    <aura:attribute name="iscontractnumberPresent" type="boolean" access="global" default="false" description="true if icontract number is present"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" description="onload function"/>
+    
+    <aura:if isTrue="{!v.isRequestWizardContrct == true}">
+    <aura:if isTrue="{!v.openProgressBar == false}">
+        <center>
+        <h1>{!$Label.c.confirmEditconractMsg}</h1><br/>
+	  		<div >
+	  			<lightning:button variant="brand" class="" label="Yes" onclick="{!c.redirectToProgressBar}"></lightning:button>
+	  		</div>
+        </center>
+    </aura:if>
+    <aura:if isTrue="{!v.openProgressBar == true}">
+        <c:LightningCreateContractProgressIndicator isContractnumPresent="{v.iscontractnumberPresent}" scoperunningcreate="{!v.scoperunningcrt}" IsstandardTemplate="{!v.IsstandardTemplate}" templateName="{!v.templateName}" templateId="{!v.templateId}" contractRecId="{!v.recordId}" isEditing="true" opportunityId="{!v.opportunityId}" typeSelectedValue="{!v.typeSelectedValue}"  subTypeSelectedValue="{!v.subTypeSelectedValue}" />
+    </aura:if>
+    </aura:if>
+    
+    <aura:if isTrue="{!or(v.isRequestWizardContrct == false,v.notallowedStatusmsg == true)}">
+        <center style="margin-top: 4%;">
+            <aura:if isTrue="{!v.notallowedStatusmsg == false}">
+                <h1>{!$Label.c.icontract_not_linked_error_message}</h1><br/>
+            </aura:if>
+         <aura:if isTrue="{!v.notallowedStatusmsg == true}">
+                <h1>{!$Label.c.Edit_not_allowed_for_contract_message}</h1><br/>
+            </aura:if>
+	  		
+                <aura:if isTrue="{!v.openProgressBar == true}">
+                    <div style="height: 24rem;"><br/>
+	  			<lightning:button variant="brand" class="" label="Get Back to Contract" onclick="{!c.redirectToContractDetailPage}"></lightning:button>
+                </div>
+                    </aura:if>
+                
+        </center>
+    </aura:if>
+    
+</aura:component>

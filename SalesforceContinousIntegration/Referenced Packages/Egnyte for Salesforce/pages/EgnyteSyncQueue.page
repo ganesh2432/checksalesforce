@@ -1,0 +1,42 @@
+<apex:page controller="efs.EgnyteSyncQueueController">
+    <apex:pageMessages id="mymsg"/>
+    <div align="center">
+        <apex:actionStatus id="status" >
+            <apex:facet name="start" >
+                <img src="/img/loading.gif" />
+            </apex:facet>
+        </apex:actionStatus>
+    </div>
+    <apex:sectionHeader title="Egnyte Sync Queue" subtitle="Home"/>
+    <apex:form >
+        <apex:pageBlock id="pb">
+            <center>
+            <apex:commandButton rerender="pb,mymsg" action="{!retryFailed}"             status="status" value="Retry Failed" title="Retry Failed" style="Width:80px;border-radius: 8px;"/> &nbsp;&nbsp;
+            <apex:commandButton rerender="pb,mymsg" action="{!clearFailedAndProcessed}" status="status" value="Clear Failed" title="Clear Failed" style="Width:80px;border-radius: 8px;"/> &nbsp;&nbsp;
+            <apex:commandButton rerender="pb,mymsg" action="{!refresh}"                 status="status" value="Refresh"      title="Refresh"      style="Width:70px;border-radius: 8px;"/> &nbsp;&nbsp;
+            </center><br/><br/>
+            <apex:pageBlockTable value="{!records}" var="esq">
+                <apex:column headerValue="Name">
+                    <apex:outputLink value="/{!esq.Id}">{!esq.Name}</apex:outputLink>
+                </apex:column>
+                <apex:column value="{!esq.efs__Id__c}"/>
+                <apex:column value="{!esq.efs__Action__c}"/>
+                <apex:column value="{!esq.efs__ProcessDateTime__c}"/>
+                <apex:column value="{!esq.efs__RetriesLeft__c}"/>
+                <apex:column value="{!esq.efs__Upload_Status__c}"/>
+                <apex:column value="{!esq.efs__File_Size__c}"/>
+                <apex:column value="{!esq.efs__ErrorDescription__c}"/>
+            </apex:pageBlockTable>
+            <br/>
+            <apex:outputText style="align:left">{!(setCon.pageNumber * size)+1-size}-{!IF((setCon.pageNumber * size)>noOfRecords, noOfRecords,(setCon.pageNumber * size))} of {!noOfRecords}</apex:outputText>
+            <center>
+            <apex:panelGrid columns="4">
+                <apex:commandButton status="status" reRender="pb,mymsg" value="|<" action="{!setCon.first}"     disabled="{!!setCon.hasPrevious}" title="First Page"    style="Width:30px;"/>
+                <apex:commandButton status="status" reRender="pb,mymsg" value="<"  action="{!setCon.previous}"  disabled="{!!setCon.hasPrevious}" title="Previous Page" style="Width:30px;"/>
+                <apex:commandButton status="status" reRender="pb,mymsg" value=">"  action="{!setCon.next}"      disabled="{!!setCon.hasNext}"     title="Next Page"     style="Width:30px;"/>
+                <apex:commandButton status="status" reRender="pb,mymsg" value=">|" action="{!setCon.last}"      disabled="{!!setCon.hasNext}"     title="Last Page"     style="Width:30px;"/>
+            </apex:panelGrid>
+            </center>
+      </apex:pageBlock>
+   </apex:form>   
+</apex:page>

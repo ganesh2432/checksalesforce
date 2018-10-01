@@ -1,0 +1,34 @@
+.THIS {
+    background-color: white;
+}
+.THIS .exitandSaveButtonStyle{
+    margin-left: 54% !important;
+}
+.THIS .exitandSaveButtonStyleForReq{
+    margin-left: 46% !important;
+}
+
+.THIS .verticalLine {
+    border-left: 1px solid rgb(217, 219, 221);
+}
+
+.THIS .headingTypeSubType {
+    width:25% ;
+}
+
+.THIS .headingTypeSubTypeFont {
+    font-family:Arial;
+}
+
+.THIS .typeSubType {
+    width:75%;
+    display: contents;
+}
+ 
+.THIS .typeSubTypeText {
+    background-color: #fafafa;width: auto !important;margin-right: 1%;
+}
+
+.THIS .progressBarMain {
+    width: 101% !important;
+}

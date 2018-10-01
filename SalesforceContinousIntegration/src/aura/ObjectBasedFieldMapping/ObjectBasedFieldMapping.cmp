@@ -1,0 +1,238 @@
+<aura:component controller="ObjectBasedFieldMappingController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <!-- Purpose : To Store the Mapping of IContract fields to Salesforce Fields -->
+    <!--aura:attribute name="iContractRecordWrapper" type="FieldDetailWrapper" access="public"/-->
+    <aura:attribute name="objectsList" type="String[]" access="public" description="Not in use"/> 
+    <aura:attribute name="object1List" type="String[]" access="public" description="List of Objects can be selection in first Mapping"/>
+    <aura:attribute name="object1Map" type="Map" access="public" description="to store the field details of Object1 in Map."/>
+    <aura:attribute name="object2Map" type="Map" access="public" description="to store the field details of Object2 in Map."/>
+    <aura:attribute name="object1Fields" type="Object[]" access="public" description="Not using"/>
+    <aura:attribute name="object2Fields" type="Object[]" access="public" description="Not using"/>
+    <aura:attribute name="obj1WithDataTypeList" type="Object[]" access="public" description="to store the field details with Datatype of Object1 in Map."/>
+    <aura:attribute name="obj2WithDataTypeList" type="Object[]" access="public" description="to store the field details with Datatype of Object2 in Map."/>
+    <aura:attribute name="fieldDataTypeMap" type="Map" access="public" description="To store the Mapping of Datatype of IContract to Salesforce Field Datatype."/>
+    <aura:attribute name="iContractMetadataMap" type="Map" access="public" description="to get the IContractMetadata records."/>
+    <aura:attribute name="object1Str" type="String" access="public" description="to store the Object1 Name"/> 
+    <aura:attribute name="object2Str" type="String" access="public" description="to store the Object2 Name"/> 
+    <aura:attribute name="object2List" type="String[]" access="public" description="Not in use"/>
+    <aura:attribute name="mapConfigId" type="String" access="public" description="to store the Mapping Config Record Id"/>
+    <aura:attribute name="fieldMismatchErrMsg" type="String" access="public" description="To store Error Message if Field Mismatch found."/>
+    <aura:attribute name="fieldMatchSaveMsg" type="String" access="public"/>
+    <aura:attribute name="newFieldCreateObj" type="String" access="public"/>
+    <aura:attribute name="isNewFieldCreate" type="Boolean" default="false" access="public"/>
+    <aura:attribute name="firstSelectedObject" type="String" access="public" description="Not in use"/>
+    <aura:attribute name="secondSelectedObject" type="String" access="public" description="Not in use"/>
+    <aura:attribute name="firstFieldList" type="String[]" access="public" description="currently, not in use"/>
+    <aura:attribute name="secondFieldList" type="String[]" access="public" description="currently, not in use"/>
+    <aura:attribute name="themeURL" type="string" access="public"/>
+    <aura:attribute name="Spinner" type="Boolean" access="public"/>
+    <aura:attribute name="SelectedFieldsFromIcontract" type="object[]" access="public" description="to store the data of Field Mapping"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />    
+
+    <!-- Handler method for getting selected fields from prevoius screen -->
+    <aura:handler event="c:SelectedFieldsEvt" action="{!c.getSelectedFields}"/>
+    
+    <aura:registerEvent type="c:MovetoNextProgressBarEvt" name="moveToNextEvt" />
+    
+    <aura:method name="saveObjectFieldMapping" action="{!c.saveRecords}" access="PUBLIC"/>
+    
+    <div class="slds-scrollable_y">
+        <br/>
+    <div>
+        <b><ui:outputText value="{!$Label.c.Heading_Field_Mapping_Component}" /></b>
+    </div>
+    <br/>
+    
+        <table class=" slds-table_fixed-layout" style="border-collapse:collapse;width: 99.9%;">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 9%;padding-top: 1.5%;padding-bottom: 1.5%;border-top-left-radius:6px;">
+                        <center><span class="slds-truncate">Sr. No</span></center>
+                    </th>
+                    <th scope="col" style="width:18%;padding-top: 1.5%;padding-bottom: 1.5%;" class="">
+                        <span class="slds-truncate" title="Field Name">Fields Selected from IContract</span> 
+                    </th>
+                    <th scope="col" style="width:32%;">
+                        <center><span class="slds-truncate" title="Object 1" >Fields in Salesforce {!v.object1Str} Object</span></center>
+                    </th>
+                    <th scope="col" style="width:32%;">       
+                        <center><span class="slds-truncate" title="Object 2">Fields in Salesforce {!v.object2Str} Object</span></center>
+                    </th >
+                    <th scope="col" style="width: 9%;border-top-right-radius:6px;">
+                        <span class="slds-truncate" title="Sot" >SOT
+                        <aura:if isTrue="{!v.themeURL != 'Theme4d'}">
+                            <lightning:helptext class="slds-m-top_x-small" title="Source of Truth for a field denotes the Master for its data which depicts the flow of data. Eg. If the Source of Truth for a field is iContract, it means that all the data for that field flows from iContract and any change in its source should get reflected here too." />
+                        </aura:if>
+                        <aura:if isTrue="{!v.themeURL == 'Theme4d'}">
+                            <lightning:helptext style="margin-top: -3px;" content="Source of Truth for a field denotes the Master for its data which depicts the flow of data. Eg. If the Source of Truth for a field is iContract, it means that all the data for that field flows from iContract and any change in its source should get reflected here too." />
+                        </aura:if>      
+
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <aura:iteration items="{!v.SelectedFieldsFromIcontract}" var="item" indexVar="index">
+                    <tr>
+                        <td scope="row" class="slds-border_bottom slds-border_left">
+                            <center><div class="slds-truncate">{!(index + 1)}</div></center>
+                        </td>
+                        <td scope="row" class="slds-border_bottom">
+                            <div class="slds-truncate" title="{!item.displayName}">{!item.displayName}</div>
+                        </td>
+                        <td scope="row" class="slds-border_bottom">
+                            <div class="{!v.themeURL != 'Theme4d' ? 'classicdropdown ':'lightningdropdown'}"><lightning:select class="slds-m-left_xx-large slds-m-right_xx-large slds-p-bottom_medium" name=""  aura:id="InputSelectDynamicList1" value="{!item.mappingField1}"  onchange="{!c.onFieldSelectObj}">
+                                            <aura:iteration items="{!v.obj1WithDataTypeList}" var="obj1">
+                                                <aura:if isTrue="{!(obj1.iContractField == item.fieldName)}">
+                                                <aura:if isTrue="{!obj1.label != 'Create New Field'}">    
+                                                <option selected="{!((obj1.salesforceField==item.mappingField1) || (item.mappingField1 == undefined &amp;&amp; obj1.salesforceField == 'Select Field')) }" value="{!obj1.salesforceField}">{!obj1.label}</option>
+                                                </aura:if>
+                                                <aura:if isTrue="{!obj1.label == 'Create New Field'}">
+                                                <option style="background-color:#DBE8ED !important;" value="{!obj1.salesforceField}">
+                                                    <div style="background-color:#DBE8ED !important;">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    &nbsp;&nbsp;&nbsp;&#9769;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    </div>{!obj1.label}
+                                                 </option>
+                                                </aura:if>
+                                                </aura:if>
+                                                
+                                                
+         									</aura:iteration>
+                                        </lightning:select></div>
+                        </td>
+                        <td scope="row" class="slds-border_bottom">
+                                      <div class="{!v.themeURL != 'Theme4d' ? 'classicdropdown ':'lightningdropdown'}">  <lightning:select class="slds-m-left_xx-large slds-m-right_xx-large slds-p-bottom_medium" name="" aura:id="InputSelectDynamicList2" value="{!item.mappingField2}"  onchange="{!c.onFieldSelectSecObj}">
+                                            <aura:iteration items="{!v.obj2WithDataTypeList}" var="obj1">
+                                                <aura:if isTrue="{!(obj1.iContractField == item.fieldName)}">
+                                                <aura:if isTrue="{!obj1.label != 'Create New Field'}">
+                                                <option selected="{!((obj1.salesforceField==item.mappingField2) || (item.mappingField2 == undefined &amp;&amp; obj1.salesforceField == 'Select Field')) }" value="{!obj1.salesforceField}">{!obj1.label}</option>
+                                                </aura:if>
+                                                <aura:if isTrue="{!obj1.label == 'Create New Field'}">
+                                                <option style="background-color:#DBE8ED !important;" value="{!obj1.salesforceField}">
+                                                    <div style="background-color:#DBE8ED !important;">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    &nbsp;&nbsp;&nbsp;&#9769;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    </div>{!obj1.label}
+                                                 </option>
+                                                </aura:if>
+                                                </aura:if>                                            
+                                                
+         									</aura:iteration>
+                                        </lightning:select></div>
+                        </td>
+                        <td scope="row" class="slds-border_bottom slds-border_right">
+                          <div class="demo-only slds-size_1-of-2 ">
+                                <div class="slds-form-element">
+                                    <label class="slds-checkbox_toggle slds-grid">
+                                        <ui:inputCheckbox value="{!item.sot}"/>
+                                        <span id="toggle-desc" class="slds-checkbox_faux_container " aria-live="assertive">
+                                            <span class="slds-checkbox_faux" style="width: 150% !important;"></span>
+                                            <span class="slds-checkbox_on">Salesforce</span>
+                                            <span class="slds-checkbox_off">iContract</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>        
+    <br/>
+    <div aria-hidden="false" id="ExitConfigurationModelObjMap" style="display:none;">
+        <div class="demo-only" style="height: 840px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 43%;">
+                    <header class="slds-modal__header slds-modal__header_empty" style="text-align:left; background: #ecebea">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <p id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                            <b style="line-height : 2.25; font-size: 1.00rem; padding-left: 3%;">Create new Field</b></p>
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <center>
+                        <div size="xx-small">
+                            <lightning:icon iconName="action:new" size="xx-small"/>
+                        </div>
+                    </center>
+                    <br/>
+                        <p style="text-align:center">
+                            <aura:unescapedHtml value="{!$Label.c.Create_New_Field_Notify_Msg_Object_Mapping_Component}"/>
+                        </p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.onModalCancel}" style="color:black;">Cancel</button><!-- go backs to Home page-->
+                            <button class="slds-button slds-button_neutral" onclick = "{!c.onModalConfirm}">Yes, continue</button><!-- remains in same page-->
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    <div aria-hidden="false" id="FieldMismatchErrorMessageModal" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 40%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <b>Error</b>
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            <aura:unescapedHtml value="{!v.fieldMismatchErrMsg}"/>
+                        </p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.onFieldMismatchModalCancel}" style="color:black;">Ok</button><!-- go backs to Home page-->
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    <div aria-hidden="false" id="FieldSuccessMessageModal" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 23%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            <aura:unescapedHtml value="{!v.fieldMatchSaveMsg}"/>
+                        </p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.onSuccessModalClick}" style="color:black;">Ok</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+           <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+             <span class="slds-assistive-text">Loading</span>
+             <div class="slds-spinner__dot-a"></div>
+             <div class="slds-spinner__dot-b"></div>
+           </div>
+        </div>
+    </aura:if>
+        <!--lightning:button variant="brand" label="Save and Next" onclick="{! c.saveRecords }" /-->
+        <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+            <br/><br/>
+        </aura:if>
+    </div>
+</aura:component>

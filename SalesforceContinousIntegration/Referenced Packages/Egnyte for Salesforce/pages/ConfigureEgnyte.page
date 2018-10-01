@@ -1,0 +1,84 @@
+<apex:page controller="efs.ConfigureEgnyteController" tabStyle="EgnyteDomainConfiguration__tab">
+    <style>
+        .trialButton {
+            margin-top: -2px !important;
+        }
+    </style>
+    <script type="text/javascript">
+        function openTrialSignUpWindow(trialURL) {
+            window.open(trialURL, '_blank');
+        }  
+    </script>
+    <apex:pageMessages />
+    <apex:sectionHeader title="Egnyte Settings" rendered="{!ISNULL(authCode)}"/>
+    <apex:form rendered="{!!ISNULL(authCode)}">
+        <apex:pageBlock >
+            <apex:outputText value="Click continue to integrate Salesforce with your Egnyte domain : "/>
+            <apex:commandButton value="Continue" action="{!saveToken}" title="Click continue to integrate Salesforce with your Egnyte domain"/>
+        </apex:pageBlock>
+    </apex:form>
+    <apex:form rendered="{!ISNULL(authCode) && editMode}">
+        <apex:pageBlock title="Edit Egnyte Settings" mode="edit">
+            <apex:pageblocksection columns="1" title="Domain Settings">
+                <apex:inputField value="{!egnyteSettingsObj.efs__SubDomain__c}"/>
+            </apex:pageblocksection>
+            <apex:pageblocksection columns="2" title="General Settings">
+                <apex:inputField value="{!egnyteSettingsObj.efs__DisableAllTriggers__c}"/>
+                <apex:inputField value="{!egnyteSettingsObj.efs__ShowFullPath__c}"/>
+                <apex:inputField value="{!egnyteSettingsObj.efs__DisableNotesAttachmentsTriggers__c}"/>
+                <apex:inputField value="{!egnyteSettingsObj.efs__DeleteNotesAttachmentsAfterUpload__c}"/>
+                <apex:selectList value="{!egnyteSettingsObj.efs__DefaultPermission__c}" size="1">
+                    <apex:selectOptions value="{!defaultPermissions}"></apex:selectOptions>
+                </apex:selectList>
+            </apex:pageblocksection>
+            <apex:pageblocksection columns="2" title="Sync Settings">
+                <apex:selectList value="{!egnyteSettingsObj.efs__ProcessMode__c}" size="1">
+                    <apex:selectOptions value="{!processModes}"></apex:selectOptions>
+                </apex:selectList>
+                <apex:inputField value="{!egnyteSettingsObj.efs__ScheduleInterval__c}"/>
+                <apex:inputField value="{!egnyteSettingsObj.efs__SyncBatchSize__c}"/>
+                <apex:inputField value="{!egnyteSettingsObj.efs__UseFutureMethod__c}"/>
+            </apex:pageblocksection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" immediate="true"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+    <apex:form rendered="{!ISNULL(authCode) && NOT(editMode)}">
+        <apex:pageBlock title="Egnyte Settings Detail" mode="maindetail">
+            <apex:pageblocksection columns="2" title="Domain Settings" >
+                <apex:pageBlockSectionItem helpText="{!$ObjectType.efs__EgnyteSettings__c.fields.efs__SubDomain__c.InlineHelpText}">
+                    <apex:outputLabel value="{!$ObjectType.efs__EgnyteSettings__c.Fields.efs__SubDomain__c.Label}" />
+                    <apex:outputPanel >
+                        <apex:outputText value="{!egnyteSettingsObj.efs__SubDomain__c}"/>
+                        <apex:commandButton value="Egnyte Trial Domain" title="If you don't have an Egnyte domain get a Trial Domain" styleClass="trialButton" onclick="openTrialSignUpWindow('https://www.egnyte.com/wsgi/route_to_dc?target=/partner_campaign.jsp&com.egnyte.target=/corp/registration/register_trial_3.html?plan=business&pvi=1ab826d2-6a31-4f6c-b10d-36009790e08d&paymode=1')" rendered="{!showFreeTrialButton}"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel Value="Admin Details Captured?" for="tokenExist" title="Specifies whether Egnyte for Salesforce has captured Admin details for the linked Egnyte domain."/>
+                    <apex:outputText value="{!IF(egnyteSettingsObj.efs__AccessToken__c == null, 'No', 'Yes')}" id="tokenExist" style="width= 300px;"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageblocksection>
+            <apex:pageblocksection columns="2" title="General Settings">
+                <apex:outputField value="{!egnyteSettingsObj.efs__DisableAllTriggers__c}"/>
+                <apex:outputField value="{!egnyteSettingsObj.efs__ShowFullPath__c}"/>
+                <apex:outputField value="{!egnyteSettingsObj.efs__DisableNotesAttachmentsTriggers__c}"/>
+                <apex:outputField value="{!egnyteSettingsObj.efs__DeleteNotesAttachmentsAfterUpload__c}"/>
+                 <apex:outputField value="{!egnyteSettingsObj.efs__DefaultPermission__c}"/>
+            </apex:pageblocksection>
+            <apex:pageblocksection columns="2" title="Sync Settings">
+                <apex:outputField value="{!egnyteSettingsObj.efs__ProcessMode__c}"/>
+                <apex:outputField value="{!egnyteSettingsObj.efs__ScheduleInterval__c}"/>
+                <apex:outputField value="{!egnyteSettingsObj.efs__SyncBatchSize__c}"/>
+                <apex:outputField value="{!egnyteSettingsObj.efs__UseFutureMethod__c}"/>
+            </apex:pageblocksection>
+            <apex:pageBlockButtons location="top" >
+                <apex:commandButton value="Edit" action="{!edit}"/>
+                <apex:commandButton value="Remote Site Setting" onclick="window.open('/0rp/e');"/>
+                <apex:commandButton value="Start Processing Sync Queue" action="{!startSync}"           disabled="{!ISNULL(egnyteSettingsObj.efs__AccessToken__c)}"/>
+                <apex:commandButton value="Bulk Actions"                action="{!synchronizationPage}" disabled="{!ISNULL(egnyteSettingsObj.efs__AccessToken__c)}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

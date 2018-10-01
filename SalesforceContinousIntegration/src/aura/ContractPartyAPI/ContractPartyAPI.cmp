@@ -1,0 +1,129 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component used to select contract party for contract which is being created
+ * Created By  :   Jayanth B
+ * Created Date:   18/07/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="ContractPartyDataFetch" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	
+  <aura:attribute name="searchcpVal" type="String" access="global" description="hold sthe search value for cp"/>
+  <aura:attribute name="typeSelectedValue" type="String" description="used to store selected Type value." access="global"/>
+  <aura:attribute name="currentCPPage" type="Integer" access="global" default="1" description="used for pagination"/>
+  <aura:attribute name="searchContrctPtVal" type="String" access="global"/>
+  <aura:attribute name="contractPartyDataList" type="String" access="global"  description="contract party list"/>
+  <aura:attribute name="defaultcPdata" type="boolean" access="global" default="true"/>  
+  <aura:attribute name="displayTable" type="boolean" access="global" default="true" description="used to display or hide a table"/>
+    <aura:attribute name="spinnerinQuickActionCP" type="boolean" access="global" default="true"/>
+    
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" description="onload function call"/>
+    
+<aura:method name="goNext" action="{!c.onNextPageClick}" access="global" description="next button click call">
+    </aura:method>
+    
+    <aura:method name="getBack" action="{!c.onBackPageClick}" access="global" description="back button click call">
+    </aura:method>
+    <aura:method name="searchAllContractpartyData" action="{!c.searchAllCP}" access="global"/>
+
+    <aura:registerEvent name="PassContractPartyDetailsEvnt" access="global" type="c:PassContractPartyDetailsEvnt" description="passes contract owner data"/>
+
+    <aura:registerEvent name="BackNextContractPartyEvnt" access="global" type="c:BackNextContractPartyEvnt" description="to move for next step"/>
+    
+     <lightning:layout horizontalAlign="left">
+               <div  style="width:30%">
+                <ui:inputText class="slds-input" maxlength="40" placeholder="Search here.." value="{!v.searchcpVal}" /><!--add change="" function later on -->
+                <div class="slds-text-align_right">Max length : 40 Char</div>
+                </div>
+                <lightning:button class="buttonsearchStyleapi" variant="brand" label="Search" title="Searches the zycus contract owner" onclick="{! c.searchContractPartyAPIByfilter }" />
+                
+       </lightning:layout>
+    
+<aura:if isTrue="{!v.displayTable==true}">    
+    <table style="border-collapse: collapse; text-align:left"> 
+                <thead>
+                    <tr style="width:100%; line-height: 3.5;background-color:#dbe8ed">
+                      
+                        <th style="width:45%;border-top-left-radius:6px;padding-left: 1%;">
+                            <div class="slds-truncate" title="Contract sub-type" style="margin-left:0.5rem;">Contract Party Name
+                            <div class="slds-icon_container" onclick="{!c.sortCPNameDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortCPNameASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                           </div>
+                        </th>
+                        <th style="width:45%;">
+                            <div class="slds-truncate" title="Status" >Location
+                            <div class="slds-icon_container" onclick="{!c.sortLocationDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortLocationASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                           </div>
+                        </th>
+                        <th style="width:16%;border-top-right-radius:6px;">
+                            <div class="slds-truncate" title="Action">Action</div>
+                        </th>
+                    </tr>
+                </thead>
+                <aura:iteration items="{!v.contractPartyDataList}" var="cp" indexVar="index">
+                    
+                    <tr style="width:100%">       
+                        <td scope="col" style="width:16%;" class="slds-border_bottom slds-border_left">
+                            <div class="slds-truncate" style="margin-left:1rem;">{!cp.legalName}</div>
+                        </td>
+                        <td scope="col" style="width:16%;" class="slds-border_bottom">    
+                            <div class="slds-truncate">
+                                {!cp.address}
+                               </div>
+                        </td>
+                        <td class="slds-border_bottom slds-border_right">
+                            <lightning:button class="slds-button  VIEW" label="Select" onclick="{! c.selectedContractparty }" value="{!cp}"/>
+                        </td>
+                    </tr>
+                </aura:iteration>        
+            </table>
+    </aura:if>
+    <aura:if isTrue="{!not(v.displayTable==true)}">
+        <div class="slds-box" style="background-color:#fafafa;">
+            <center>Contracting party(s) not available.Please click <b>"Search All"</b> button.</center>
+        </div>
+    </aura:if>
+    
+        <div aria-hidden="false" id="contractpartyError" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            <center>{!$Label.c.unable_to_fetch_contract_party_error_message}</center></p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.closePoppupcp}" style="color:black;">OK</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    
+    
+    <!--Used for spinner loading icon -->
+        <aura:if isTrue="{!v.spinnerinQuickActionCP}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+    
+    
+</aura:component>

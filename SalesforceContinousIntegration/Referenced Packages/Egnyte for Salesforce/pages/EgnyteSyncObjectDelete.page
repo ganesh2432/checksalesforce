@@ -1,0 +1,29 @@
+<apex:page standardController="efs__EgnyteSyncObject__c" extensions="efs.EgnyteSyncObjectDeleteController">
+    <apex:includeScript value="{!URLFOR($Resource.efs__jszip, '/jszip.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.efs__jszip, '/jszip-load.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.efs__jszip, '/jszip-deflate.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.efs__jszip, '/jszip-inflate.js')}" />
+    <apex:sectionHeader title="Egnyte Sync Configuration Delete" subtitle="{!efs__EgnyteSyncObject__c.Name}" id="sectionheader" rendered="{!NOT(isComplete)}"/>
+    <apex:pagemessages id="mymsg"></apex:pagemessages>
+    <apex:form id="formId">
+        <apex:pageblock rendered="{!(NOT(isComplete))}">
+            <apex:pageBlockSection columns="1" >
+                 Deleting this Egnyte Sync Configuration will also remove all related triggers and test classes. Do you want to proceed?
+            </apex:pageBlockSection>
+            <apex:actionPoller action="{!checkAsyncRequest}" interval="5" rerender="formId,mymsg" rendered="{!NOT(ISNULL(AsyncResult))}" />
+            <apex:actionFunction name="deployZip" action="{!deployZip}" rendered="{!ISNULL(AsyncResult)}" rerender="formId,mymsg">
+                <apex:param name="data" assignTo="{!ZipData}" value="" />
+            </apex:actionFunction>
+            <c:zip name="generateZip" oncomplete="deployZip(data);" rendered="{!ISNULL(AsyncResult)}" id="zipblock">
+                <c:zipEntry path="package.xml" data="{!PackageXml}" />
+                <c:zipEntry path="destructiveChanges.xml" data="{!destructiveChangesXml}"/>
+            </c:zip>
+            <br />
+            <div align="center">
+                <apex:commandButton onclick="generateZip();return false;" title="OK" rendered="{!ISNULL(AsyncResult)}" value="OK" style="Width:60px;border-radius:10px;"/>
+                <apex:commandButton action="{!cancel}" title="Cancel" value="Cancel" style="Width:60px;border-radius: 10px;"/>
+            </div>
+        </apex:pageblock>
+        <apex:commandButton action="{!cancel}" title="Back" value="Back" style="Width:60px;border-radius: 10px;" rendered="{!(isComplete)}"/>
+    </apex:form>
+</apex:page>

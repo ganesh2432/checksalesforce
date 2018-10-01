@@ -1,0 +1,42 @@
+<aura:component controller="IContractBaseComponentCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes" access="global">
+	<!-- Purpose : Base Component of the App -->
+	<!-- Attributes -->
+	<aura:attribute type="String" name="selectedType" access="public" description="Used to store selected Type value"/>
+	<aura:attribute type="String" name="selectedSubType" access="public" description="Used to store selected Sub Type value"/>
+	<aura:attribute type="Boolean" name="showMappingComponent" default="false" access="public"/>
+    <!--aura:attribute name="BaseURL" type="string" access="global"/ -->
+    <aura:attribute name="themeURL" type="string" access="public" description="Used to store value, if App is opened in Lightning or Classic"/>
+    
+    <aura:handler name="fetchMDataEvent" event="c:fetchMetadataButtonEvent" action="{!c.handleShowMapping}" description="To set Selected Type ,SubType and to show or hide Mapping Table"/>
+	<aura:handler event="c:DependentPicklistEvt" name="PickListEvt"  action="{!c.handleTypeSubTypeValue}" phase="bubble" description="To set Selected Type and SubType value"></aura:handler>
+	<aura:handler name="init" value="{!this}" action="{!c.checkBaseURL}" description="To get the Base URL and check App is opened in Lightning or Classic view."/>
+	
+    <aura:handler name="goToHomePage" event="c:GoToHomePage" action="{!c.goToHomePage}" description="To return to Home Page of App."/>
+    
+    <aura:method name="closeShowMapping" action="{!c.goToHomePage}" access="PUBLIC" description="To return to Home Page of App."/>
+    <div class="slds-box" style="background-color:White;">
+    <!-- Component Body -->
+	<aura:if isTrue="{!not(v.showMappingComponent)}">
+		<c:iContractHeaderComponent />
+		<br/>
+		<div class="slds-box" style="margin:1%">
+			<c:iContractTypeSubtypeComponent />
+		</div>
+		<c:iContractStoredMappings isContractConfigFound="true"/>
+		<div class="slds-docked-form-footer">  
+			<div style="float:right">
+	         	<!-- <lightning:button variant="brand" label="Next" onclick="{! c.next }" />
+	         	<button type="button" class="slds-button slds-button_neutral">Cancel</button> -->
+	    		<!--button type="button" style="float:right" class="slds-button slds-button_brand" onclick="{!c.gotoFieldMapping }">Next</button-->
+
+	        </div>
+    	  </div>
+	</aura:if>
+	<aura:if isTrue="{!v.showMappingComponent}">
+		<c:LightningProgressIndiactorPathComponent selectedType="{!v.selectedType}" selectedSubType="{!v.selectedSubType}" themeURL="{!v.themeURL}"/>
+	</aura:if>
+ 	
+    
+    </div>
+    <!-- Component Body Ends Here -->
+</aura:component>

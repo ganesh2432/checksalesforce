@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Use to configure the folder architecture.</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Auto_Copy_files_from_Lead_to_Opportunity__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, while conversion, files and folders related to lead will be automatically copied to converted opportunity.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, while conversion, files and folders related to lead will be automatically copied to converted opportunity.</inlineHelpText>
+        <label>Auto copy files from Lead to Opportunity</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Delete_files_for_Coverted_lead__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, files related to lead will be deleted once lead is converted to opportunity.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, files related to lead will be deleted once lead is converted to opportunity.</inlineHelpText>
+        <label>Delete files for Coverted lead</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>Folder Architecture Configuration</label>
+    <visibility>Public</visibility>
+</CustomObject>

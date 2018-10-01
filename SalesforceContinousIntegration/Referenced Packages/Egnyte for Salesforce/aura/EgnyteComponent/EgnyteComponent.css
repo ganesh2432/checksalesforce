@@ -1,0 +1,108 @@
+.THIS.top-bar {
+    height: 10px;
+    position: fixed;
+    z-index: 1;
+    top: -2px;
+    left: -1px;
+    right: -1px;
+    background: #129591;
+    display: none;
+}
+
+.THIS.logo-container {
+    margin-top: -17px;
+    text-align: center;
+    display: none;
+}
+
+.THIS #backArrow {
+    width: 1.5em;  
+    position: absolute;
+    left: 4px; top: 28px;
+}
+
+.THIS #egnyteLogo {
+    width: 15em;
+}
+
+.THIS #fileIcon {
+    width: 5em;
+}
+
+.THIS hr {
+    margin: 10px 0px !important;
+    border-top: 1.5px solid rgb(221, 219, 218) !important;
+    opacity: .4 !important;
+}
+
+.THIS.main {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: normal;
+    max-width: 500px;
+    margin: 0 auto;
+    margin-top: 40px;
+    text-align: center;
+    font-size: 24px;
+    display: none;
+}
+
+.THIS p {
+    color: #515150;
+}
+
+.THIS.main img {
+    margin-top: 40px;
+    margin-bottom: 35px;
+}
+
+.THIS.main a {
+    display: block;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    height: 50px;
+    line-height: 28px;
+}
+
+.THIS a.pathLink {
+    background: #3898EC;
+    color: white;
+}
+
+.THIS a.storeLink {
+    background: #F3F2F2;
+    color: #3898EC;
+    border: 1px solid #3898EC;
+}
+
+@media only screen and (max-width: 320px) {
+    .THIS.main a {
+        font-size: 14px !important;
+    }  
+}
+
+@media only screen and (min-width: 321px) and (max-width: 480px) {
+    .THIS.main a {
+        font-size: 15px !important;
+    }   
+}
+
+@media only screen and (min-width: 481px) and (max-width: 640px) {
+    .THIS.main a {
+        font-size: 17px;
+    }      
+}
+
+@media only screen and (min-width: 641px) and (max-width: 960px) {
+    .THIS.main a {
+        font-size: 20px;
+    }   
+    .THIS.logo-container {
+        margin-top: 3px !important;
+    }   
+}
+
+.THIS.showBlock {
+    display : block !important;
+}

@@ -1,0 +1,37 @@
+.THIS {
+}
+.THIS th{
+    background-color:#DBE8ED !important;
+    border-collapse: collapse !important;
+}
+.THIS .colFirstStyle{
+   width:5% !important;
+   border-top-left-radius:6px !important;
+}
+.THIS .colSecondStyle{
+    width:15% !important;
+}
+.THIS .colThirdStyle{
+    width:14% !important;
+}
+.THIS .colFourthStyle{
+    width:9% !important;
+    border-top-right-radius:6px !important;
+}
+.THIS .lightningStyleForHelptext{
+    margin-top: -3px !important;
+}
+.THIS .tableStleCustom{
+    border-collapse:collapse !important;
+    width:100% !important;
+}
+.THIS .colStylevalStyle{
+    width:4% !important;
+}
+.THIS .fieldSelectStleLightning{
+    width: 58% !important;
+    margin-top: -5% !important;
+}
+.THIS .fieldSelectStleClassic{
+    width: 58% !important;
+}

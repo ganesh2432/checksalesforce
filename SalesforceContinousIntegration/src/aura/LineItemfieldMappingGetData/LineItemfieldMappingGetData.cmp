@@ -1,0 +1,18 @@
+<aura:component controller="LineItemMappingRequestMetadata" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+	
+    <!-- Attribute definition -->
+    <aura:attribute name="allLineItemFields" type="Object[]" description="stores the metadata fields details from iContract"/>
+    <aura:attribute name="isFieldAvailable" type="boolean" default="false" />
+    <aura:attribute name="selectedCount" type="integer" default="0"/>
+    <aura:attribute name="themeURL" type="string" description="to know component running in lightning or classic"/>
+
+    <!--Methods to invoke child methods and evnt handler to handle event invoked from child -->
+    <aura:method name="saveSelectedLineItems" action="{!c.saveAndGoNext}" access="PUBLIC" description="method invoked from parent component to go next step"/>
+    <aura:method name="isFieldAvailableFalse" action="{!c.isFieldAvailableFalse}" access="PUBLIC"/>
+    <aura:handler name="init" value="{!this}" action="{!c.makeRequestToGetLineItemMetaData}"/>
+    
+    <aura:if isTrue="{!v.isFieldAvailable}">
+    <c:LineItemfieldSelection aura:id="LineItemfieldSelection" themeURL="{!v.themeURL}" lineItemData="{!v.allLineItemFields}" selectedCount="{!v.selectedCount}"/>
+    </aura:if>
+    
+</aura:component>

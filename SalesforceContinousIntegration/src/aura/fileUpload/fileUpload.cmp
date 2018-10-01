@@ -1,0 +1,222 @@
+<aura:component controller="FileUploadCtrl" 
+                implements="force:hasRecordId,force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes" 
+                access="global" >
+    <aura:attribute name="oppId" type="Id" description="To store the Opportunity Id to get information of Files stored under Opportunity"/>
+    <aura:attribute name="contractId" type="String" description="To store the Contract Id to store new files and get information of Files stored under Contract"/>
+    <aura:attribute name="existingFileList" type="Object[]" description="list of Files stored in Opportunity."/>
+    <aura:attribute name="existingContractFileList" type="Object[]" description="list of Files stored in Contract"/>
+    <aura:attribute name="delFileId" type="String" description="to get the Id of File to be deleted."/>
+    <aura:attribute name="selectedFieldsCount" type="Integer" default="0" description="to count the number of files selected from Opportunity"/>
+    <!-- 'showLoadingSpinner' attribute for show/hide the uploading image and msg in aura:if-->
+    <aura:attribute name="showLoadingSpinner" type="boolean" default="false" />
+    <!-- 'fileName' attribute for display the selected file name -->  
+    <aura:attribute name="fileName" type="String" default="No File Selected.." />
+    <!-- Lightning Input with file type and on file change call the 'handleFilesChange' controller --> 
+    <aura:attribute name="selectedFiles" type="String[]" />
+    <aura:attribute name="fileObject" type="Object[]"/>
+    <aura:attribute name="themeURL" type="String" />
+    <aura:attribute name="iscalledFromKeepfile" type="boolean" default="false" access="global"/>
+
+    
+    <aura:method name="saveFileUpload" action="{!c.saveRec}" access="PUBLIC" description=""/>
+    <aura:handler name="init" value="{!this}" action="{!c.getOppId}"/>
+    
+    <aura:method name="keepSavefileupld" action="{!c.keepSavefileUpld}" access="PUBLIC" description="method invoked from parent component to create contract">
+	<aura:attribute name="params1" type="boolean" access="global"/>
+    </aura:method>
+    
+    <aura:registerEvent name="selectedFilesCountEvt" type="c:SelectedFilesCountEvt"/>
+    <aura:registerEvent name="KeepSaveEvnt" type="c:KeepSaveEvnt" access="global" description=""/>
+    
+    <p><aura:unescapedHtml value="{!$Label.c.File_Upload_Main_Div_Content}"/></p><br/>
+    
+    <div class="slds-scrollable" style='padding: 18px; border: 2px solid #ccc; border-radius: 6px;'>
+        <p style="padding: 0 0 14px 0px; font-weight: bold; font-size: 13px;"><aura:unescapedHtml value="{!$Label.c.File_Upload_Div_Content_2}"/></p>
+        <div style="border: solid 1px #ccc; border-top: none;">
+           			  
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+      			<thead>
+                </thead>
+      			<tbody>
+                    <aura:iteration items="{!v.existingContractFileList}" var="fileRec" indexVar="index">
+                        <tr>
+                          <th scope="row" data-label="Opportunity Name" style="width:85%">
+                            <div class="slds-truncate" title="{!(fileRec.fileName)}">{!(fileRec.fileName)}.{!(fileRec.fileType)}</div>
+                            <div>{!fileRec.fileSize}</div>  
+                          </th>
+                          <td data-label="Account Name" style="width:15%">
+                             <div class="slds-truncate" title="Cloudhub">
+                                <lightning:button iconName="utility:close" class="buttonRemoveStyle"  onclick="{!c.showDeleteConfirm }" value="{!index}">
+                                    <span style="color:#000;">Remove</span></lightning:button>
+                             </div>
+                          </td>          
+                        </tr> 
+                    </aura:iteration>
+                </tbody>
+            </table>
+		</div>
+        <br/>
+        <aura:if isTrue="{!v.themeURL ==$Label.c.Theme4d}">
+        
+        <div style="border-top: dashed 3px #ccc; border-right: dashed 3px #ccc; border-left: dashed 3px #ccc; height: 100px ">
+            <center><lightning:fileUpload label="" 
+                                          multiple="true" 
+                                          accept=".pdf, .doc, .xls, .ppt, .docx, .xlsx, .pptx, .txt, .jpg, .jpeg, .gif, .png, .zip, .rar, .tif, .tiff, .stp, .iges, .model, .dwg"
+                                          recordId="{!v.contractId}" 
+                                          aura:id="multipleUpload"
+                                          onuploadfinished="{!c.handleUploadFinished}" />
+            </center>
+        </div>
+        <div style="border: solid 1px #ccc; background: #ecebeb; padding: 4px 12px; font-weight: bold; border-radius: 3px; font-size: 11px; margin-top: 8px; width:100%">
+            <div style="text-align:left; width:95%; display: inline;">Supported file formats: .pdf, .doc, .xls, .ppt, .docx, .xlsx, .pptx, .txt, .jpg, .jpeg, .gif, .png, .zip, .rar, .tif, .tiff, .stp, .iges, .model, .dwg</div>
+            <div style="text-align:right; width:5%; display: inline;margin:30px;">Max file size : 2Gb</div>
+        </div>
+        </aura:if>    
+        <br/>
+        <aura:if isTrue="{!v.themeURL !=$Label.c.Theme4d}">
+        <div style="border-top: dashed 3px #ccc; border-right: dashed 3px #ccc; border-left: dashed 3px #ccc; border-bottom: dashed 3px #ccc;">
+            <br/>
+                        <center>       
+            <lightning:input aura:id="fileId" onchange="{!c.handleFilesChange}" 
+                    files="{!v.fileObject}"
+                    type="file" name="file" label="Upload Attachment" multiple="true"/>
+   <aura:iteration items="{!v.selectedFiles}" var="file" indexVar="index">
+        <lightning:pill label="{!file}" onremove="{! c.handleRemoveOnly }"  name="{!index}">
+            <aura:set attribute="media">
+                <lightning:icon iconName="standard:account"  alternativeText="Account" />
+            </aura:set>
+        </lightning:pill><br/>
+    </aura:iteration>
+ <!--use aura:if for show-hide the loading spinner image--> 
+   <aura:if isTrue="{!v.showLoadingSpinner}">
+      <div class="slds-text-body_small slds-text-color_error">Uploading... 
+         <img src="/auraFW/resources/aura/images/spinner.gif" class="spinner-img" alt="Loading"/>
+          
+      </div>
+       <br/>
+   </aura:if>
+   
+ <br/>
+ 
+   <button class="slds-button slds-button_brand" onclick="{!c.doSave}">Upload Attachment</button>
+                            </center>
+            <br/>
+        </div>
+        </aura:if>
+        <br/>
+        <p><aura:unescapedHtml value="{!$Label.c.Select_Opp_File_Div_Content}"/></p>
+        <br/>
+        <div style='border: 2px solid #ccc; border-radius: 4px; float: left;width:100%'>
+        <table style="border-collapse: collapse; text-align:left;width:100%"> 
+            <thead>
+                <tr style="width:100%; line-height: 3.5;background-color:#dbe8ed">
+                    <th style="width:3.25rem; background-color:#dbe8ed;width : 5%; text-align:right;padding: 6px 14px;" class="slds-text-align--right">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <label class="slds-checkbox">
+                                    <!--header checkbox for select all-->
+                                    <ui:inputCheckbox aura:id="box3" change="{!c.selectAll}"/>
+                                    <span class="slds-checkbox--faux"></span>
+                                    <span class="slds-form-element__label text"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </th>
+                    <th style="width:16%;border-top-left-radius:6px;padding-left: 0%;">
+                        <div class="slds-truncate" title="Document Name"><aura:unescapedHtml value="{!$Label.c.File_Upload_Table_Header_1}"/>
+                            <div class="slds-icon_container" onclick="{!c.sortDocNameDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortDocNameASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                        </div>
+                        
+                    </th>
+                    <th style="width:16%;">
+                        <div class="slds-truncate" title="Document Type"><aura:unescapedHtml value="{!$Label.c.File_Upload_Table_Header_2}"/>                            
+                            <div class="slds-icon_container" onclick="{!c.sortDocTypeDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortDocTypeASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                        </div>
+                    </th>
+                    <th style="width:16%;">
+                        <div class="slds-truncate" title="Uploaded By"><aura:unescapedHtml value="{!$Label.c.File_Upload_Table_Header_3}"/>
+                            <div class="slds-icon_container" onclick="{!c.sortUploadedByDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortUploadedByASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                        </div>
+                    </th>
+                    <th style="width:16%;">
+                        <div class="slds-truncate" title="Uploaded On"><aura:unescapedHtml value="{!$Label.c.File_Upload_Table_Header_4}"/>
+                            <div class="slds-icon_container" onclick="{!c.sortUploadedOnDESC}">  
+                                    <lightning:icon iconName="utility:arrowup" size="xx-small" alternativeText="sort arrow up"/>
+                                </div>
+                                <div class="slds-icon_container" onclick="{!c.sortUploadedOnASC}">
+                                    <lightning:icon iconName="utility:arrowdown" size="xx-small" alternativeText="sort arrow down"/>  
+                               </div>
+                        </div>
+                    </th>
+                    <th style="width:16%;">
+                        <div class="slds-truncate" title="Action">
+                            
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <aura:iteration items="{!v.existingFileList}" var="fileRec" indexVar="index">
+                <tr style="width:100%; border-top: 2px solid #ccc;"> 
+                    <td scope="row" class="slds-text-align--right" style="width:3.25rem; width : 5%; padding: 6px 14px;">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <label class="slds-checkbox">
+                                    <ui:inputCheckbox text="{!fileRec.isSelected}" aura:id="boxPack" value="{!fileRec.isSelected}" change="{!c.checkboxSelect}"/>
+                                    <span class="slds-checkbox--faux"></span>
+                                    <span class="slds-form-element__label text"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{!fileRec.fileName}</td>
+                    <td>{!fileRec.fileType}</td>
+                    
+                    <td>{!fileRec.createdBy}</td>
+                    <td><lightning:formattedDateTime value="{!fileRec.createdOn}" year="numeric" month="numeric" day="numeric"/></td>
+                    <td><lightning:button class="slds-button  VIEW" label="View" onclick="{! c.onViewClick }" value="{!index}"/></td>
+                </tr>
+            </aura:iteration>
+        </table>
+            </div>
+    </div>
+    <div aria-hidden="false" id="DeleteFileConfirmationModal" style="display:none;">
+                <div class="demo-only" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container" style="width: 23%;">
+                            <header class="slds-modal__header slds-modal__header_empty">
+                            </header>
+                            <!-- Messages displayed inside modal popup-->
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                <p><aura:unescapedHtml value="{!$Label.c.File_Upload_Delete_File_Confirm_Box_Content}"/></p>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <div class="slds-align_absolute-center">
+                                    <button class="slds-button slds-button_neutral" onclick = "{!c.deleteFile}">Yes</button>
+									<button class="slds-button slds-button_neutral" onclick = "{!c.closeDeleteConfirm}">No</button>
+                                </div>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+            </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+</aura:component>

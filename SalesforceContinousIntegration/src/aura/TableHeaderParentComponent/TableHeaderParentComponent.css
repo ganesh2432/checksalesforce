@@ -1,0 +1,40 @@
+.THIS table{
+    border-collapse: collapse;
+    margin-top: 3%;
+}
+.THIS th{
+    background-color:#DBE8ED;
+    border-collapse: collapse;
+}
+.THIS .firstCol{
+    width:12%;
+    border-top-left-radius:6px;
+}
+.THIS .secondCol{
+    width:29%;
+}
+.THIS .thirdCol{
+    width:76%
+}
+.THIS .fourthCol{
+    width:12%
+}
+.THIS .fifthCol{
+    width:10%;
+    border-top-right-radius:6px;
+}
+.THIS .progressBarStyle{
+    border-radius: 30px;
+}
+.THIS .skipPopUPStyle{
+    height: 640px;
+}
+.THIS .modelSkipContainer{
+    width: 38%;
+}
+.THIS .emptyQuestionModel{
+    height: 640px;
+}
+.THIS .emptyModelContainer{
+    width:26%;
+}

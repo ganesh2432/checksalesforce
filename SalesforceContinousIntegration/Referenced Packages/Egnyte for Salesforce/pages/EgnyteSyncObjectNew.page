@@ -1,0 +1,149 @@
+<apex:page standardController="efs__EgnyteSyncObject__c" extensions="efs.EgnyteSyncObjectNewController" tabStyle="efs__EgnyteSyncObject__c" id="page">
+    <apex:includeScript value="{!URLFOR($Resource.efs__jszip, '/jszip.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.efs__jszip, '/jszip-load.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.efs__jszip, '/jszip-deflate.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.efs__jszip, '/jszip-inflate.js')}" />
+    <apex:sectionHeader title="Egnyte Sync Configuration Edit" subtitle="New Egnyte Sync Configuration" id="sectionheader" rendered="{!NOT(isComplete)}"/>
+    <apex:pageMessages id="mymsg"/>
+    <div align="center">
+        <apex:actionStatus id="status" >
+            <apex:facet name="start" >
+                <img src="/img/loading.gif" />
+            </apex:facet>
+        </apex:actionStatus>
+    </div>
+    <script type="text/javascript">
+        function selectAllCheckboxes(obj,receivedInputID)
+        {
+            var inputCheckBox = document.getElementsByTagName("input");                  
+            for(var i=0; i<inputCheckBox.length; i++)
+            {          
+                if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1)
+                {                                     
+                    inputCheckBox[i].checked = obj.checked;
+                }
+            }
+        }
+        function deselectCheckbox(receivedInputID)
+        {
+        	var inputCheckBox = document.getElementsByTagName("input");                  
+            for(var i=0; i<inputCheckBox.length; i++)
+            {          
+                if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1)
+                {                                     
+                    inputCheckBox[i].checked = false;
+                }
+            }
+        }
+        function removeSpaces(obj)
+        {
+        	obj.value = obj.value.replace(/\s{2,}/g, '');
+        }
+    </script>
+    <apex:form id="formId">
+        <!-- Page Block 1 : Search and add objects for Configuration -->
+        <apex:pageBlock title="Search standard and custom objects" rendered="{!searchOptionFlag}">
+            <br />
+            <apex:inputText value="{!searchString}"  style="border-radius: 5px;"/> &nbsp;&nbsp;
+            <apex:commandButton action="{!searchObjects}" rerender="formId,mymsg" status="status" value="Search" title="Search" style="Width:60px;border-radius: 10px;"/>&nbsp;&nbsp;
+            <apex:image value="/img/msg_icons/info16.png" title="Search Objects in this organization for configuring Egnyte Sync"/>
+            <br /><br /><br />
+            <apex:outputPanel rendered="{!searchResultFlag}">
+                <apex:pageBlockTable value="{!searchResultMap[pageNumber]}" var="searchResult">
+                    <apex:column width="5%">
+                    	<apex:facet name="header">
+	                        <apex:inputCheckbox onclick="selectAllCheckboxes(this,'addAllInputIds')" id="addAll"/>
+	                    </apex:facet>
+                        <apex:inputCheckbox value="{!searchResult.sobjectSelected}" id="addAllInputIds"/>
+                    </apex:column>
+                    <apex:column headerValue="Object Name" value="{!searchResult.sobjectLabel}" />
+                </apex:pageBlockTable>
+                <br />
+                <apex:outputText style="align:left">Displaying Page: {!pageNumber} of {!totalPages}</apex:outputText>
+                <div align="center">
+                    <apex:commandButton status="status" reRender="formId,mymsg" value="<<" oncomplete="deselectCheckbox('addAll');" action="{!first}"    disabled="{!!hasFirst}"    title="First Page"    style="Width:30px;" />
+                    <apex:commandButton status="status" reRender="formId,mymsg" value="<"  oncomplete="deselectCheckbox('addAll');" action="{!previous}" disabled="{!!hasPrevious}" title="Previous Page" style="Width:30px;" />
+                    <apex:commandButton status="status" reRender="formId,mymsg" value=">"  oncomplete="deselectCheckbox('addAll');" action="{!next}"     disabled="{!!hasNext}"     title="Next Page"     style="Width:30px;" />
+                    <apex:commandButton status="status" reRender="formId,mymsg" value=">>" oncomplete="deselectCheckbox('addAll');" action="{!last}"     disabled="{!!hasLast}"     title="Last Page"     style="Width:30px;" />
+                    <br /><br /><br />
+                    <apex:commandButton oncomplete="deselectCheckbox('addAll');deselectCheckbox('removeAll');" action="{!addSObjects}" rerender="formId" status="status" value="Add" title="Add SObjects" style="Width:80px;border-radius: 10px;"/>
+                </div>
+            </apex:outputPanel>
+            <br />
+        </apex:pageBlock>
+
+        <!-- Page Block 2 : Process for Configuration after final selection -->
+        <!-- Action function for enable or disable text box on selection in selectlist -->
+        <apex:actionFunction name="enableTextBox" rerender="formId,mymsg" status="status"/>
+        <apex:pageBlock title="Selected Objects" rendered="{!selectedObjectFlag}">
+            <br />
+            <apex:pageBlockTable value="{!selectedSObjects}" var="selected">
+                <apex:column headerValue="Select" width="5%">
+                	<apex:facet name="header">
+	                    <apex:inputCheckbox onclick="selectAllCheckboxes(this,'removeAllInputIds')" selected="false" id="removeAll"/>
+	                </apex:facet>
+                    <apex:inputCheckbox value="{!selected.sobjectSelected}" id="removeAllInputIds"/>
+                </apex:column>
+                <apex:column headerValue="Object Name" value="{!selected.sobjectLabel}" />
+                <apex:column headerValue="Auto-generate Trigger" width="10%">
+                    <apex:selectList value="{!selected.generateFlag}" size="1" onchange="enableTextBox();" style="Width:100px;" disabled="{!selected.packagedTrigger}">
+			            <apex:selectOption itemValue="Yes" itemLabel="Yes"/>
+			            <apex:selectOption itemValue="No" itemLabel="No"/>
+                    </apex:selectList>
+                </apex:column>
+                <apex:column headerValue="Trigger Name"  width="15%">
+                	<apex:inputText value="{!selected.triggerName}" disabled="{!IF(selected.generateFlag == 'Yes', true, false) || selected.packagedTrigger}"  onchange="removeSpaces(this)"/>	
+                </apex:column>
+                <apex:column headerValue="Test Class Name"  width="15%">
+                	<apex:inputText value="{!selected.triggerTestClassName}" disabled="{!IF(selected.generateFlag == 'Yes', true, false) || selected.packagedTrigger}"  onchange="removeSpaces(this)"/>	
+                </apex:column>
+            </apex:pageBlockTable>
+            <br />
+            <div align="center">
+                <apex:commandButton action="{!removeSObjects}"   rerender="formId,mymsg" status="status" value="Remove"   title="Remove" onclick="if(!confirm('Are you sure?')){return};" oncomplete="deselectCheckbox('removeAll');" style="Width:80px;border-radius: 10px;"/> &nbsp;&nbsp;
+                <apex:commandButton action="{!processSelection}" rerender="formId,mymsg" status="status" value="Continue" title="Continue" style="Width:80px;border-radius: 10px;"/>
+            </div>
+            <br />
+        </apex:pageBlock>
+
+        <!-- Page Block 3 : Configure objects with Egnyte -->
+        <apex:pageBlock rendered="{!finalProcessFlag}" title="Egnyte Global Configuration Options">
+            <br />
+            <apex:pageBlockTable value="{!selectedSObjects}" var="selected">
+                <apex:column headerValue="Object Name"       value="{!selected.sobjectLabel}" />
+                <apex:column headerValue="Parent Object">
+                    <apex:selectList value="{!selected.parentInfo}" size="1" style="Width:500px;">
+                        <apex:selectOptions value="{!sobjectParentsMap[selected.sobjectName]}" />
+                    </apex:selectList>
+                </apex:column>
+                <apex:column headerValue="Create Root Folder">
+                    <apex:inputCheckbox value="{!selected.sobjectSelected}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+            <!-- trigger code -->
+            <apex:actionPoller action="{!checkAsyncRequest}" interval="5" rerender="formId,mymsg" rendered="{!NOT(ISNULL(AsyncResult))}" />
+            <apex:actionFunction name="deployZip" action="{!deployZip}" rendered="{!ISNULL(AsyncResult)}" rerender="formId,mymsg">
+                <apex:param name="data" assignTo="{!ZipData}" value="" />
+            </apex:actionFunction>
+            <c:zip name="generateZip" oncomplete="deployZip(data);" rendered="{!ISNULL(AsyncResult)}" id="zipblock">
+                <c:zipEntry path="package.xml" data="{!PackageXml}" />
+
+                <apex:repeat value="{!triggerMap}" var="key" id="theRepeat">
+                    <c:zipEntry path="{!triggerMap[key]['triggerPath']}" data="{!triggerMap[key]['triggerData']}" />
+                    <c:zipEntry path="{!triggerMap[key]['triggerMetadataPath']}" data="{!TriggerMetadata}" />
+                    <c:zipEntry path="{!triggerMap[key]['testClassPath']}" data="{!triggerMap[key]['classData']}" />
+                    <c:zipEntry path="{!triggerMap[key]['classMetadataPath']}" data="{!ClassMetadata}" />
+                </apex:repeat>
+            </c:zip>
+            <!-- trigger code -->
+            <br />
+            <div align="center">
+                <apex:commandButton onclick="generateZip();return false;" title="Process" rendered="{!ISNULL(AsyncResult)}" value="Process" style="Width:60px;border-radius:10px;"/>
+                <apex:commandButton action="{!cancel}" title="Cancel" value="Cancel" style="Width:60px;border-radius: 10px;"/>
+            </div>
+            <br />
+        </apex:pageBlock>
+        
+        <apex:commandButton action="{!cancel}" title="Back" value="Back" style="Width:60px;border-radius: 10px;" rendered="{!(isComplete)}"/>
+    </apex:form>
+</apex:page>

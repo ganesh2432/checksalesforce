@@ -1,0 +1,11 @@
+<apex:page controller="GreetingController">
+
+    <apex:form >  
+        <apex:inputText id="inputText" value="{!username}"  style="margin:10px;"/>
+        <br/>
+        <apex:commandButton style="padding:10px;margin:10px;" value="Greet" action="{!greet}"  />
+        <br/>
+        <apex:outputText style="padding:10px" value="{!output}"></apex:outputText>
+        <br/>
+    </apex:form>
+</apex:page>

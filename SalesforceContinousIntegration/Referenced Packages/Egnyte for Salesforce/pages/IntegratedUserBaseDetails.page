@@ -1,0 +1,49 @@
+<!--***********************************************************
+* Copyright Egnyte, Inc. All rights reserved.
+***************************************************************-->
+<apex:page showHeader="{!isClassic}" sidebar="{!isClassic}" controller="efs.IntegratedUserBaseDetailsController" standardStylesheets="{!isClassic}" applyBodyTag="{!isClassic}">
+	<html lang="en" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+		
+		<!-- Render SLDS if in Lightning Interface -->
+		<apex:outputPanel rendered="{! !isClassic}">
+			<apex:slds />
+		</apex:outputPanel>
+		
+		<apex:pageMessages />
+
+		<apex:outputPanel rendered="{! detailsFetched}">
+			<!-- Classic Interface Page Header section -->
+			<apex:sectionHeader title="{!$Label.efs__egnyteintegrateduserspagetitle}" subtitle="{!pageSubTitle}" rendered="{!isClassic}"/>
+			<div class="slds-scope">
+				<!-- Lightning Interface Page Header section -->
+				<apex:outputPanel rendered="{! !isClassic}">
+					<div class="slds-page-header">
+						<div class="slds-media slds-no-space slds-grow">
+							<div class="slds-media__figure">
+								<span class="slds-icon_container slds-icon-custom-custom15">
+									<svg aria-hidden="true" class="slds-icon slds-icon_large">
+										<use xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/custom-sprite/svg/symbols.svg#custom15')}"></use>
+									</svg>
+								</span>
+							</div>
+							<div class="slds-media__body">
+								<h1 class="slds-page-header__title slds-truncate slds-align-middle">{!$Label.efs__egnyteintegrateduserspagetitle}</h1>
+								<p class="slds-text-body_regular slds-line-height_reset">{!pageSubTitle}</p>
+							</div>
+						</div>
+					</div>
+				</apex:outputPanel>
+				
+				<!-- Integrated User's Detail Table -->
+				<apex:pageBlock mode="edit"  rendered="{!hasIntegrations}">
+					<apex:pageBlocktable value="{!info.Users}" var="userInfo" styleClass="slds-table slds-table--bordered slds-table--cell-buffer">
+						<apex:column value="{!userInfo.first_name}" headerValue="{!$ObjectType.User.fields.FirstName.Label}" headerClass="slds-text-title_caps"/>
+						<apex:column value="{!userInfo.last_name}" headerValue="{!$ObjectType.User.fields.LastName.Label}" headerClass="slds-text-title_caps"/>
+						<apex:column value="{!userInfo.salesforce_email}" headerValue="{!$ObjectType.User.fields.Email.Label}" headerClass="slds-text-title_caps"/>
+						<apex:column value="{!userInfo.user_type}" headerValue="{!$ObjectType.User.fields.UserType.Label}" headerClass="slds-text-title_caps"/>
+					</apex:pageBlocktable>
+				</apex:pageBlock>
+			</div>
+		</apex:outputPanel>
+	</html>
+</apex:page>

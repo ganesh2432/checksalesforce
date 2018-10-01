@@ -1,0 +1,176 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component Used to map salesfroce fields with icontract fields
+ * Created By  :   Jayanth B
+ * Created Date:   15/05/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="LineItemMappingRequestMetadata">
+    
+    <aura:attribute name="lineItemData" type="Object[]" access="global" description="Selected fields from icontract"/>
+    <aura:attribute name="mapConfigId" type="String" access="global" description="Mapping config Id,which is not being used now"/>
+    <aura:attribute name="selectedCount" type="integer" default="0" access="global" description="selected ocnt of fields"/>
+    <aura:attribute name="objectName" type="String" access="global" default="{!$Label.c.Opportunity_Product}" description="object name"/>
+    <aura:attribute name="object1Fields" type="Object[]" access="global" description="object field list"/>
+    <aura:attribute name="fieldDataTypeMap" type="Map" access="global" description="object field with datatype list"/>
+    <aura:attribute name="object1Map" type="Map" access="global" description="used for mapping"/>
+    <aura:attribute name="fieldMismatchErrMsg" type="String" access="global" description="if wrong field is matched"/>
+    <aura:attribute name="isNewFieldCreate" type="boolean" access="global" default="false" description="used for new field creation"/>
+    <aura:attribute name="themeURL" type="string" access="global" description="to know component running in lightning or classic"/>
+    <aura:attribute name="obj1WithDataTypeList" access="global" type="Object[]"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" access="global" description="method called on load"/>
+    
+    <aura:method name="saveMappedFields" action="{!c.saveRecords}" access="PUBLIC" description="methods called from parent component for saving purpose"/>
+    
+    <aura:registerEvent name="LineItemMappingThirdPage" type="c:LineItemMappingThirdPage" access="global" description="Event to go for next page"/>
+    <aura:registerEvent name="LineItemMappingSpinnerEvent" type="c:LineItemMappingSpinnerEvent" access="global" description="to fire spinner event"/>
+    
+    <div class="slds-p-horizontal_large slds-p-top_x-small">    
+        <b>{!$Label.c.LineItemMappingHeader}</b>&nbsp;
+        <table class="slds-m-top_medium slds-table_fixed-layout tableStleCustom" >
+            <thead>
+                <tr>
+                    <th scope="col"  class="slds-text-align_center slds-p-around_medium colFirstStyle">
+                        <span class="slds-truncate" title="Field Name">Sr. No.</span> 
+                    </th>
+                    <th scope="col"  class="slds-p-around_medium colSecondStyle">
+                        <span class="slds-truncate" title="Field Name">Fields Selected from iContract</span>      
+                    </th>
+                    <th scope="col"  class="slds-p-around_medium colThirdStyle">
+                        <span class="slds-truncate" title="Data Type" >Fields from Salesforce LineItem</span>
+                    </th>
+                    <th scope="col"  class="slds-p-around_medium colFourthStyle">       
+                        <span class="slds-truncate">Source of Truth
+                            <!--alignment issues when opened in lighting and classic so condition added -->
+                         <aura:if isTrue="{!v.themeURL != $Label.c.Theme4d}">
+                            <lightning:helptext class="slds-m-top_x-small" title="{!$Label.c.SOT_LineItemHelpText}" />
+                        </aura:if>
+                        <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+                            <lightning:helptext class="lightningStyleForHelptext"  content="{!$Label.c.SOT_LineItemHelpText}" />
+                        </aura:if>   
+                        </span>
+                    </th >
+                </tr>
+            </thead>
+ 
+            <tbody>
+                <aura:iteration items="{!v.lineItemData}" var="con" indexVar="index">
+                    <tr>
+                        <td class="slds-text-align_center slds-border_bottom slds-p-around_xx-small slds-border_left  slds-p-left_large colStylevalStyle">
+                            {!index+1}   
+                        </td>
+                        <td scope="row" class="slds-border_bottom slds-p-around_xx-small slds-p-left_large">
+                            <div class="slds-truncate" title="{!con.displayName}">{!con.displayName}</div>
+                        </td>
+                        <td scope="row" class="slds-border_bottom  slds-p-around_xx-small slds-p-left_large">
+							<!--CSS issues with classic and lightning + create new field style needs to be added. so below conditions and codes are added --> 
+                            <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+                            <div class="fieldSelectStleLightning">
+                            <lightning:select name=""  aura:id="InputSelectDynamicList1" value="{!con.mappingField1}"  onchange="{!c.onFieldSelectChange}">
+                               <aura:iteration items="{!v.obj1WithDataTypeList}" var="obj1">
+                                   <aura:if isTrue="{!(obj1.iContractField == con.fieldName)}">        
+                                                <aura:if isTrue="{!obj1.label != 'Create New Field'}">
+                                                <option selected="{!((obj1.salesforceField==con.mappingField1) || (con.mappingField1 == undefined &amp;&amp; obj1.salesforceField == 'Select Field')) }" value="{!obj1.salesforceField}">{!obj1.label}</option>
+                                                </aura:if>
+                                                <aura:if isTrue="{!obj1.label == 'Create New Field'}">
+                                                <option style="background-color:#DBE8ED !important;" value="{!obj1.salesforceField}"><div style="background-color:#DBE8ED !important;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9769;&nbsp;&nbsp;&nbsp;&nbsp;</div>{!obj1.label}</option>
+                                                </aura:if>
+                                    </aura:if>
+                                </aura:iteration>
+                            </lightning:select>
+                            </div>
+                            </aura:if>
+                            <aura:if isTrue="{!v.themeURL != $Label.c.Theme4d}">
+                            <div class="fieldSelectStleClassic">
+                            <lightning:select name=""  aura:id="InputSelectDynamicList1" value="{!con.mappingField1}"  onchange="{!c.onFieldSelectChange}">
+                                    <aura:iteration items="{!v.obj1WithDataTypeList}" var="obj1">
+                                      <aura:if isTrue="{!(obj1.iContractField == con.fieldName)}">        
+                                                <aura:if isTrue="{!obj1.label != 'Create New Field'}">
+                                                <option selected="{!((obj1.salesforceField==con.mappingField1) || (con.mappingField1 == undefined &amp;&amp; obj1.salesforceField == 'Select Field')) }" value="{!obj1.salesforceField}">{!obj1.label}</option>
+                                                </aura:if>
+                                                <aura:if isTrue="{!obj1.label == 'Create New Field'}">
+                                                <option style="background-color:#DBE8ED !important;" value="{!obj1.salesforceField}"><div style="background-color:#DBE8ED !important;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9769;&nbsp;&nbsp;&nbsp;&nbsp;</div>{!obj1.label}</option>
+                                                </aura:if>
+                                    </aura:if>
+                                </aura:iteration>
+                           </lightning:select>
+                            </div>
+                            </aura:if>
+                        </td>
+                        <td scope="row" class="slds-border_right slds-border_bottom slds-p-left_large slds-p-around_xx-small">
+                            <div class="demo-only slds-size_1-of-2 ">
+                                <div class="slds-form-element">
+                                    <label class="slds-checkbox_toggle slds-grid">
+                                        <ui:inputCheckbox value="{!con.SOT}"/>
+                                        <span id="toggle-desc" class="slds-checkbox_faux_container " aria-live="assertive">
+                                            <span class="slds-checkbox_faux" style="width: 150% !important;"></span>
+                                            <span class="slds-checkbox_on">Salesforce</span>
+                                            <span class="slds-checkbox_off">iContract</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </div>
+    <!--spacing issues in lightning and classic so condition added -->
+    <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+    <br/>
+   <br/><br/>
+    </aura:if>
+ 
+    <!--field creation redirect confirmation popup -->
+        <div aria-hidden="false" id="redirectToFieldCreation" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width:41%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <center><aura:unescapedHtml value="{!$Label.c.New_Field_Creation2}"></aura:unescapedHtml></center>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.onModalCancel}" style="color:black;">No</button>
+                            <button class="slds-button slds-button_neutral" onclick = "{!c.onModalConfirm}">Yes, continue</button><!-- remains in same page-->
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    
+    <!-- field mismatch popup model-->
+    <div aria-hidden="false" id="FieldMismatchErrorMessageModal" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            <center><lightning:icon iconName="action:close" size="small" alternativeText="Indicates approval"/></center>
+                            <aura:unescapedHtml value="{!v.fieldMismatchErrMsg}"></aura:unescapedHtml>
+                        </p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.onFieldMismatchModalCancel}" style="color:black;">Ok</button><!-- go backs to Home page-->
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>    
+
+</aura:component>

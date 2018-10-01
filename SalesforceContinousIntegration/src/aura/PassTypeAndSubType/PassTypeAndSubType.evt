@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="Event template">
+<aura:attribute name="Type" type="String" description="Type of the contract" />
+<aura:attribute name="SubType" type="String" description="SubType of the Contract" />
+</aura:event>

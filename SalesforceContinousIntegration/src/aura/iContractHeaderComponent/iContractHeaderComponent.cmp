@@ -1,0 +1,42 @@
+<aura:component controller="LineItemMappingRequestMetadata" access="global">
+    
+    <aura:attribute name="isReview" type="boolean" default="false"/>
+    <aura:registerEvent name="EnableLineItemMappings" type="c:EnableLineItemMappings"/> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div style="margin-left: 1%;margin-right: 1%;">
+        <div class="slds-grid slds-gutters" style="width:102%;">
+            <div class="slds-col" style="width:25%"> 
+                <b>
+                    <div class="slds-text-align_left slds-text-heading_small" style="display:inline;font-family:Arial;">
+                        {!$Label.c.Heading_Header_Component_IContract_Integration}
+                    </div>
+                    
+                    <aura:if isTrue="{!v.isReview}">
+                        <div class="slds-float_right" style="display:inline;">
+                        <lightning:button class="slds-button slds-button_outline-brand" label="Review Line-Items Mapping"  onclick="{!c.onclickOflineItemMapping}"/>
+                    </div>
+                    </aura:if>
+                    
+                    <aura:if isTrue="{!not(v.isReview)}">
+                        <div class="slds-float_right" style="display:inline;">
+                        <lightning:button class="slds-button slds-button_outline-brand" label="Map Line-Items"  onclick="{!c.onclickOflineItemMapping}"/>
+                    </div>
+                    </aura:if>
+                    
+                </b>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light" role="status" style="background-color:#DBE8ED;margin-left: 1%; width: 98%;">
+        <div class="slds-media__figure">
+            <span class="slds-icon_container slds-icon-utility-info" title="information">	      
+                <lightning:icon iconName="utility:info" variant="info"/>
+                <span class="slds-assistive-text">information</span>
+            </span>
+        </div>
+        <div class="slds-media__body">
+            <p ><b>{!$Label.c.Heading_Header_Component_Info}</b></p>
+        </div>
+    </div>
+</aura:component>

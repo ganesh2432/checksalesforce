@@ -1,0 +1,190 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component Used for Document setup.
+ * Created By  :   Jayanth B
+ * Created Date:   03/05/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="DocumentSetUpController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <!-- Attribute definition -->
+    <aura:attribute name="ObjectName" type="String" default="{!$Label.c.DocumentSetup_ObjectName}" description="opportunity object name" access="global"/>
+    <aura:attribute name="FieldName" type="String" default="{!$Label.c.DocumentSetup_FieldName}" description="fieldname to get the values" access="global"/>
+    <aura:attribute name="StageNames" type="String[]" description="selected stage value to store in backend" access="global"/> 
+    <aura:attribute name="SelectedType" type="String" access="global" description="Contract selected type"/>
+    <aura:attribute name="SelectedSubType" type="String" access="global" description="Contract selected Subtype"/>
+    <aura:attribute name="SelectedStage" type="String" access="global" description="Stage selected from opportunity stage field which defines when to generate contract"/>
+    <aura:attribute name="StoreSalesforceFile" type="boolean" default="false" access="global" description="defines whether to store store salesforce fiels or not"/>
+    <aura:attribute name="AllowLineItems" type="boolean" default="false" access="global" description="defines whether to allow opplineItem or not"/>
+    <aura:attribute name="Activate" type="String" default="InActive" access="global" description="to activate mapping config"/>
+    <aura:attribute name="isActive" type="String" default="false" access="global" description="checks if mapping config is active or not"/>
+    <aura:attribute name="deactivate" type="String" default="false" access="global" description="to deactivate mapping config,bnot using now but in future we might use"/>
+    <aura:attribute name="themeURL" type="string" access="global" description="to know component running in lightning or classic"/>
+    
+    <!-- Event Registration-->
+    <aura:registerEvent name="goToHomePage" type="c:GoToHomePage" description="goes to home page"/>
+    
+    <!--Method used by parent component -->
+    <aura:method name="passTypeAndSubType" action="{!c.getTypeAndSubType}" access="PUBLIC" description="type and subtype passed from parent component">
+        <aura:attribute name="Type" type="String" />
+        <aura:attribute name="SubType" type="String"  />
+    </aura:method>
+    <aura:method name="finishSetup" action="{!c.createMappingConfiguration}" access="PUBLIC" description="Save and finish of doc setup"/>
+    
+    <!--Onload function -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    
+    <div>
+        <div class="slds-grid slds-gutters docSetupHeaderstyle">
+            <div class="slds-col docSetupHeaderStyleCol"> 
+                <b><div class="slds-text-align_left slds-text-heading_small" style="font-family:Arial;">{!$Label.c.Document_Setup_Header}</div></b>
+            </div>
+        </div>
+        <br/>
+        
+        <div class="slds-box sldsboxfirstCustomStyle">
+            <div class="slds-text-align_left slds-text-heading_small" >
+                <b class="slds-m-right_medium fontcustomStyle">{!$Label.c.Document_setup_option_1_0}</b>
+                <ui:inputSelect class="inputSelectStyle slds-select slds-m-left_x-large stagemarginStyle" multiple="false" aura:id="StageNameInput" value="{!v.SelectedStage}">
+                    <ui:inputSelectOption text="None" label="None" />
+                    <aura:iteration items="{!v.StageNames}" var="item">
+                        <ui:inputSelectOption text="{!item}" label="{!item}"/>
+                    </aura:iteration>
+                </ui:inputSelect>
+            </div><br/>
+            <div class="sldsboxfirstCustomStylefurtherMore">
+                {!$Label.c.Document_setup_option_1_1}
+            </div>
+        </div>
+        
+        <div class="slds-box sldsboxSecondCustomStyle">
+            <div class="demo-only demo-only--sizing slds-grid slds-wrap ">
+                <div class="slds-size_1-of-2 sldsboxSecondCustomStyleone">
+                    <div class="slds-text-align_left slds-text-heading_small fontcustomStyle">
+                        <b class="slds-m-right_medium">{!$Label.c.Document_setup_option_2_0}</b>
+                    </div>
+                    <br/>
+                    <div class="sldsboxSecondCustomStyletwo">
+                        {!$Label.c.Document_setup_option_2_1}
+                    </div>
+                </div>
+                <div class="slds-size_1-of-2 sldsboxSecondCustomStylethree">
+                    <label class="slds-checkbox_toggle">
+                        <ui:inputCheckbox value="{!v.StoreSalesforceFile}"/>
+                        <span id="toggle-desc" class="slds-checkbox_faux_container " aria-live="assertive">
+                            <span class="slds-checkbox_faux"></span>
+                            <span class="slds-checkbox_on">Yes</span>
+                            <span class="slds-checkbox_off">No</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>        
+        
+        <div class="slds-box sldsboxthirdCustomStyle">
+            <div class="demo-only demo-only--sizing slds-grid slds-wrap ">
+                <div class="slds-size_1-of-2 sldsboxthirdCustomStyleone" >
+                    <div class="slds-text-align_left slds-text-heading_small fontcustomStyle">
+                        <b class="slds-m-right_medium">{!$Label.c.Document_setup_option_3_0}</b>
+                    </div>
+                    <br/>
+                    <div class="sldsboxthirdCustomStyletwo">
+                        {!$Label.c.Document_setup_option_3_1}
+                    </div>
+                </div>
+                <div class="slds-size_1-of-2 sldsboxthirdCustomStylethird">
+                    <label class="slds-checkbox_toggle">
+                        <ui:inputCheckbox value="{!v.AllowLineItems}"/>
+                        <span id="toggle-desc" class="slds-checkbox_faux_container " aria-live="assertive">
+                            <span class="slds-checkbox_faux"></span>
+                            <span class="slds-checkbox_on">Yes</span>
+                            <span class="slds-checkbox_off">No</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+        <br/><br/>
+        </aura:if>
+    </div>
+    
+    <!-- Doc setup activation model popup-->
+    <div aria-hidden="false" id="ActivateMappingConfig" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 36%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <span class="slds-assistive-text">Close</span><lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{! c.closePopUpForRequired }" alternativeText="Close window." />
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <br/>
+                        <center><lightning:icon iconName="action:approval" size="small" alternativeText="Indicates activation"/></center>
+                        <br/>
+                        <div>
+                            <center>{!$Label.c.DocSetup_activation_msg1} '{!v.SelectedType} - {!v.SelectedSubType}' {!$Label.c.DocSetup_activation_msg2}</center>
+                        </div>
+                        <br/>
+                        <center>
+                            <aura:if isTrue="{!not(v.isActive)}">
+                                {!$Label.c.Activate_Doc_setup_message}
+                            </aura:if>
+                            <aura:if isTrue="{!v.isActive}">
+                                {!$Label.c.already_active_doc_setup_message}
+                            </aura:if>
+                        </center>
+                        
+                        
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <!--button class="slds-button slds-button_neutral" onclick="{!c.closePopUpForRequired}">Cancel</button-->
+                            <aura:if isTrue="{!not(v.isActive)}">
+                                <button class="slds-button slds-button_neutral" onclick="{!c.dontActivateMappingcongif}">Not now</button>
+                            </aura:if>
+                            <aura:if isTrue="{!not(v.isActive)}">
+                                <button class="slds-button slds-button_success" onclick="{!c.activateMappingcongif}">Yes, Continue</button>
+                            </aura:if>
+                            <aura:if isTrue="{!v.isActive}">
+                                <button class="slds-button slds-button_neutral" onclick="{!c.deactiveMappingConfig}">OK</button>
+                            </aura:if>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    
+    <!-- stage mandatory model popup-->
+    <div aria-hidden="false" id="StageEmptyErrorMessage" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 30%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <br/>
+                        <center><lightning:icon iconName="action:close" size="small" alternativeText="Indicates activation"/></center>
+                        <br/>
+                        <div>
+                            <center>{!$Label.c.Stage_is_mandatory_Please_select_Stage_message_for_doc_setup}</center>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.closePopUpForRequired}">OK</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    
+  
+</aura:component>

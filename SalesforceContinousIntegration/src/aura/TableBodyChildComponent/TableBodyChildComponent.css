@@ -1,0 +1,15 @@
+.THIS .customInputWidth{
+    width:83%;
+}
+
+.THIS .customSelectStyle{
+    width: 80%;
+    margin-top: -2.4rem;
+    margin-left: 1.5rem;
+}
+
+.THIS .disabled {
+   pointer-events: none;
+   cursor: default;
+   color:grey;
+}

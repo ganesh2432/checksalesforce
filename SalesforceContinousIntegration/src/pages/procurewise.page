@@ -1,0 +1,47 @@
+<apex:page id="page" controller="suppliers_controller">
+    <apex:form >
+        <apex:pageBlock >
+                <apex:commandButton value="Suppliers" action="{!callOut}" rendered="{!$CurrentPage.parameters.offline!='1'}"/>
+                <apex:commandButton value="Clear" action="{!clear}" rendered="{!$CurrentPage.parameters.offline!='1'}"/>
+            <apex:pageBlockSection columns="1" title="Supplier" rendered="{!suppliers != null}" collapsible="false" >
+                <apex:pageBlockTable value="{!suppliers}" var="i" >
+                    <apex:column headerValue="Supplier Id" style="width:75px;" >
+                        <apex:outputText value="{!i.id}" />
+                    </apex:column>
+                    <apex:column headerValue="Supplier Name" style="width:75px;" >
+                        <apex:outputText value="{!i.name}" />
+                    </apex:column>
+                    <apex:column headerValue="Supplier Legal Structure" style="width:75px;" >
+                        <apex:outputText value="{!i.legalStructure}"/>
+                    </apex:column>
+                    <apex:column headerValue="Created Date" style="width:75px;" >
+                        <apex:outputText value="{!i.createdDateTime}" />
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+
+
+        <apex:pageBlock >
+                <apex:commandButton value="Filter Results" action="{!getResults}" rendered="{!$CurrentPage.parameters.offline!='1'}"/>
+                <apex:commandButton value="Clear" action="{!clear}" rendered="{!$CurrentPage.parameters.offline!='1'}"/><br/><br/>
+                Supplier Name contains:&nbsp;<apex:inputText value="{!supplierName}"/>
+            <apex:pageBlockSection columns="1" title="Results" rendered="{!results!= null}" collapsible="false" >
+                <apex:pageBlockTable value="{!results}" var="i" >
+                    <apex:column headerValue="Supplier Id" style="width:75px;" >
+                        <apex:outputText value="{!i.id}" />
+                    </apex:column>
+                    <apex:column headerValue="Supplier Name" style="width:75px;" >
+                        <apex:outputText value="{!i.name}" />
+                    </apex:column>
+                    <apex:column headerValue="Supplier Legal Structure" style="width:75px;" >
+                        <apex:outputText value="{!i.legalStructure}" />
+                    </apex:column>
+                    <apex:column headerValue="Created Date" style="width:75px;" >
+                        <apex:outputText value="{!i.createdDateTime}" />
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

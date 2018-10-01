@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Tree Node Configuration</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>false</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Allow_To_Select_Grouping_Nodes__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If true, user will allow to select grouping node generated as a result of this tree node configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If true, user will allow to select grouping node generated as a result of this tree node configuration.</inlineHelpText>
+        <label>Allow To Select Grouping Nodes</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Caption_Field_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Field name to use to retrieve node caption/title. Note that this field will be used as &apos;group by&apos; field for the group by nodes. This field is required for group by and query type of nodes.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Field name to use to retrieve node caption/title. Note that this field will be used as &apos;group by&apos; field for the group by nodes. This field is required for group by and query type of nodes.</inlineHelpText>
+        <label>Caption Field Name</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Caption__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Caption - displayed as tree node title</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Caption - displayed as tree node title</inlineHelpText>
+        <label>Caption</label>
+        <length>80</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Child_Object_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Object type string of the children objects that will be displayed inside this node</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Object type string of the children objects that will be displayed inside this node</inlineHelpText>
+        <label>Child Object Type</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Node description</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add node description here such as this node displays as root node in the File Explorer</inlineHelpText>
+        <label>Description</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Disabled__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If disable is checked, this node will not be rendered as one of the node in the tree.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If disable is checked, this node will not be rendered as one of the node in the tree.</inlineHelpText>
+        <label>Disabled</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Group_By_Query_String__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The query must have the following syntax &quot;Select Count(Id) fieldCount, &lt;GroupByFieldName&gt; fieldValue from &lt;ObjectName&gt; Group By&lt;GroupByFieldName&gt; Order By &lt;FieldName&gt;</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The query must have the following syntax &quot;Select Count(Id) fieldCount, &lt;GroupByFieldName&gt; fieldValue from &lt;ObjectName&gt; Group By&lt;GroupByFieldName&gt; Order By &lt;FieldName&gt;</inlineHelpText>
+        <label>Group By Query String</label>
+        <length>32768</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Order_Children_By__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Fields string used to sort the children of a node. It can contain one or more fields along with the order of sort.
+
+field1 =&gt; order by field1 ASC
+field1~field2 =&gt; order by field1 ASC, field2 ASC
+field1#ASC~field2 =&gt; order by field1 ASC, field2 ASC
+field1#DESC~field2 =&gt; order by field1 DESC, field2 ASC
+field1~field2#DESC =&gt; order by field1 ASC, field2 DESC
+field1#DESC~field2#DESC =&gt; order by field1 DESC, field2 DESC</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Fields used to sort the children of a node. Use ~ as separator when using multiple fields.</inlineHelpText>
+        <label>Order Children By</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Parent__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Parent tree node in the hierarchy</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Parent tree node in the hierarchy</inlineHelpText>
+        <label>Parent</label>
+        <referenceTo>Tree_Node_Configuration__c</referenceTo>
+        <relationshipLabel>Tree Node Configurations</relationshipLabel>
+        <relationshipName>Children</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Query_String__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Node query string for query type nodes. The query string is (name, value) pairs of conditions in the form Name#Vaue~N2#V2....  AND condition is assumed between each (name, value) pairs.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Node query string for query type nodes. The query string is (name, value) pairs of conditions in the form Name#Vaue~N2#V2....  AND condition is assumed between each (name, value) pairs.</inlineHelpText>
+        <label>Query String</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Show_Children_as_tree_nodes__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked shows children objects as tree nodes.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked shows children objects as tree nodes.</inlineHelpText>
+        <label>Show Children as tree nodes</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Show_this_configuration_node_in_tree__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked shows the configuration node in the tree.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked shows the configuration node in the tree.</inlineHelpText>
+        <label>Show this configuration node in tree</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Sort_Id__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Sort identifier to sort all nodes in a tree in specific order. By default sort is using sort id followed by name. If user is interested in specific sort order, configure this value such as 001, 002...
+The sort id is within the context of parent.</description>
+        <externalId>false</externalId>
+        <label>Sort Id</label>
+        <length>3</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tree_Configuration__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Tree where this node is displayed</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Tree where this node is displayed</inlineHelpText>
+        <label>Tree Configuration</label>
+        <referenceTo>Tree_Configuration__c</referenceTo>
+        <relationshipLabel>Tree Node Configurations</relationshipLabel>
+        <relationshipName>Tree_Node_Configurations</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Tree node type. Can be one of 
+o	&apos;NodeType_Root&apos; - the top most root node that can have static children only as defined in configuration
+o	NodeType_Object - an object is displayed as tree node 
+o	NodeType_GroupByRoot - group nodes inside this using group by field 
+o	NodeType_Query - nodes inside this node comes from query result</description>
+        <externalId>false</externalId>
+        <inlineHelpText>o	NodeType_Root - node that can have static children only
+o	NodeType_Object - an object is displayed as tree node 
+o	NodeType_GroupByRoot - group nodes inside this using group by field 
+o	NodeType_Query - nodes inside this node comes from query result</inlineHelpText>
+        <label>Type</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>NodeType_GroupByRoot</fullName>
+                    <default>true</default>
+                </value>
+                <value>
+                    <fullName>NodeType_Object</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>NodeType_Query</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>NodeType_Root</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <label>Tree Node Configuration</label>
+    <nameField>
+        <label>Tree Node Configuration Name</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Tree Node Configurations</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>Read</sharingModel>
+</CustomObject>

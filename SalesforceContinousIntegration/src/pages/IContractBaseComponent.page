@@ -1,0 +1,28 @@
+<!-- ----------------------------------------------------------------------------
+ * Description :   This VF page is used to create iContract-salesforce mapping
+                   in classic version.
+ * Created By  :   Siva Krishna Reddy B
+ * Created Date:   08/05/2018
+ * Version     :   V1.0
+ --------------------------------------------------------------------------- -->
+<apex:page standardStylesheets="false" sidebar="false" showHeader="true">
+    <apex:includeLightning />
+    
+    <div id="iContractDiv" />
+      <script>
+          var totalPageURL = window.location.toString();
+          var protocalType= totalPageURL.split("//")[0];
+          var tempbaseURL = totalPageURL.split("//")[1].split("/");
+          var finalBaseURL = protocalType+'//'+tempbaseURL[0] + "{!$Site.Prefix}";
+          console.log('....'+finalBaseURL);
+          debugger;
+         $Lightning.use("c:iContractBaseComponentApp", function() {
+            $Lightning.createComponent("c:IContractComponent",{BaseURL:finalBaseURL },                      
+              "iContractDiv",
+              function(cmp) {
+                // do some stuff
+              });
+            });
+    </script>
+  
+</apex:page>

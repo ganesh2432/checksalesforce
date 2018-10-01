@@ -1,0 +1,83 @@
+<aura:component controller="TypeSubtypeController">
+    <!-- Purpose : Controller for selecting Type and Subtype, and getting Fields for selected Metadata from IContract API -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:registerEvent name="fetchMDataEvent" type="c:fetchMetadataButtonEvent"/>
+    <aura:registerEvent name="typeSubTypeEvent" type="c:DependentPicklistEvt"/>
+    <aura:registerEvent name="StoreTypeSubTypeMapEvt" type="c:StoreTypeSubTypeMapEvt"/>
+    
+    <!--Using Attributes-->
+	<aura:attribute name="isSubTypeDisable" type="boolean" default="true" description="used to, disbale Subtype field." access="public"/>
+    <aura:attribute name="typeSubTypeMap" type="map" description="used to store Type and SubType Mapping." access="public"/>
+    <aura:attribute name="typeSelectedValue" type="String" description="used to store selected Type value." access="public"/>
+    <aura:attribute name="subTypeSelectedValue" type="String" description="used to store selected SubType value." access="public"/>
+    <aura:attribute name="typeSubTypeErrMsg" type="String" access="public"/>
+    <aura:attribute name="Spinner" type="Boolean" access="public"/>
+    
+	
+	
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-3">
+ 
+            <div>
+                <!--Controller Field-->
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="select-01"><b>{!$Label.c.Heading_Type_Subtype_Component_Type}</b></label>
+                    <div>
+                        <ui:inputSelect aura:id="typeId" class="slds-select" change="{!c.onTypeFieldChange}"/>
+                    </div>
+                </div>
+                
+                <br/>
+                <!--Dependent Field-->
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="select-01"><b>{!$Label.c.Heading_Type_Subtype_Component_Sub_Type}</b></label>
+                    <div >
+                        <ui:inputSelect aura:id="subtypeId" class="slds-select" change="{!c.setSelectedSubTypeValue}" disabled="{!v.isSubTypeDisable}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<br/>
+    <br/>
+	<div class="slds-grid slds-gutters">
+
+	  	<div class="slds-col slds-size_1-of-3" >
+	  		<div style="float:left">
+	  			<lightning:button variant="brand" class="" label="{!$Label.c.Button_Type_Subtype_Component_Fetch_Metadata}" onclick="{!c.getMetadata}"></lightning:button>
+	  		</div>
+		</div>
+	  
+	</div>
+    
+    <div aria-hidden="false" id="TypeSubtypeSubmitErrMsgModel" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 23%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p><aura:unescapedHtml value="{!v.typeSubTypeErrMsg}"/></p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.closeErrorMsgModal}" style="color:black;">Ok</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+           <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+             <span class="slds-assistive-text">Loading</span>
+             <div class="slds-spinner__dot-a"></div>
+             <div class="slds-spinner__dot-b"></div>
+           </div>
+        </div>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,73 @@
+<!--**********************************************************************************
+* Copyright (c) 2015-2016, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edFileDownloadHistory
+* Controller: edFileDownloadHistoryController
+* Created by Anil Meghnathi: 18/07/2016
+* 
+* - Modifications:
+* - Anil Meghnathi, 05/01/2016 - Initial Developement
+***********************************************************************************-->
+<apex:page standardController="NEILON__File__c" extensions="NEILON.edFileDownloadHistoryController" readOnly="true" sidebar="false" tabStyle="Amazon_File_System__tab" title="{!$Label.neilon__file_download_history}">
+	<c:apJsAndCssIncludeComponent importJquery="true" 
+	                                importAppurinUtil="true"
+	                                importAppurinCss="true"
+	                                importLightningDesign="true"/>
+    
+	<apex:form id="form">
+	    <apex:outputPanel styleClass="slds">
+	        <div class="slds-page-header">
+                <div class="slds-grid">
+                    <div class="slds-col slds-has-flexi-truncate">
+                        <nav class="slds-m-bottom--xx-small" role="navigation">
+                            <ol class="slds-breadcrumb slds-list--horizontal">
+                                <li class="slds-breadcrumb__item slds-text-title--caps"><a href="javascript:void(0);">{!$ObjectType.NEILON__File__c.labelPlural}</a></li>
+                                <li class="slds-breadcrumb__item slds-text-title--caps"><apex:outputLink styleClass="apPageHeaderLink" target="_blank" value="/{!NEILON__File__c.Id}" >{!NEILON__File__c.Name}</apex:outputLink></li>
+                            </ol>
+                        </nav>
+                        <h1 class="slds-page-header__title slds-truncate" title="File Download History">{!$ObjectType.NEILON__File_Download_History__c.labelPlural}</h1>
+                    </div>
+                    <div class="slds-col slds-no-flex slds-grid slds-align-top">
+                        <div class="slds-button-group">
+                            <apex:commandButton styleClass="slds-button slds-button--neutral" value="Close" action="{!cancel}" rerender="" oncomplete="if(Appurin.lightning.isLightningExperience()){Appurin.lightning.back(true);}"/>
+                        </div>
+                    </div> 
+                </div>
+                 <div class="slds-grid">
+                    <div class="slds-col slds-align-bottom">
+                        <p class="slds-text-body--small">{!fileDownloadHistories.size} {!$Label.neilon__items} • {!$Label.neilon__sorted_by} {!$ObjectType.NEILON__File_Download_History__c.fields.CreatedDate.Label}</p>
+                    </div>
+                </div>
+            </div>
+	    </apex:outputPanel>
+	    <apex:outPutPanel styleClass="slds">
+	        <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+            	<tr class="slds-text-heading--label">
+                	<th scope="col">
+                    	<div class="slds-truncate">{!$ObjectType.NEILON__File_Download_History__c.fields.NEILON__Type__c.Label}</div>
+                    </th>
+                	<th scope="col">
+                    	<div class="slds-truncate">{!$ObjectType.NEILON__File_Download_History__c.fields.NEILON__DownloadedBy__c.Label}</div>
+                    </th>
+                    <th scope="col">
+                    	<div class="slds-truncate">{!$ObjectType.NEILON__File_Download_History__c.fields.NEILON__DownloadedDate__c.Label}</div>
+                    </th>
+                </tr>
+                <apex:repeat value="{!fileDownloadHistories}" var="fileDownloadHistory">
+                	<tr>
+                        <td>
+                            <apex:outputField value="{!fileDownloadHistory.NEILON__Type__c}" />
+                        </td>
+                        <td>
+                            <apex:outputField value="{!fileDownloadHistory.NEILON__DownloadedBy__c}" />
+                        </td>
+                        <td>
+                            <apex:outputField value="{!fileDownloadHistory.NEILON__DownloadedDate__c}" />
+                        </td>
+                    </tr>
+                </apex:repeat>                       
+        	</table>
+	    </apex:outPutPanel>
+	</apex:form>
+</apex:page>

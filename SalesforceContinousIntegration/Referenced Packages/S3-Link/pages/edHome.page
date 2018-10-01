@@ -1,0 +1,51 @@
+<!--**********************************************************************************
+* Copyright © 2015 Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edHome
+* Created by Anil Meghnathi: 06/05/2015
+*
+* - Showing the list of all documents and also allowed to perform various operation on those documents.
+
+* - Modifications:
+* - Anil Meghnathi, 06/05/2015 – Initial Development
+***********************************************************************************-->
+<apex:page standardStylesheets="false" sidebar="false" title="{!$Label.neilon__file_explorer}" showHeader="{!fileExplorerPageConfugration.isShowHeader}" controller="NEILON.edHomeController">
+    <c:apJsAndCssIncludeComponent importJquery="true"
+                              importAppurinUtil="true"
+                              importJQueryLayout="true"
+                              importFancyTree="true"
+                              importJqGrid="false"
+                              importEasyTooltip="true"
+                              importAppurinCss="true"
+                              importCkEditor="false"
+                              importGnattChart="false"
+                              importJqForm="true"
+                              importLightningDesign="true"/>
+    <div class="slds">
+        <div id="splashDiv" class="apInitiallyDivDisplayNone" style="z-index:9998;">
+            <div class="slds-spinner_container apLightningSpinnerContainer">
+                <div role="status" class="slds-spinner slds-spinner--medium slds-spinner--brand">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <apex:form >
+        <c:edFileExplorerComponent primaryParentObjectId="{!strMainObjectId}"
+                primaryParentObjectFieldAPI="{!strMainObjectFieldAPI}"
+                secondaryParentObjectId="{!strOtherObjectId}"
+                secondaryParentObjectFieldAPI="{!strOtherObjectFieldAPI}"
+                folderIdToLoad="{!folderIdToLoad}"
+                folderIdForRoot="{!folderIdForRoot}"
+                explorerConfig="{!strExplorerConfigName}"
+                callerName="{!strCallerName}"
+                hideSendEmail="{!isHideSendEmail}"
+                hideRecordDetailIcon="{!isHideView}"                   
+                folderStructureRecordId="{!folderStructureRecordId}" >
+        </c:edFileExplorerComponent>
+    </apex:form>
+</apex:page>

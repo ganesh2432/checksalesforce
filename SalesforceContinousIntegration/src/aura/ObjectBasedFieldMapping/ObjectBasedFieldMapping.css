@@ -1,0 +1,60 @@
+.THIS .FirstTableRowStyle{
+    border: 1px solid #E2DEDE;
+    border-collapse: collapse;
+}
+
+.THIS .SecondAndThirdTableRowStyle{
+
+}
+
+.THIS .SotIcon{
+    background-color: orange;
+    border-radius: 55%;   
+}
+
+.THIS .TableOneHeaderStyle{
+    
+}
+
+.THIS table{
+    width: 87%;
+    border-collapse: collapse;
+}
+
+.THIS th{
+    background-color:#DBE8ED;
+    border-collapse: collapse;
+}
+
+.THIS .dynamicInputSelect{
+    width: 94%;
+}
+
+.THIS .slds-icon--xx-small {
+    width: 1.2rem;
+    height: 0.7rem;
+    line-height: 1;
+    fill: white;
+
+}
+
+
+.THIS .leftRightArrow{
+   font-size: 200%;
+   color:blue; 
+}
+
+
+/** CSS **/
+.THIS.scrollerSize {
+    height: 300px;
+}
+.THIS .classicdropdown{
+    margin-top:4% !important;
+    margin-left: 1.5rem !important;
+    margin-right: 1.5rem !important;
+}
+.THIS .lightningdropdown{
+    margin-left: 1.5rem !important;
+    margin-right: 1.5rem !important;
+}

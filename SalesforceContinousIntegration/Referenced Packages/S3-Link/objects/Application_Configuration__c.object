@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Custom settings used to configure the application.</description>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Configured_Value__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Value of a application configuration property.</description>
+        <externalId>false</externalId>
+        <label>Configured Value</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Description</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Display_Layout__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Display Layout determines how the property value is displayed for editing. It is is one of Checkbox, Radio or SImple Text.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Valid values are Checkbox, Radio and Simple Text.</inlineHelpText>
+        <label>Display Layout</label>
+        <length>15</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Label__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Application configuration label.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This will be displayed as Name on System Configuration Page.</inlineHelpText>
+        <label>Label</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>System_Configuration__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If checked, configuration will be display in System Configuration list.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, configuration will be display in System Configuration list.</inlineHelpText>
+        <label>System Configuration?</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>Application Configuration</label>
+    <visibility>Public</visibility>
+</CustomObject>

@@ -1,0 +1,55 @@
+<aura:component controller="FieldMappingController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <!-- Purpose : To let the User select field which will be used in Contract generation next steps. -->
+	<aura:attribute name="allFields" type="Object[]" access="public" description="to Store response from IContract API"/> 
+    <aura:attribute name="isFieldAvailable" type="boolean" default="false" access="public" description="Not using"/>
+    <aura:attribute type="String" name="selectedType" access="public" description="to get the selected Type"></aura:attribute>
+    <aura:attribute type="String" name="selectedSubType" access="public" description="to get the selected SubType"></aura:attribute>
+    <aura:attribute type="String[]" name="prevSelectedFields" access="public" description="To get the fields which are selected previously."></aura:attribute>
+    <aura:attribute name="selectedCount" type="integer" default="0" access="public" description="Total count of Selected fields."/>
+    <aura:attribute name="Spinner" type="Boolean" access="public" description="to Show Spinner."/>
+    <aura:attribute name="themeURL" type="string" access="global" description="to know component running in lightning or classic"/>
+
+    <aura:registerEvent name="selectedFieldCountEvt" type="c:SelectedFieldCountEvt"/>
+    <aura:registerEvent name="goToHomePage" type="c:GoToHomePage"/>
+    
+    <aura:method name="saveFieldMapping" action="{!c.saveAndGoNext}" access="PUBLIC"/>
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.makeRequest}"/>    
+   
+    	<c:FieldSelection aura:id="fieldSelectionCompId" themeURL="{!v.themeURL}" ListOfContact="{!v.allFields}" selectedType="{!v.selectedType}" selectedSubType="{!v.selectedSubType}" selectedCount="{!v.selectedCount}"/>
+
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+           <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+             <span class="slds-assistive-text">Loading</span>
+             <div class="slds-spinner__dot-a"></div>
+             <div class="slds-spinner__dot-b"></div>
+           </div>
+        </div>
+    </aura:if>
+    <div aria-hidden="false" id="FieldMappingErrModal" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 23%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <!-- Messages displayed inside modal popup-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p><aura:unescapedHtml value="{!$Label.c.Field_Selection_API_Err_Message}"/></p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.goToHomePageOnErrMsg}" style="color:black;">Ok</button><!-- go backs to Home page-->
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+  
+</aura:component>

@@ -1,0 +1,69 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component used for displaying Contract  Type and Subtype.
+ * Created By  :   Jayanth B
+ * Created Date:   17/07/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="TypeSubtypeControllerForcontractCreation">
+	
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" description="onload function"/>
+    <aura:attribute name="opportunityId" type="Id" access="global" description="Holds the opportunity id"/>
+    <aura:attribute name="themeURL" type="string" access="global" description="Used to know whether component is running in Lightning Experience or classic"/> 
+    <aura:registerEvent name="StoreTypeSubTypeMapEvt" type="c:StoreTypeSubTypeMapEvt"/>
+   
+    <!--Using Attributes-->
+	<aura:attribute name="isSubTypeDisable" type="boolean" default="true" description="used to, disbale Subtype field." access="public"/>
+    <aura:attribute name="typeSubTypeMap" type="map" description="used to store Type and SubType Mapping." access="public"/>
+    <aura:attribute name="typeSelectedValue" type="String" description="used to store selected Type value." access="public"/>
+    <aura:attribute name="subTypeSelectedValue" type="String" description="used to store selected SubType value." access="public"/>
+    <aura:attribute name="typeSubTypeErrMsg" type="String" access="public" description="used to display error message"/>
+    <aura:attribute name="enablingAnddisbalingList" type="String[]" access="public" description="holds the enabled and disabled value of type and dependent subtypes"/>
+    <aura:attribute name="openCreateContract" type="boolean" access="global" default="false" description="flag state whether to open or not to open the create contract component"/>
+    
+    <aura:if isTrue="{!v.themeURL != 'Theme4d'}"><br/>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.openCreateContract == false}">
+     <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-3">
+ 
+            <div>
+                <!--Controller Field-->
+                <div class="{!v.themeURL!='Theme4d' ?'classicstyle':'lightningstyle'}" >
+                    <label class="slds-form-element__label" for="select-01"><b>{!$Label.c.Contract_create_question_for_type_selection}</b></label>
+                    <div>
+                        <ui:inputSelect aura:id="typeId" class="slds-select" change="{!c.onTypeFieldChange}"/>
+                    </div>
+                </div>
+                
+                <br/> 
+                <!--Dependent Field-->
+                <div class="{!v.themeURL != 'Theme4d' ? 'classicstyle ':'lightningstyle'}" >
+                    <label class="slds-form-element__label" for="select-01"><b>2. {!$Label.c.Heading_Type_Subtype_Component_Sub_Type}</b></label>
+                    <div >
+                        <ui:inputSelect aura:id="subtypeId" class="slds-select" change="{!c.setSelectedSubTypeValue}" disabled="{!v.isSubTypeDisable}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<br/>
+    <br/>
+	<div class="slds-grid slds-gutters">
+
+	  	<div class="slds-col slds-size_1-of-3" >
+	  		<div style="float:left">
+	  			<lightning:button variant="brand" class="" label="Proceed" onclick="{!c.getContractData}"></lightning:button>
+	  		</div>
+		</div>
+	  
+	</div>
+    </aura:if>
+
+ <aura:if isTrue="{!v.openCreateContract == true}">
+     <c:LightningCreateContractProgressIndicator scoperunningcreate="true" themeURL="{!v.themeURL}" opportunityId="{!v.opportunityId}" typeSelectedValue="{!v.typeSelectedValue}" subTypeSelectedValue="{!v.subTypeSelectedValue}" />
+ </aura:if>
+    
+    
+    
+</aura:component>

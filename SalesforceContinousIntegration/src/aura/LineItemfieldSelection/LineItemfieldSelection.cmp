@@ -1,0 +1,128 @@
+<!-- ********************************************************************************
+ * Description :   This Lightning component Used for Line item field selection from iContract.
+ * Created By  :   Jayanth B
+ * Created Date:   14/05/2018
+ * Version     :   V1.0
+*************************************************************************************** -->
+<aura:component controller="LineItemMappingRequestMetadata">
+    
+    <!-- Attributes definition used in this component -->
+    <aura:attribute name="lineItemData" type="Object[]" access="global" description="stores the metadata fields details from iContract"/>
+    <aura:attribute name="selectedCount" type="integer" default="0" access="global" description="selected fields count"/>
+    <aura:attribute name="themeURL" type="string" access="global" description="defines the environment the app running in either classic or lightning"/>
+    
+    <!-- Event registered in this component -->
+    <aura:registerEvent name="LineItemSelectedFieldsCount" access="global" type="c:LineItemSelectedFieldsCount" description="event fired when selected count changes and updates in parent component"/> 
+    <aura:registerEvent name="LineItemMappingSecondPage" access="global" type="c:LineItemMappingSecondPage" description="to move to next step"/>
+    <aura:registerEvent name="LineItemMappingSpinnerEvent" access="global" type="c:LineItemMappingSpinnerEvent" description="to invoke spinner present in parent"/>
+    <!-- on load function call -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" access="global"/>
+    
+    <aura:method name="saveSelectedLineItems" action="{!c.saveAndGoNext}" access="PUBLIC"/>
+    <!-- Component Body -->
+    <div class="slds-p-horizontal_large slds-p-top_x-small">    
+        <b>{!$Label.c.LineItemFieldSelectionHeader}</b>&nbsp;
+        
+        <table class="slds-m-top_medium slds-table_fixed-layout" style="border-collapse:collapse;width:100%">
+            <thead>
+                <tr>
+                    <th scope="col"  class="slds-p-left_large slds-text-align--right slds-p-around_medium firstColumnStyle">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <label class="slds-checkbox">
+                                    <!--header checkbox for select all-->
+                                    <ui:inputCheckbox aura:id="selectAllcheckbox" change="{!c.selectAll}"/>
+                                    <span class="slds-checkbox--faux"></span>
+                                    <span class="slds-form-element__label text"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </th>
+                    <th scope="col"  class="slds-p-around_medium secondColumnStyle">
+                        <span class="slds-truncate" title="Field Name">Field Name</span>      
+                    </th>
+                    <th scope="col" class="slds-p-around_medium thirdColumnStyle">
+                        <span class="slds-truncate" title="Data Type" >Datatype</span>
+                    </th>
+                    <th scope="col"  class="slds-p-around_medium fourthColumnStyle">       
+                        <span class="slds-truncate" title="Sample Values">Sample Values</span>
+                    </th >
+                    <th scope="col"  class="slds-p-around_medium fifthColumnStyle">
+                        <div class="slds-truncate" title="Field Dependency">Field Dependency</div>
+                    </th>
+                    <th scope="col"  class="slds-p-around_medium sixthColumnStyle">
+                        <div class="slds-truncate" title="Is Mandatory ?">Mandatory in iContract</div>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <aura:iteration items="{!v.lineItemData}" var="con">
+                    <tr>
+                        <td class="slds-border_bottom slds-border_left slds-p-around_small slds-p-left_large" style="width:4%;">
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control">
+                                    <label class="slds-checkbox">
+                                        <ui:inputCheckbox disabled="{!(con.mandatory == 'YES')}" text="{!con.Id}" aura:id="boxPack" value="{!con.isSelected}" change="{!c.checkboxSelect}"/>
+                                        <span class="slds-checkbox--faux"></span>
+                                        <span class="slds-form-element__label text"></span>
+                                    </label>
+                                </div>
+                            </div>          
+                        </td>
+                        
+                        <td scope="row" class="slds-border_bottom slds-p-around_small slds-p-left_large">
+                            <div class="slds-truncate" title="{!con.displayName}">{!con.displayName}</div>
+                        </td>
+                        <td scope="row" class="slds-border_bottom slds-p-around_small slds-p-left_large">
+                            <div class="slds-truncate" title="{!con.dataType}">{!con.dataType}</div>
+                        </td>
+                        <td scope="row" class="slds-border_bottom slds-p-around_small slds-p-left_large">
+                            <aura:if isTrue="{!(con.allowedValues == undefined || con.allowedValues == '')}">-
+                            </aura:if>
+                            <div class="slds-truncate" title="{!con.allowedValues}">{!con.allowedValues}</div>
+                        </td>
+                        <td scope="row" class="slds-border_bottom slds-p-around_small slds-p-left_large">
+                            <aura:if isTrue="{!(con.dependantFields == undefined || con.dependantFields == '')}">-
+                            </aura:if>
+                            <div class="slds-truncate" title="{!con.allowedValues}">{!con.dependantFields}</div>
+                        </td>
+                        <td scope="row" class="slds-border_bottom slds-p-around_small slds-border_right  slds-p-left_large">
+                            <div class="slds-truncate" title="{!con.mandatory}">{!con.mandatory}</div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </div>
+    <!--Spacing issue when viewed in classic and lightning, so condition is added -->
+    <aura:if isTrue="{!v.themeURL == $Label.c.Theme4d}">
+        <br/>
+        <br/><br/>
+    </aura:if>
+    
+    
+    <!--If rows are not selected then to display error message -->
+    <div aria-hidden="false" id="selectedcountEmpty" style="display:none;">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 26%;">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <center><p>{!$Label.c.FieldSelection_Error_Message}</p></center>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <div class="slds-align_absolute-center">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.closequickAction}">OK</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>   
+</aura:component>

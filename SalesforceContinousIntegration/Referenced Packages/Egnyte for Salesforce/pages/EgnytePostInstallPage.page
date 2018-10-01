@@ -1,0 +1,23 @@
+<apex:page controller="efs.EgnytePostInstallPageController">
+    <apex:pageMessages />
+    <apex:form >
+    		<h1>Run through the following steps to configure Egnyte for Salesforce:</h1> 
+    		<br/><br/><br/>
+    		Step - 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    		<apex:commandlink action="{!redirectRemoteSiteUrlPackage}" target="_blank" style="text-decoration:none">
+	            <apex:commandButton value="Add remote site setting for the Egnyte package" title="Add remote site setting for the Egnyte Package" style="Width:275px;height:25px;border-radius:5px;"/>
+	        </apex:commandLink>
+    		<br/><br/><br/>
+    		Step - 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    		<apex:commandlink action="{!redirectRemoteSiteUrlDomain}" target="_blank" style="text-decoration:none">
+	            <apex:commandButton value="Add remote site setting for your Egnyte domain" title="Add remote site setting for your Egnyte domain" style="Width:275px;height:25px;border-radius:5px;"/>
+	        </apex:commandLink>
+    		<br/><br/><br/>
+    		Step - 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    		<apex:commandlink action="{!redirectDomainConfigUrl}" target="_blank" style="text-decoration:none">
+	            <apex:commandButton value="Complete Domain Configuration" title="Complete Domain Configuration" style="Width:275px;height:25px;border-radius:5px;"/>
+	        </apex:commandLink>
+    		<br/><br/><br/>
+        <p>You can find more information about post installation steps in the Egnyte for Salesforce <a target="_new" href="https://www.egnyte.com/downloads/salesforce/latest/EgnyteforSalesforce_InstallationGuide.pdf">Installation Guide</a>.</p>
+    </apex:form>
+</apex:page>

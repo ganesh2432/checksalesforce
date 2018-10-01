@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>File_Access_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Files and folders will be shared to this user as per this field value.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Public Download Only -  Allow downloading all files with &quot;Public Download Only&quot; access type.
+Public Download &amp; Write - Allow downloading and edit all files with &quot;Public Download &amp; Write&quot; access type.
+None - Allow downloading only his/her files.</inlineHelpText>
+        <label>Share all file / folder with Access Type</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Public Download Only</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Public Download &amp; Write</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Is_S3_Link_User__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If true, access for S3 Link will be granted.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If true, access for S3 Link will be granted.</inlineHelpText>
+        <label>S3 Link User?</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+</CustomObject>

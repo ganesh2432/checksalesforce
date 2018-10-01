@@ -1,0 +1,27 @@
+.THIS .popover {
+position: absolute;
+left: 9%;
+bottom:64.5%;
+}
+
+.THIS .buttonRemoveStyle{
+    border-color: transparent;
+    background-color: transparent;
+    border-left: 1px solid #bbb;
+    border-radius: 0px;
+    color: red;
+}
+
+
+.THIS .VIEW{
+    border-color:#FFF !important;
+    font-weight :bold !important;
+    padding: 0px 10px 0px 0px !important;
+}
+
+
+.THIS .MAINDIV{
+    padding: 18px !important;
+    border: 2px solid #ccc !important;
+    border-radius: 6px !important;
+}

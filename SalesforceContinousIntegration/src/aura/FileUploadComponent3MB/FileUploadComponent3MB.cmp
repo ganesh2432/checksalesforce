@@ -1,0 +1,49 @@
+<aura:component controller="ComponentsGenricClass">
+    <aura:attribute name="parentId" type="Id"/>
+    <aura:attribute name="fileObject" type="Object[]"/>
+    <aura:handler event="aura:waiting" action="{!c.waiting}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.doneWaiting}"/>
+    <aura:attribute type="List" name="finalFileListToUpload"/>
+    <aura:attribute type="Integer" name="counter" default="0"/>
+    <aura:attribute name="finalfileToBeUploaded" type="Object[]"/>
+    
+    <aura:method name="uploadFile" action="{!c.save}">
+        <aura:attribute name="parentId" type="Id"/>
+    </aura:method> 
+     <aura:attribute name="selectedFiles" type="String[]" />
+     
+   
+    <div style="position:relative">
+        <label class="slds-form-element__label" for="file-input">
+            Document Upload
+        </label>
+        <lightning:helptext content="Please select files with maximum size of 4MB" iconName="utility:info"  class="popover"/>
+        <lightning:input aura:id="file-input" type="file"
+                         files="{!v.fileObject}"
+                         label="Document Upload"
+                         name="file"
+                         multiple="true"
+                         onchange="{!c.handleFilesChange}"
+                         class="hideLabel"/>
+        
+        <lightning:button variant="brand" label="Upload File"  onclick="{!c.save}" class="btnCss" />
+
+        
+    </div>
+        <br/>
+     <!-- <aura:iteration items="{!v.selectedFiles}" var="file" indexVar="index">
+                        <lightning:card title="{!file}" iconName="utility:attach" class="slds-m-top_medium slds-size_1-of-2">
+                            <aura:set attribute="actions">
+                                    <span><lightning:button name="{!index}" iconName="utility:close"  onclick="{!c.removeFile}"/></span>
+                                </aura:set>
+                        </lightning:card>
+                    </aura:iteration>  -->
+    <aura:iteration items="{!v.selectedFiles}" var="file" indexVar="index">
+        <lightning:pill label="{!file}" onremove="{! c.handleRemoveOnly }"  name="{!index}">
+            <aura:set attribute="media">
+                <lightning:icon iconName="standard:account"  alternativeText="Account" />
+            </aura:set>
+        </lightning:pill><br/>
+    </aura:iteration>
+
+</aura:component>
